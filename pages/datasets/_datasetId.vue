@@ -297,7 +297,7 @@ export default {
     const errorMessages = []
 
     const [organEntries, datasetDetails, versions, downloadsSummary] = await Promise.all([
-      getOrganEntries(),
+      // getOrganEntries(),
       getDatasetDetails(
         datasetId,
         route.params.version,

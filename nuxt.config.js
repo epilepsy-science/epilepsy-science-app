@@ -28,16 +28,16 @@ export default {
       { hid: 'og:title', property: 'og:title', content: 'SPARC Portal' },
       { hid: 'og:description', property: 'og:description', content: 'Stimulating Peripheral Activity to Relieve Conditions (SPARC)' },
       { hid: 'og:image', property: 'og:image',
-        content: 'https://images.ctfassets.net/6bya4tyw8399/7r5WTb92QnHkub8RsExuc1/2ac134de2ddfd65eb6316421df7578f9/sparc-logo-primary.png'
+        content: 'http://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
       },
       { hid: 'og:image:secure_url', property: 'og:image:secure_url',
-        content: 'https://images.ctfassets.net/6bya4tyw8399/7r5WTb92QnHkub8RsExuc1/2ac134de2ddfd65eb6316421df7578f9/sparc-logo-primary.png'
+        content: 'http://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
       },
       { hid: 'og:url', property: 'og:url', content: process.env.ROOT_URL || 'sparc.science' },
       { hid: 't-type', name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:site', content: '@sparc_science' },
       { name: 'twitter:title', content: 'SPARC Portal' },
-      { name: 'twitter:image', content: 'https://images.ctfassets.net/6bya4tyw8399/7r5WTb92QnHkub8RsExuc1/2ac134de2ddfd65eb6316421df7578f9/sparc-logo-primary.png' },
+      { name: 'twitter:image', content: 'http://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png' },
       { name: 'twitter:description', content: 'Stimulating Peripheral Activity to Relieve Conditions (SPARC)' }
     ],
     link: [
@@ -70,13 +70,13 @@ export default {
     ctf_community_spotlight_item_id: 'communitySpotlight',
     ctf_news_and_events_id: 'newsAndEvents',
     ctf_resource_id: 'sparcPartners',
-    ctf_resource_hero_id: '3ImGx7UyDXPwM3oTag06nt',
-    ctf_tools_and_resources_page_id: '1Yy2BEB0df8HxLNx2Ivsct',
+    ctf_resource_hero_id: 'v1RaymYIp0g20jBjj38G0',
+    ctf_tools_and_resources_page_id: '5gOQBmYpDBRPtJh7Yzj8SP',
     ctf_help_id: 'helpDocument',
-    ctf_help_list_id: 'helpSection',
-    ctf_help_aws_id: 'zQfzadwADutviJjT19hA5',
-    ctf_about_page_id: '4VOSvJtgtFv1PS2lklMcnS',
-    ctf_about_portal_page_id: '2156L8jQgaifFNpgeylaQp',
+    // ctf_help_list_id: 'helpSection',
+    // ctf_help_aws_id: 'zQfzadwADutviJjT19hA5',
+    ctf_about_page_id: 'eGyEJR9pBdNT4zI71Y6sD',
+    ctf_about_portal_page_id: '3QNKLvQyniXdkmFPVI7skQ',
     ctf_about_details_content_type_id: 'aboutPageSecondLevel',
     ctf_learn_more_item_id: 'learnMoreItem',
     ctf_sparc_policies_id: 'sparcPolicies',
@@ -86,7 +86,7 @@ export default {
     ctf_about_policies_page_id: '71a9NzpuHvaTpgTf9ir1xg',
     ctf_contact_us_form_type_id: 'contactUsForm',
     ctf_support_page_id: '59F0dM5goobqjw3TsqINRw',
-    ctf_home_page_id: '4qJ9WUWXg09FAUvCnbGxBY',
+    ctf_home_page_id: '4KuOw0SnxWqN7SZ6W68oey',
     ctf_news_and_events_page_id: '4IoMamTLRlN3OpxT1zgnU',
     ctf_dataset_navigation_info_page_id: 'qvEcnv56c76V0JC0KvtSd',
     ctf_dataset_format_info_page_id: '3FXikFXC8shPRd8xZqhjVT',

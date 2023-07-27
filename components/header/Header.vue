@@ -204,11 +204,6 @@ const links = [
     href: `/resources`
   },
   {
-    title: 'maps',
-    displayTitle: 'Maps',
-    href: '/maps'
-  },
-  {
     title: 'news-and-events',
     displayTitle: 'News & Events',
     href: '/news-and-events'

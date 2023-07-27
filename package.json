@@ -35,7 +35,7 @@
     "babel-eslint": "^10.0.3",
     "chart.js": "^2.9.4",
     "chartjs-plugin-datalabels": "1.0.0",
-    "contentful": "^7.10.0",
+    "contentful": "7.10.0",
     "cookie-universal-nuxt": "^2.1.1",
     "core-js": "3.25.1",
     "date-fns": "^2.8.1",

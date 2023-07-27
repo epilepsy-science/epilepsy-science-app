@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import logo from '@/static/images/logo-sparc-wave-primary.svg'
+import logo from '@/static/images/epilepsy.science.png'
 
 export default {
   name: 'SparcLogo',

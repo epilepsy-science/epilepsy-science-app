@@ -188,7 +188,7 @@ export default {
       slideAxis: undefined,
       slideNaturalHeight: 135,
       slideNaturalWidth: 180,
-      defaultImg: require('~/assets/logo-sparc-wave-primary.svg'),
+      defaultImg: require('~/assets/epilepsy.science.png'),
       defaultScaffoldImg: require('~/assets/scaffold-light.png'),
       defaultPlotImg: require('~/assets/data-icon.png'),
       defaultVideoImg: require('~/assets/video-default.png'),

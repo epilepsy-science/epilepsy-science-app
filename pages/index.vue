@@ -56,7 +56,7 @@ export default {
     FeaturedData,
     HomepageNews,
     PortalFeatures,
-    ProjectsAndDatasets,
+    // ProjectsAndDatasets,
     StayConnected
   },
 
