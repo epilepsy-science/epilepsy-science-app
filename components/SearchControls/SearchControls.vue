@@ -163,7 +163,7 @@ export default {
 
 .search-button {
   .view-search-results {
-    background: #24245b;
+    background: #e76f51;
     border: 0;
     height: 40px;
   }

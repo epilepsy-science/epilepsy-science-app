@@ -10,7 +10,7 @@ export const mutations = {
 
 const actions = {
   async nuxtServerInit({dispatch}) {
-    await dispatch('pages/contact-us/fetchContactUsFormOptions')
+    // await dispatch('pages/contact-us/fetchContactUsFormOptions')
     await dispatch('layouts/default/fetchFooterData')
     await dispatch('user/fetchUser')
     await dispatch('layouts/default/fetchPortalNotification')

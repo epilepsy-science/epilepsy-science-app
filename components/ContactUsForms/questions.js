@@ -13,7 +13,6 @@ export const pageOrResource = [
   'Find Data',
   'Help or documentation',
   'Home page, header, or footer',
-  'Maps',
   'News & Events',
   'oSPARC',
   'Simulations',

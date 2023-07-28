@@ -32,7 +32,7 @@ export default {
     },
     title: {
       type: String,
-      default: "What Can I Do with SPARC?"
+      default: "What can I do on epilepsy.science?"
     },
     iconIsTopElement: {
       type: Boolean,

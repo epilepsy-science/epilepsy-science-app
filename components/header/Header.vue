@@ -20,7 +20,7 @@
           <a class="sign-in-link" v-if="!pennsieveUser" @click="showLoginDialog = true">
             Sign in
           </a>
-          <el-menu class="mr-16 user-menu" v-else popper-class="user-popper" background-color="#24245b" mode="horizontal" @select="handleUserMenuSelect">
+          <el-menu class="mr-16 user-menu" v-else popper-class="user-popper" background-color="#e76f51" mode="horizontal" @select="handleUserMenuSelect">
             <el-submenu index="user">
               <template slot="title">{{pennsieveUsername}}</template>
               <el-menu-item class="user-submenu" index="profile">Profile</el-menu-item>
@@ -196,22 +196,26 @@ const links = [
   {
     title: 'data',
     displayTitle: 'Data & Models',
-    href: '/data'
+    // href: '/data'
+    href: '#'
   },
   {
     title: 'resources',
     displayTitle: 'Tools & Resources',
-    href: `/resources`
+    // href: `/resources`
+    href: `#`
   },
   {
     title: 'news-and-events',
     displayTitle: 'News & Events',
-    href: '/news-and-events'
+    // href: '/news-and-events'
+    href: '#'
   },
   {
     title: 'about',
     displayTitle: 'About',
-    href: '/about'
+    // href: '/about'
+    href: '#'
   }
 ]
 

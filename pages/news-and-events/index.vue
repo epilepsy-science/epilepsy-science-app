@@ -99,8 +99,8 @@
         <div class="subpage py-16">
           <el-row :gutter="32">
             <el-col :xs="24" :sm="12" class="newsletter-wrap">
-              <div class="heading2">Sign up for the SPARC Newsletter</div>
-              <div class="body1 mb-16 mt-8">Keep up to date with all the latest news and events from the SPARC Portal.</div>
+              <div class="heading2">Sign up for the Epilepsy.Science Newsletter</div>
+              <div class="body1 mb-16 mt-8">Keep up to date with all the latest news and events from the Epilepsy.Science Portal.</div>
               <newsletter-form />
               <div class="newsletter-archive mt-16">
                 <style type="text/css">

@@ -68,7 +68,7 @@ $tablet-large: 64em;
   &__content-wrap {
     display: flex;
     flex: 1;
-    background: #24245b;
+    background: #e76f51;
   }
   &__image,
   &__content-wrap {
