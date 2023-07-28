@@ -49,3 +49,11 @@ $font-family: 'Asap', sans-serif;
   position: absolute;
   width: 1px;
 }
+
+
+//Temp override
+.el-button.secondary, .el-button.secondary[disabled], .el-button.secondary[disabled]:focus, .el-button.secondary[disabled]:hover {
+  background: #fbefeb!important;
+  border: 1px solid #e76f51!important;
+  color: #e76f51!important;
+}

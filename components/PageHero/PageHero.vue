@@ -33,7 +33,7 @@ export default {
 @import '@nih-sparc/sparc-design-system-components/src/assets/_variables.scss';
 
 .page-hero {
-  background: $darkBlue;
+  background: #264653;
   font-size: 1rem;
   line-height: 1.5rem;
   font-weight: 400;

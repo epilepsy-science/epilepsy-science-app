@@ -64,11 +64,12 @@ export default {
 <style lang="scss" scoped>
 @import '@nih-sparc/sparc-design-system-components/src/assets/_variables.scss';
 .feature-container {
-  border: 2px solid $grey;
+  border: 2px solid #264653;
   border-radius: .75rem;
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding-top: 1em;
 }
 .icon {
   max-width: 50%;
