@@ -196,26 +196,26 @@ const links = [
   {
     title: 'data',
     displayTitle: 'Data & Models',
-    // href: '/data'
-    href: '#'
+    href: '/data'
+    // href: '#'
   },
   {
     title: 'resources',
     displayTitle: 'Tools & Resources',
-    // href: `/resources`
-    href: `#`
+    href: `/resources`
+    // href: `#`
   },
   {
     title: 'news-and-events',
     displayTitle: 'News & Events',
-    // href: '/news-and-events'
-    href: '#'
+    href: '/news-and-events'
+    // href: '#'
   },
   {
     title: 'about',
     displayTitle: 'About',
-    // href: '/about'
-    href: '#'
+    href: '/about'
+    // href: '#'
   }
 ]
 

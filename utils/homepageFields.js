@@ -4,6 +4,7 @@
  * @returns {Object}
  */
 export default (fields = {}) => {
+
   return {
     heroHeading: fields.heroHeading || '',
     heroCopy: fields.heroCopy || '',
