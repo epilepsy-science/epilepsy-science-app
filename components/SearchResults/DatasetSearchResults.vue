@@ -4,52 +4,48 @@
     :show-header="false"
     empty-text="No Results"
   >
+  
     <el-table-column prop="banner" label="Image" width="160">
       <template slot-scope="scope">
-        <div v-if="scope.row.pennsieve">
           <nuxt-link
             :to="{
               name: 'datasets-datasetId',
-              params: { datasetId: scope.row.object_id },
+              params: { datasetId: scope.row.id },
               query: {
-                type: getSearchResultsType(scope.row.item)
+                type: getSearchResultsType(scope.row)
               }
             }"
             class="img-dataset"
           >   
             <img
-              v-if="scope.row.pennsieve.banner"
-              :src="scope.row.pennsieve.banner.uri"
-              :alt="`Banner for ${scope.row.item.name}`"
+              v-if="scope.row.banner"
+              :src="scope.row.banner"
+              :alt="`Banner for ${scope.row.name}`"
               height="128"
               width="128"
             />
-            <sparc-pill v-if="scope.row.item.published" v-show='scope.row.item.published.status == "embargo"'>
+            <sparc-pill v-if="scope.row.embargo">
               Embargoed
             </sparc-pill>
           </nuxt-link>
-        </div>
       </template>
     </el-table-column>
     <el-table-column
       min-width="400"
     >
       <template slot-scope="scope">
-        <div v-if="scope.row.pennsieve">
+
           <nuxt-link
             :to="{
               name: 'datasets-datasetId',
-              params: { datasetId: scope.row.object_id },
+              params: { datasetId: scope.row.id },
               query: {
-                type: getSearchResultsType(scope.row.item)
+                type: getSearchResultsType(scope.row)
               }
             }"
-            v-html="scope.row._highlightResult.item.name.value"
           />
           <div
             class="my-8"
-            v-if="scope.row._highlightResult.item.description"
-            v-html="scope.row._highlightResult.item.description.value"
           />
           <table class="property-table">
             <tr
@@ -65,7 +61,7 @@
               />
             </tr>
           </table>
-        </div>
+
       </template>
     </el-table-column>
   </el-table>
@@ -96,12 +92,12 @@ export default {
     return {
       PROPERTY_DATA: [
         {
-          displayName: 'Anatomical Structure',
-          propPath: '_highlightResult.anatomy.organ'
+          displayName: 'Name',
+          propPath: 'name'
         },
         {
-          displayName: 'Species',
-          propPath: '_highlightResult.organisms.primary[0].species.name.value'
+          displayName: 'Description',
+          propPath: 'description'
         },
         {
           displayName: 'Experimental Approach',
@@ -133,15 +129,11 @@ export default {
         return undefined
       }
       switch (property.displayName) {
-        case 'Anatomical Structure': {
-          const organs = _.get(item, property.propPath)
-          return organs
-            ? organs.map(item => this.toTermUppercase(item.name.value)).join(', ')
-            : undefined
+        case 'Name': {
+          return item.name
         }
-        case 'Includes': {
-          const published = _.get(item, property.propPath)
-          return (published == undefined || published == 'false') ? undefined : 'Publications'
+        case 'Description': {
+          return item.description
         }
         case 'Samples': {
           const sampleCount = _.get(item, property.propPath + '.samples.count')
@@ -162,26 +154,26 @@ export default {
             : undefined
         }
         case 'Publication Date': {
-          const pennsieve = _.get(item, property.propPath)
-          if (pennsieve.createdAt == undefined || pennsieve.updatedAt == undefined) {
+          if (item.versionPublishedAt == undefined || item.versionPublishedAt == undefined) {
             return undefined
           }
-          const createdAt = pennsieve.createdAt.timestamp.split(",")[0]
-          const updatedAt = pennsieve.updatedAt.timestamp.split(",")[0]
+          const createdAt = item.versionPublishedAt.split(",")[0]
+          const updatedAt = item.updatedAt.split(",")[0]
           return this.formatDate(createdAt) +
                     ' (Last updated ' +
                     this.formatDate(updatedAt) +
                     ')'
         }
         default: {
-          return _.upperFirst(_.get(item, property.propPath))
+          return _.upperFirst(item)
         }
       }
     },
     getSearchResultsType(item) {
-      return item !== undefined ? 
-        (item.types[0].name === 'computational model' ? 'simulation' : 'dataset') :
-        ''
+      return 'dataset'
+      // return item !== undefined ? 
+      //   (item.types[0].name === 'computational model' ? 'simulation' : 'dataset') :
+      //   ''
     }
   }
 }

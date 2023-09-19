@@ -570,7 +570,6 @@ export default {
         this.algoliaIndex
           .search(query, {
             facets: ['*'],
-            filters: `${datasetsFilter}`
           })
           .then(response => {
             this.visibleFacets = response.facets
@@ -581,9 +580,6 @@ export default {
           })
           .finally(() => {
             var filters =  this.$refs.datasetFacetMenu?.getFilters()
-            filters = filters === undefined ? 
-              `${datasetsFilter}` : 
-              filters + ` AND ${datasetsFilter}`
 
             this.algoliaIndex
               .search(query, {
@@ -592,11 +588,8 @@ export default {
                 page: this.curSearchPage - 1,
                 filters: filters,
                 attributesToHighlight: [
-                  'item.name',
-                  'item.description',
-                  'item.modalities',
-                  'anatomy.organ',
-                  'organisms.primary.species.name'
+                  'name',
+                  'description',
                 ],
                 highlightPreTag: `<${HIGHLIGHT_HTML_TAG}>`,
                 highlightPostTag: `</${HIGHLIGHT_HTML_TAG}>`
@@ -656,15 +649,8 @@ export default {
       if (searchType !== 'projects'){
 
         // Alogilia searches
-        const datasetsFilter =
-          searchType === 'simulation' ? '(NOT item.types.name:Dataset AND NOT item.types.name:Scaffold)' 
-            : searchType === 'model' ? '(NOT item.types.name:Dataset AND item.types.name:Scaffold)' 
-            : "item.types.name:Dataset"
 
         var filters = this.$refs.datasetFacetMenu?.getFilters()
-        filters = filters === undefined ? 
-          `${datasetsFilter}` : 
-          filters + ` AND ${datasetsFilter}`
 
         this.algoliaIndex
           .search(query, {
