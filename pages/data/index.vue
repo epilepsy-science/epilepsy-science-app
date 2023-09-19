@@ -2,28 +2,6 @@
   <div class="page-data">
     <breadcrumb :breadcrumb="breadcrumb" :title="searchType.label" />
     <div class="container">
-      <div class="search-tabs__container">
-        <h3>
-          Browse categories
-        </h3>
-        <ul class="search-tabs">
-          <li v-for="type in searchTypes" :key="type.label">
-            <nuxt-link
-              class="search-tabs__button"
-              :class="{ active: type.type === $route.query.type }"
-              :to="{
-                name: 'data',
-                query: {
-                  ...$route.query,
-                  type: type.type,
-                }
-              }"
-            >
-              {{ type.label }}
-            </nuxt-link>
-          </li>
-        </ul>
-      </div>
       <div class="search-bar__container">
         <h5>
           Search within category
@@ -117,27 +95,6 @@
                   <div v-if="searchHasAltResults">
                     <template v-if="searchData.total === 0">
                       No results were found for <strong>{{ searchType.label }}</strong>.
-                    </template>
-                    The following results were discovered for the other categories:
-                    <br />
-                    <br />
-                    <template v-for="dataType in dataTypes">
-                      <dd v-if="resultCounts[dataType] > 0 && dataType !== 'projects'" :key="dataType">
-                        <nuxt-link
-                          :to="{
-                            name: 'data',
-                            query: {
-                              ...$route.query,
-                              type: dataType
-                            }
-                          }"
-                        >
-                          {{ resultCounts[dataType] }} result{{
-                            resultCounts[dataType] > 1 ? 's' : ''
-                          }}
-                        </nuxt-link>
-                        - {{ humanReadableDataTypesLookup[dataType] }}
-                      </dd>
                     </template>
                   </div>
                 </div>
