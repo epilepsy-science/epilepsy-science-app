@@ -60,10 +60,11 @@ const embargoedFacetCategory = {
 
 const visibleDatasetsFacetCategories = [
   'tags',
+  'contributors.lastName',
   'availability'
 ];
 
-const visibleModelsAndSimulationsFacetCategories = ['tags'];
+const visibleModelsAndSimulationsFacetCategories = ['tags','contributors.lastName'];
 
 const embargoFacetCategoryTooltip = "Epilepsy.Science datasets are subject to a 1 year embargo during which time<br/>the datasets are visible only to members of the Epilepsy.Science consortium.<br/>During embargo, the public will be able to view basic metadata about<br/>these datasets as well as their release date."
 

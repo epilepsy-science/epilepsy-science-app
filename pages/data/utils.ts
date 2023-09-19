@@ -160,14 +160,14 @@ export const facetPropPathMapping = [
     label: 'Tags',
     id: 'tags',
     facetPropPath: 'tags',
-    facetSubpropPath: 'item.types.subcategory.name'
+    facetSubpropPath: ''
   },
-  // {
-  //   label: 'Anatomical Structure',
-  //   id: 'anatomy.organ',
-  //   facetPropPath: 'anatomy.organ.name',
-  //   facetSubpropPath: 'anatomy.organ.subcategory.name'
-  // },
+  {
+    label: 'Contributors',
+    id: 'contributors.lastName',
+    facetPropPath: 'contributors.lastName',
+    facetSubpropPath: ''
+  },
   // {
   //   label: 'Species',
   //   id: 'organisms.primary.species',
