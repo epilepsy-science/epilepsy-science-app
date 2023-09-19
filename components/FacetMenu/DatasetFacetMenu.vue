@@ -59,18 +59,13 @@ const embargoedFacetCategory = {
 }
 
 const visibleDatasetsFacetCategories = [
-  'anatomy.organ.name',
-  'anatomy.organ.subcategory.name',
-  'organisms.primary.species.name',
-  'item.modalities.keyword',
-  'attributes.subject.sex.value',
-  'attributes.subject.ageCategory.value',
+  'tags',
   'availability'
 ];
 
-const visibleModelsAndSimulationsFacetCategories = ['anatomy.organ.name', 'anatomy.organ.subcategory.name', 'availability', 'organisms.primary.species.name'];
+const visibleModelsAndSimulationsFacetCategories = ['tags'];
 
-const embargoFacetCategoryTooltip = "SPARC datasets are subject to a 1 year embargo during which time<br/>the datasets are visible only to members of the SPARC consortium.<br/>During embargo, the public will be able to view basic metadata about<br/>these datasets as well as their release date."
+const embargoFacetCategoryTooltip = "Epilepsy.Science datasets are subject to a 1 year embargo during which time<br/>the datasets are visible only to members of the Epilepsy.Science consortium.<br/>During embargo, the public will be able to view basic metadata about<br/>these datasets as well as their release date."
 
 export default {
   name: 'DatasetFacetMenu',
@@ -132,6 +127,7 @@ export default {
   },
 
   mounted() {
+    console.log(this)
     if (this.$route.query.selectedFacetIds) {
       this.defaultCheckedFacetIds = this.$route.query.selectedFacetIds.split(",")
     }

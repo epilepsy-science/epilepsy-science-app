@@ -157,41 +157,41 @@ export const extractExtension = (
 // Used for populating the Dataset Search Results facet menu dynamically
 export const facetPropPathMapping = [
   {
-    label: 'Type',
-    id: 'item.types',
-    facetPropPath: 'item.types.name',
+    label: 'Tags',
+    id: 'tags',
+    facetPropPath: 'tags',
     facetSubpropPath: 'item.types.subcategory.name'
   },
-  {
-    label: 'Anatomical Structure',
-    id: 'anatomy.organ',
-    facetPropPath: 'anatomy.organ.name',
-    facetSubpropPath: 'anatomy.organ.subcategory.name'
-  },
-  {
-    label: 'Species',
-    id: 'organisms.primary.species',
-    facetPropPath: 'organisms.primary.species.name',
-    facetSubpropPath: 'organisms.primary.species.subcategory.name'
-  },
-  {
-    label: 'Experimental Approach',
-    id: 'item.modalities',
-    facetPropPath: 'item.modalities.keyword',
-    facetSubpropPath: 'item.modalities.subcategory.name'
-  },
-  {
-    label: 'Sex',
-    id: 'attributes.subject.sex',
-    facetPropPath: 'attributes.subject.sex.value',
-    facetSubpropPath: 'attributes.subject.sex.subcategory.name'
-  },
-  {
-    label: 'Age Categories',
-    id: 'attributes.subject.ageCategory',
-    facetPropPath: 'attributes.subject.ageCategory.value',
-    facetSubpropPath: 'attributes.subject.ageCategory.subcategory.name'
-  },
+  // {
+  //   label: 'Anatomical Structure',
+  //   id: 'anatomy.organ',
+  //   facetPropPath: 'anatomy.organ.name',
+  //   facetSubpropPath: 'anatomy.organ.subcategory.name'
+  // },
+  // {
+  //   label: 'Species',
+  //   id: 'organisms.primary.species',
+  //   facetPropPath: 'organisms.primary.species.name',
+  //   facetSubpropPath: 'organisms.primary.species.subcategory.name'
+  // },
+  // {
+  //   label: 'Experimental Approach',
+  //   id: 'item.modalities',
+  //   facetPropPath: 'item.modalities.keyword',
+  //   facetSubpropPath: 'item.modalities.subcategory.name'
+  // },
+  // {
+  //   label: 'Sex',
+  //   id: 'attributes.subject.sex',
+  //   facetPropPath: 'attributes.subject.sex.value',
+  //   facetSubpropPath: 'attributes.subject.sex.subcategory.name'
+  // },
+  // {
+  //   label: 'Age Categories',
+  //   id: 'attributes.subject.ageCategory',
+  //   facetPropPath: 'attributes.subject.ageCategory.value',
+  //   facetSubpropPath: 'attributes.subject.ageCategory.subcategory.name'
+  // },
 ]
 
 export const getAlgoliaFacets = function(algoliaIndex : SearchIndex, propPathMapping : Array<{id: string, facetPropPath: string, facetSubpropPath: string, label: string}>, filters : string) {

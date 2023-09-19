@@ -74,7 +74,7 @@ export default {
       getAlgoliaFacets(algoliaIndex, facetPropPathMapping)
         .then(data => {
           this.organFacets = data.find(
-            facet => facet.key === 'anatomy.organ.name'
+            facet => facet.key === 'tags'
           ).children
         })
         .finally(() => {
