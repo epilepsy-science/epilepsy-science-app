@@ -43,6 +43,7 @@
                 type: getSearchResultsType(scope.row)
               }
             }"
+            v-html="scope.row.name"
           />
           <div
             class="my-8"
@@ -91,10 +92,6 @@ export default {
   data() {
     return {
       PROPERTY_DATA: [
-        {
-          displayName: 'Name',
-          propPath: 'name'
-        },
         {
           displayName: 'Description',
           propPath: 'description'
