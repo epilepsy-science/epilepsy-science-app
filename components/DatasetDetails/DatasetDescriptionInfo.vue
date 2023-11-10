@@ -10,7 +10,7 @@
       v-html="parseMarkdown(markdown.markdownBottom)"
     />
     <hr>
-    <div class="heading2 mb-8">
+    <!-- <div class="heading2 mb-8">
       Metadata
     </div>
     <p class="mb-8"><strong>Experimental Design: </strong></p>
@@ -97,7 +97,7 @@
     </span>
     <span v-else>
       <p>n/a</p>
-    </span>
+    </span> -->
   </div>
 </template>
 
