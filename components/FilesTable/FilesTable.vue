@@ -93,8 +93,8 @@
                         :to="{
                           name: 'file-datasetId-datasetVersion',
                           params: {
-                            datasetId: datasetInfo.id,
-                            datasetVersion: datasetInfo.version
+                            datasetId: datasetInfo[0].id,
+                            datasetVersion: datasetInfo[0].version
                           },
                           query: {
                             path: s3Path(scope.row.path)
@@ -192,23 +192,6 @@
                 </sparc-tooltip>
               </div>
               <div
-                class="circle"
-                @click="setDialogSelectedFile(scope)"
-              >
-                <sparc-tooltip
-                  placement="bottom-center"
-                >
-                  <div slot="data" class="osparc-service-btn-tooltip">
-                    Open in o<sup>2</sup>S<sup>2</sup>PARC. Login is required, 
-                    <a href="/resources/4LkLiH5s4FV0LVJd3htsvH#user-accounts" target="_blank">
-                      <u>here</u>
-                    </a>
-                    you can find more information on how to get an account.
-                  </div>
-                  <svg-icon slot="item" name="icon-osparc" height="1.5rem" width="1.5rem" />
-                </sparc-tooltip>
-              </div>
-              <div
                 v-if="isTimeseriesFile(scope.row)"
                 class="circle"
                 @click="openTimeseriesView(scope)"
@@ -239,12 +222,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <osparc-file-viewers-dialog
+      <!-- <osparc-file-viewers-dialog
         :open="dialogSelectedFile !== null"
         :viewers="osparcViewers"
         :selected-file="dialogSelectedFile"
         @close="() => setDialogSelectedFile(null)"
-      />
+      /> -->
     </div>
     <sparc-tooltip
       v-if="selected.length == 0"
@@ -257,7 +240,7 @@
         class="mt-16"
         disabled
         :selected="selected"
-        :dataset="datasetInfo"
+        :dataset="datasetInfo[0]"
         :file-path="path"
         @remove-selection="removeSelection"
       />
@@ -273,7 +256,7 @@
         class="mt-16"
         disabled
         :selected="selected"
-        :dataset="datasetInfo"
+        :dataset="datasetInfo[0]"
         :file-path="path"
         @remove-selection="removeSelection"
       />
@@ -282,7 +265,7 @@
       v-else
       class="mt-16"
       :selected="selected"
-      :dataset="datasetInfo"
+      :dataset="datasetInfo[0]"
       :file-path="path"
       @remove-selection="removeSelection"
     />
@@ -304,7 +287,7 @@ import {
 } from 'ramda'
 
 import BfDownloadFile from '@/components/BfDownloadFile/BfDownloadFile'
-import OsparcFileViewersDialog from '@/components/FilesTable/OsparcFileViewersDialog.vue'
+// import OsparcFileViewersDialog from '@/components/FilesTable/OsparcFileViewersDialog.vue'
 import { mapGetters, mapState } from 'vuex'
 
 import FormatStorage from '@/mixins/bf-storage-metrics/index'
@@ -330,7 +313,7 @@ export default {
 
   components: {
     BfDownloadFile,
-    OsparcFileViewersDialog
+    // OsparcFileViewersDialog
   },
 
   mixins: [FormatStorage],
@@ -416,7 +399,7 @@ export default {
      * @returns {String}
      */
     datasetVersion: function() {
-      return propOr(1, 'version', this.datasetInfo)
+      return propOr(1, 'version', this.datasetInfo[0])
     },
     /**
      * Compute URL for zipit service
@@ -718,8 +701,8 @@ export default {
       const route = {
         name: 'file-datasetId-datasetVersion',
         params: {
-          datasetId: this.datasetInfo.id,
-          datasetVersion: this.datasetInfo.version
+          datasetId: this.datasetInfo[0].id,
+          datasetVersion: this.datasetInfo[0].version
         },
         query: {
           path: this.s3Path(scope.row.path)

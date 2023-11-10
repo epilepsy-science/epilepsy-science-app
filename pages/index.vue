@@ -18,7 +18,7 @@
     <portal-features :features="portalFeatures" />
     <hr />
     <div class="secondary-background">
-      <projects-and-datasets :datasetSectionTitle="datasetSectionTitle" :projectOrResource="featuredProject" :dataset="featuredDataset" />
+      <!-- <projects-and-datasets :datasetSectionTitle="datasetSectionTitle" :projectOrResource="featuredProject" :dataset="featuredDataset" /> -->
     </div>
     <hr />
     <homepage-news :news="newsAndEvents" />
@@ -71,7 +71,6 @@ export default {
           fields = { ...fields, 'featuredDataset': { 'title': datasets[0].name, 'description': datasets[0].description, 'banner': datasets[0].banner, 'id': datasets[0].id }, 'datasetSectionTitle': datasetSectionTitle }
         })
         if (pathOr(undefined, ["featuredProject","fields","institution"], fields) != undefined) {
-          console.log("HEREHERHERE")
           const institutionId = pathOr("", ["featuredProject","fields","institution","sys","id"], fields)
           await client.getEntry(institutionId).then(( response ) => {
             fields.featuredProject.fields = { ...fields.featuredProject.fields, 'banner': response.fields.logo.fields.file.url }

@@ -148,8 +148,7 @@ export default {
   },
   async fetch() {
     const changelogFileRequests = []
-    this.versions.forEach(({ version }) => {
-      var changelogEndpoint = `${process.env.discover_api_host}/datasets/${this.datasetId}/versions/${version}/files?path=changelog.md`
+    var changelogEndpoint = `${process.env.discover_api_host}/datasets/${this.datasetId}/versions/${this.versions[this.datasetId]}/files?path=changelog.md`
       if (this.userToken) { changelogEndpoint += `&api_key=${this.userToken}` }
       changelogFileRequests.push(
         this.$axios.$get(changelogEndpoint).then(response => {
@@ -161,6 +160,8 @@ export default {
           return {}
         })
       )
+    this.versions.forEach(({ version }) => {
+
     })
 
     this.changelogFiles = await Promise.all(changelogFileRequests)
@@ -180,24 +181,24 @@ export default {
      * @returns {Number}
      */
     datasetId: function() {
-      return propOr(0, 'id', this.datasetInfo)
+      return propOr(0, 'id', this.datasetInfo[0])
     },
     latestVersionRevisionText: function() {
       let version = this.versions[0].version
       let revision = this.versions[0].revision || '0'
-      let latestDate =
-        this.versions[0].revisedAt || this.versions[0].firstPublishedAt
-      let date = this.formatDate(latestDate)
-      return `Version ${version}, Revision ${revision}; ${date}`
+      // let latestDate =
+      //   this.versions[0].revisedAt || this.versions[0].firstPublishedAt
+      // let date = this.formatDate(latestDate)
+      return `Version ${version}, Revision ${revision}`
     },
     originalVersionRevisionText: function() {
       const originalVersionPosition = this.versions.length - 1
       let version = this.versions[originalVersionPosition].version
       let revision = this.versions[originalVersionPosition].revision || '0'
-      let date = this.formatDate(
-        this.versions[originalVersionPosition].firstPublishedAt
-      )
-      return `Version ${version}, Revision ${revision}; ${date}`
+      // let date = this.formatDate(
+      //   this.versions[originalVersionPosition].firstPublishedAt
+      // )
+      return `Version ${version}, Revision ${revision}`
     },
     embargoed: function() {
       return propOr(false, 'embargo', this.datasetInfo)

@@ -153,10 +153,10 @@ export default {
       return EMBARGO_ACCESS
     },
     embargoAccess() {
-      return propOr(null, 'embargoAccess', this.datasetInfo)
+      return propOr(null, 'embargoAccess', this.datasetInfo[0])
     },
     embargoed: function() {
-      return propOr(false, 'embargo', this.datasetInfo)
+      return propOr(false, 'embargo', this.datasetInfo[0])
     },
     anatomicalStructureText: function() {
       return this.getFacetText('Anatomical Structure')
@@ -191,14 +191,14 @@ export default {
      * @returns {Number}
      */
     datasetId: function() {
-      return propOr(0, 'id', this.datasetInfo)
+      return propOr(0, 'id', this.datasetInfo[0])
     },
     /**
      * Gets dataset version
      * @returns {Number}
      */
     versionId: function() {
-      return propOr(0, 'version', this.datasetInfo)
+      return propOr(0, 'version', this.datasetInfo[0])
     },
     /**
      * Computes the API url for downloading the metadata of a dataset

@@ -204,9 +204,9 @@ export default {
      */
     ...mapState('pages/datasets/datasetId', ['datasetInfo']),
     ...mapGetters('user', ['cognitoUserToken']),
-    datasetScicrunch() {
-      return propOr({}, 'sciCrunch', this.datasetInfo)
-    },
+    // datasetScicrunch() {
+    //   return propOr({}, 'sciCrunch', this.datasetInfo)
+    // },
     userToken() {
       return this.cognitoUserToken || this.$cookies.get('user-token')
     },

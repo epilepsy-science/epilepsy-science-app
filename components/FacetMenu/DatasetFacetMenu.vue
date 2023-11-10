@@ -128,7 +128,6 @@ export default {
   },
 
   mounted() {
-    console.log(this)
     if (this.$route.query.selectedFacetIds) {
       this.defaultCheckedFacetIds = this.$route.query.selectedFacetIds.split(",")
     }

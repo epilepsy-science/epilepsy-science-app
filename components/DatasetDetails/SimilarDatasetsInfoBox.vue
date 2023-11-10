@@ -15,7 +15,7 @@
         </div>
         <hr class="mt-16"/>
       </div>
-      <div class="my-8" v-for="facet in datasetFacetsData" :key="facet.label">
+      <!-- <div class="my-8" v-for="facet in datasetFacetsData" :key="facet.label">
         <div v-if="facet.children && showFacet(facet)">
           <div class="capitalize mb-8">{{facet.label}}:</div>
           <div class="facet-button-container" v-for="child in facet.children" :key="child.id">
@@ -32,7 +32,7 @@
             </sparc-tooltip> 
           </div>
           <hr class="my-16"/>
-        </div>
+        </div> -->
       </div>
       <div class="mb-16" v-if="contributors">
         <div class="capitalize mb-8">contributors:</div>
@@ -71,7 +71,7 @@ import FormatString from '@/mixins/format-string'
 
 const algoliaClient = createAlgoliaClient()
 const algoliaIndex = algoliaClient.initIndex(process.env.ALGOLIA_INDEX)
-const EXPERIMENTAL_APPROACH_LABEL = facetPropPathMapping.find(item => item.id == 'item.modalities').label
+// const EXPERIMENTAL_APPROACH_LABEL = facetPropPathMapping.find(item => item.id == 'item.modalities').label
 
 const getPageTypeName = typeFacet => {
   let typeName = 'dataset'
@@ -116,12 +116,12 @@ export default {
   },
 
   created() {
-    this.isLoadingFacets = true;
-    getAlgoliaFacets(algoliaIndex, facetPropPathMapping).then(data => {
-        this.allFacetsData = data
-      }).finally(() => {
-        this.isLoadingFacets = false
-      })
+    // this.isLoadingFacets = true;
+    // getAlgoliaFacets(algoliaIndex, facetPropPathMapping).then(data => {
+    //     this.allFacetsData = data
+    //   }).finally(() => {
+    //     this.isLoadingFacets = false
+    //   })
   },
   methods: {
     getProjectLink: function(associatedProject) {

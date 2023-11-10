@@ -39,7 +39,7 @@
                 </span>
                 <span>
                   <div v-for="(item, index) in primaryPublications" :key="index" class="primary-publications-list-item">
-                    <apa-citation @doi-invalid="onDoiInvalid" class="mb-8" :doi="item.doi" :can-copy-citation="false" />
+                    <!-- <apa-citation @doi-invalid="onDoiInvalid" class="mb-8" :doi="item.doi" :can-copy-citation="false" /> -->
                   </div>
                 </span>
               </div>

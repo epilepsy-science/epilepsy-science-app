@@ -3,35 +3,37 @@
     <client-only>
       <breadcrumb :breadcrumb="breadcrumb" :title="datasetTitle" />
       <div v-if="showTombstone">
-        <tombstone
-          :dataset-details="datasetInfo"
-        />
+        <tombstone :dataset-details="datasetInfo" />
       </div>
       <div v-else>
         <div class="bx--grid">
           <div class="bx--row">
-            <div class="bx--col-sm-4 bx--col-md-2 bx--col-lg-3 bx--col-xlg-3 left-column">
+            <div
+              class="bx--col-sm-4 bx--col-md-2 bx--col-lg-3 bx--col-xlg-3 left-column"
+            >
               <dataset-action-box />
-              <similar-datasets-info-box
+              <!-- <similar-datasets-info-box
                 :associated-projects="associatedProjects"
                 :dataset-type-name="datasetTypeName"
-              />
+              /> -->
             </div>
-            <div class="bx--col-sm-4 bx--col-md-6 bx--col-lg-13 bx--col-xlg-13 right-column">
-              <dataset-header
+            <div
+              class="bx--col-sm-4 bx--col-md-6 bx--col-lg-13 bx--col-xlg-13 right-column"
+            >
+              <!-- <dataset-header
                 class="dataset-header"
                 :latestVersionRevision="latestVersionRevision"
                 :latestVersionDate="latestVersionDate"
                 :numCitations="numCitations"
                 :numDownloads="numDownloads"
-              />
+              /> -->
               <div class="tabs-container mt-16 mb-0 mx-0 p-16">
                 <content-tab-card
                   id="datasetDetailsTabsContainer"
                   :tabs="tabs"
                   :active-tab-id="activeTabId"
                   @tab-changed="tabChanged"
-                  linkComponent="nuxt-link"
+                  linkComponent="nuxt-link" 
                   routeName="datasetDetailsTab"
                 >
                   <dataset-description-info
@@ -41,12 +43,12 @@
                     :loading-markdown="loadingMarkdown"
                     :dataset-tags="datasetTags"
                   />
-                  <dataset-about-info
+                  <!-- <dataset-about-info
                     v-show="activeTabId === 'about'"
                     :latestVersionRevision="latestVersionRevision"
                     :latestVersionDate="latestVersionDate"
                     :associated-projects="associatedProjects"
-                  />
+                  /> -->
                   <citation-details
                     v-show="activeTabId === 'cite'"
                     :doi-value="datasetInfo.doi"
@@ -59,28 +61,28 @@
                     :markdown="markdown.markdownTop"
                     v-show="activeTabId === 'images'"
                   />
-                  <dataset-references
+                  <!-- <dataset-references
                     v-if="hasCitations"
                     v-show="activeTabId === 'references'"
                     :primary-publications="primaryPublications"
                     :associated-publications="associatedPublications"
-                  />
-                  <version-history
+                  /> -->
+                  <!-- <version-history
                     v-if="canViewVersions"
                     v-show="activeTabId === 'versions'"
                     :versions="versions"
-                  />
+                  /> -->
                 </content-tab-card>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <dataset-version-message
+      <!-- <dataset-version-message
         v-if="!isLatestVersion"
         :current-version="datasetInfo.version"
         :dataset-details="datasetInfo"
-      />
+      /> -->
     </client-only>
   </div>
 </template>
@@ -97,13 +99,13 @@ import DatasetActionBox from '@/components/DatasetDetails/DatasetActionBox.vue'
 
 import Breadcrumb from '@/components/Breadcrumb/Breadcrumb'
 import CitationDetails from '@/components/CitationDetails/CitationDetails.vue'
-import DatasetAboutInfo from '@/components/DatasetDetails/DatasetAboutInfo.vue'
-import DatasetReferences from '~/components/DatasetDetails/DatasetReferences.vue'
+// import DatasetAboutInfo from '@/components/DatasetDetails/DatasetAboutInfo.vue'
+// import DatasetReferences from '~/components/DatasetDetails/DatasetReferences.vue'
 import DatasetDescriptionInfo from '@/components/DatasetDetails/DatasetDescriptionInfo.vue'
 import DatasetFilesInfo from '@/components/DatasetDetails/DatasetFilesInfo.vue'
 import SimilarDatasetsInfoBox from '@/components/DatasetDetails/SimilarDatasetsInfoBox.vue'
 import ImagesGallery from '@/components/ImagesGallery/ImagesGallery.vue'
-import VersionHistory from '@/components/VersionHistory/VersionHistory.vue'
+// import VersionHistory from '@/components/VersionHistory/VersionHistory.vue'
 import DatasetVersionMessage from '@/components/DatasetVersionMessage/DatasetVersionMessage.vue'
 import Tombstone from '@/components/Tombstone/Tombstone.vue'
 
@@ -133,23 +135,19 @@ const tabs = [
     id: 'abstract'
   },
   {
-    label: 'About',
-    id: 'about'
-  },
-  {
     label: 'Cite',
     id: 'cite'
-  },
-  {
-    label: 'Gallery',
-    id: 'images'
-  },
+  }
 ]
 
-const getDatasetFacetsData = async (route) => {
+const getDatasetFacetsData = async route => {
   const objectId = route.params.datasetId
   const filter = `objectID:${objectId}`
-  return await getAlgoliaFacets(algoliaIndex, facetPropPathMapping, filter).then(data => {
+  return await getAlgoliaFacets(
+    algoliaIndex,
+    facetPropPathMapping,
+    filter
+  ).then(data => {
     return data
   })
 }
@@ -173,13 +171,15 @@ const getOrganEntries = async () => {
  * Get associated project from contentful
  * @returns {Array}
  */
-const getAssociatedProjects = async (sparcAwardNumbers) => {
+const getAssociatedProjects = async sparcAwardNumbers => {
   try {
     const projects = await client.getEntries({
-      content_type: process.env.ctf_project_id,
+      content_type: process.env.ctf_project_id
     })
-    const associatedProjects = projects.items?.filter((project) => {
-      return sparcAwardNumbers.includes(pathOr('', ['fields', 'awardId'], project) ) 
+    const associatedProjects = projects.items?.filter(project => {
+      return sparcAwardNumbers.includes(
+        pathOr('', ['fields', 'awardId'], project)
+      )
     })
     return associatedProjects || []
   } catch (error) {
@@ -195,7 +195,13 @@ const getAssociatedProjects = async (sparcAwardNumbers) => {
  * @param {Function} $axios
  * @returns {Object}
  */
-const getDatasetDetails = async (datasetId, version, userToken, datasetTypeName, $axios) => {
+const getDatasetDetails = async (
+  datasetId,
+  version,
+  userToken,
+  datasetTypeName,
+  $axios
+) => {
   const url = `${process.env.discover_api_host}/datasets/${datasetId}`
   var datasetUrl = version ? `${url}/versions/${version}` : url
   if (userToken) {
@@ -205,8 +211,8 @@ const getDatasetDetails = async (datasetId, version, userToken, datasetTypeName,
   const simulationUrl = `${process.env.portal_api}/sim/dataset/${datasetId}`
 
   const datasetDetails =
-    (datasetTypeName === 'dataset' || datasetTypeName === 'scaffold')
-      ? await $axios.$get(datasetUrl).catch((error) => { 
+    datasetTypeName === 'dataset' || datasetTypeName === 'scaffold'
+      ? await $axios.$get(datasetUrl).catch(error => {
           const status = pathOr('', ['data', 'status'], error.response)
           if (status === 'UNPUBLISHED') {
             const details = error.response.data
@@ -216,7 +222,7 @@ const getDatasetDetails = async (datasetId, version, userToken, datasetTypeName,
             }
           }
         })
-      : await $axios.$get(simulationUrl).catch((error) => { 
+      : await $axios.$get(simulationUrl).catch(error => {
           const status = pathOr('', ['data', 'status'], error.response)
           if (status === 'UNPUBLISHED') {
             const details = error.response.data
@@ -226,7 +232,6 @@ const getDatasetDetails = async (datasetId, version, userToken, datasetTypeName,
             }
           }
         })
-
   return datasetDetails
 }
 
@@ -247,21 +252,22 @@ const getDatasetVersions = async (datasetId, $axios) => {
   }
 }
 
-const getDownloadsSummary = async ($axios) => {
+const getDownloadsSummary = async $axios => {
   try {
-    const startDate = new Date('2000','1');
+    const startDate = new Date('2000', '1')
     const currentDate = new Date()
     const url = `${process.env.discover_api_host}/metrics/dataset/downloads/summary`
-    return $axios.$get(url, {
+    return $axios
+      .$get(url, {
         params: { startDate: startDate, endDate: currentDate }
-      }).then(response => {
-      return response
-    })
+      })
+      .then(response => {
+        return response
+      })
   } catch (error) {
     return 0
   }
 }
-
 
 export default {
   name: 'DatasetDetails',
@@ -271,12 +277,12 @@ export default {
     DatasetHeader,
     DatasetActionBox,
     CitationDetails,
-    DatasetReferences,
-    DatasetAboutInfo,
+    // DatasetReferences,
+    // DatasetAboutInfo,
     DatasetDescriptionInfo,
     DatasetFilesInfo,
     ImagesGallery,
-    VersionHistory,
+    // VersionHistory,
     DatasetVersionMessage,
     SimilarDatasetsInfoBox,
     Tombstone
@@ -290,13 +296,22 @@ export default {
     const datasetId = pathOr('', ['params', 'datasetId'], route)
 
     const datasetFacetsData = await getDatasetFacetsData(route)
-    const typeFacet = datasetFacetsData.find(child => child.key === 'item.types.name')
-    const datasetTypeName = typeFacet !== undefined ? typeFacet.children[0].label : 'dataset'
-    const userToken = app.$cookies.get('user-token') || store.getters.cognitoUserToken
+    const typeFacet = datasetFacetsData.find(
+      child => child.key === 'item.types.name'
+    )
+    const datasetTypeName =
+      typeFacet !== undefined ? typeFacet.children[0].label : 'dataset'
+    const userToken =
+      app.$cookies.get('user-token') || store.getters.cognitoUserToken
 
     const errorMessages = []
 
-    const [organEntries, datasetDetails, versions, downloadsSummary] = await Promise.all([
+    const [
+      organEntries,
+      datasetDetails,
+      versions,
+      downloadsSummary
+    ] = await Promise.all([
       // getOrganEntries(),
       getDatasetDetails(
         datasetId,
@@ -306,17 +321,27 @@ export default {
         $axios
       ),
       getDatasetVersions(datasetId, $axios),
-      getDownloadsSummary($axios),
+      getDownloadsSummary($axios)
     ])
-    
+
     if (!datasetDetails) {
       //critical error messages
-      error({ statusCode: 400, message: ErrorMessages.methods.discover(), display: true})
+      error({
+        statusCode: 400,
+        message: ErrorMessages.methods.discover(),
+        display: true
+      })
     }
 
     store.dispatch('pages/datasets/datasetId/setDatasetInfo', datasetDetails)
-    store.dispatch('pages/datasets/datasetId/setDatasetFacetsData', datasetFacetsData)
-    store.dispatch('pages/datasets/datasetId/setDatasetTypeName', datasetTypeName)
+    store.dispatch(
+      'pages/datasets/datasetId/setDatasetFacetsData',
+      datasetFacetsData
+    )
+    store.dispatch(
+      'pages/datasets/datasetId/setDatasetTypeName',
+      datasetTypeName
+    )
 
     return {
       entries: organEntries,
@@ -337,7 +362,9 @@ export default {
       loadingMarkdown: false,
       associatedProjects: [],
       markdown: {},
-      activeTabId: this.$route.query.datasetDetailsTab ? this.$route.query.datasetDetailsTab : 'abstract',
+      activeTabId: this.$route.query.datasetDetailsTab
+        ? this.$route.query.datasetDetailsTab
+        : 'abstract',
       datasetRecords: [],
       sparcAwardNumbers: [],
       tabs: [],
@@ -360,29 +387,25 @@ export default {
       ],
       subtitles: [],
       ctfDatasetFormatInfoPageId: process.env.ctf_dataset_format_info_page_id,
-      errorMessages: [],
+      errorMessages: []
     }
   },
 
+  // What does this code do in detail
   async fetch() {
-    const datasetOwnerId = propOr('', 'ownerId', this.datasetInfo)
-    const datasetOwnerEmail = await this.$axios
-      .$get(`${process.env.portal_api}/get_owner_email/${datasetOwnerId}`)
-      .then(resp => {
-        return resp.email
+    const datasetOwnerEmail = this.ownerEmail
+    if (this.datasetInfo[0])
+      this.$store.dispatch('pages/datasets/datasetId/setDatasetInfo', {
+        ...this.datasetInfo[0],
+        ownerEmail: datasetOwnerEmail
       })
-      .catch(() => {
-        return ''
-      })
-
-    if (this.datasetInfo)
-      this.$store.dispatch('pages/datasets/datasetId/setDatasetInfo', { ...this.datasetInfo, 'ownerEmail': datasetOwnerEmail })
   },
 
   computed: {
-    ...mapState('pages/datasets/datasetId', 
-      ['datasetInfo', 'datasetFacetsData']
-    ),
+    ...mapState('pages/datasets/datasetId', [
+      'datasetInfo',
+      'datasetFacetsData'
+    ]),
     defaultTab() {
       return this.tabs[0].id
     },
@@ -391,12 +414,12 @@ export default {
      * @returns {Boolean}
      */
     embargoAccess() {
-      return propOr(null, 'embargoAccess', this.datasetInfo)
+      return propOr(null, 'embargoAccess', this.datasetInfo[0])
     },
     isLatestVersion() {
       if (this.versions !== undefined && this.versions.length) {
         const latestVersion = compose(propOr(1, 'version'), head)(this.versions)
-        return this.datasetInfo.version === latestVersion
+        return this.datasetInfo[0].version === latestVersion
       }
 
       return true
@@ -438,7 +461,7 @@ export default {
      * @returns {String}
      */
     datasetLicense: function() {
-      const licenseKey = propOr('', 'license', this.datasetInfo)
+      const licenseKey = propOr('', 'license', this.datasetInfo[0])
       return getLicenseAbbr(licenseKey)
     },
 
@@ -447,35 +470,35 @@ export default {
      * @returns {String}
      */
     datasetLicenseName: function() {
-      return propOr('', 'license', this.datasetInfo)
+      return propOr('', 'license', this.datasetInfo[0])
     },
     /**
      * Returns dataset banner
      * @returns {String}
      */
-     getDatasetImage: function() {
-      return propOr('', 'banner', this.datasetInfo)
+    getDatasetImage: function() {
+      return propOr('', 'banner', this.datasetInfo[0])
     },
     /**
      * Returns the list of contributors who contributed to the dataset
      * @returns {String}
      */
     datasetContributors: function() {
-      return propOr([], 'contributors', this.datasetInfo)
+      return propOr([], 'contributors', this.datasetInfo[0])
     },
     /**
      * Returns dataset owner email
      * @returns {String}
      */
     datasetOwnerEmail: function() {
-      return this.datasetInfo.ownerEmail || ''
+      return this.datasetInfo[0].ownerEmail || ''
     },
     /**
      * Returns the dataset title
      * @returns {String}
      */
     datasetTitle: function() {
-      return propOr('', 'name', this.datasetInfo)
+      return propOr('', 'name', this.datasetInfo[0])
     },
     /**
      * Url to get records for model
@@ -496,7 +519,7 @@ export default {
      * @return {String}
      */
     originallyPublishedDate: function() {
-      const date = propOr('', 'firstPublishedAt', this.datasetInfo)
+      const date = propOr('', 'firstPublishedAt', this.datasetInfo[0])
       return this.formatDate(date)
     },
     /**
@@ -504,21 +527,21 @@ export default {
      * @returns {Array}
      */
     datasetTags: function() {
-      return propOr([], 'tags', this.datasetInfo)
+      return propOr([], 'tags', this.datasetInfo[0])
     },
     /**
      * Returns list of external publications for dataset
      * @returns {Array}
      */
     externalPublications: function() {
-      return propOr([], 'externalPublications', this.datasetInfo)
+      return propOr([], 'externalPublications', this.datasetInfo[0])
     },
     /**
      * Return DOI link
      * @returns {String}
      */
     doiLink: function() {
-      const doi = propOr('', 'doi', this.datasetInfo)
+      const doi = propOr('', 'doi', this.datasetInfo[0])
       return doi ? `https://doi.org/${doi}` : ''
     },
     /**
@@ -526,21 +549,21 @@ export default {
      * @returns {String}
      */
     datasetDescription: function() {
-      return propOr('', 'description', this.datasetInfo)
+      return propOr('', 'description', this.datasetInfo[0])
     },
     /**
      * Compute name
      * @returns {String}
      */
     datasetName: function() {
-      return propOr('', 'name', this.datasetInfo)
+      return propOr('', 'name', this.datasetInfo[0])
     },
     /**
      * Compute organization name
      * @returns {String}
      */
     organizationName: function() {
-      return propOr('', 'organizationName', this.datasetInfo)
+      return propOr('', 'organizationName', this.datasetInfo[0])
     },
     /**
      * Compute endpoint URL to get dataset
@@ -573,17 +596,21 @@ export default {
       return Scaffolds[this.organType.toLowerCase()]
     },
     externalPublications: function() {
-      return propOr([], 'externalPublications', this.datasetInfo)
+      return propOr([], 'externalPublications', this.datasetInfo[0])
     },
     primaryPublications: function() {
-      const valObj = this.externalPublications.filter(function(elem) {
-        return elem.relationshipType == 'IsDescribedBy'
-      })
+      const valObj = []
+      // const valObj = this.externalPublications.filter(function(elem) {
+      //   return elem.relationshipType == 'IsDescribedBy'
+      // })
       return valObj.length > 0 ? valObj : null
     },
     associatedPublications: function() {
       const valObj = this.externalPublications.filter(function(elem) {
-        return elem.relationshipType == 'IsReferencedBy' || elem.relationshipType == 'IsSupplementedBy'
+        return (
+          elem.relationshipType == 'IsReferencedBy' ||
+          elem.relationshipType == 'IsSupplementedBy'
+        )
       })
       return valObj.length > 0 ? valObj : null
     },
@@ -591,25 +618,31 @@ export default {
       return (this.primaryPublications || this.associatedPublications) !== null
     },
     numCitations: function() {
-      let numPrimary = this.primaryPublications ? this.primaryPublications.length : 0;
-      let numAssociated = this.associatedPublications ? this.associatedPublications.length : 0;
-      return numPrimary + numAssociated;
+      let numPrimary = this.primaryPublications
+        ? this.primaryPublications.length
+        : 0
+      let numAssociated = this.associatedPublications
+        ? this.associatedPublications.length
+        : 0
+      return numPrimary + numAssociated
     },
     numDownloads: function() {
-      let numDownloads = 0;
-      this.downloadsSummary.filter(download => download.datasetId == this.datasetId).forEach(item => {
-        numDownloads += item.downloads;
-      })
+      let numDownloads = 0
+      this.downloadsSummary
+        .filter(download => download.datasetId == this.datasetId)
+        .forEach(item => {
+          numDownloads += item.downloads
+        })
       return numDownloads
     },
     hasFiles: function() {
-      return this.fileCount >= 1
+      return true
     },
     fileCount: function() {
-      return propOr('0', 'fileCount', this.datasetInfo)
+      return propOr('0', 'fileCount', this.datasetInfo[0])
     },
     embargoed: function() {
-      return propOr(false, 'embargo', this.datasetInfo)
+      return propOr(false, 'embargo', this.datasetInfo[0])
     },
     canViewVersions: function() {
       return !this.embargoed
@@ -657,7 +690,8 @@ export default {
     hasFiles: {
       handler: function(newValue) {
         if (newValue) {
-          const hasFilesTab = this.tabs.find(tab => tab.id === 'files') !== undefined
+          const hasFilesTab =
+            this.tabs.find(tab => tab.id === 'files') !== undefined
           if (!hasFilesTab) {
             this.tabs.splice(3, 0, { label: 'Files', id: 'files' })
           }
@@ -667,8 +701,10 @@ export default {
     },
     hasCitations: {
       handler: function(newValue) {
+        return false
         if (newValue) {
-          const hasCitationsTab = this.tabs.find(tab => tab.id === 'references') !== undefined
+          const hasCitationsTab =
+            this.tabs.find(tab => tab.id === 'references') !== undefined
           if (!hasCitationsTab) {
             this.tabs.splice(5, 0, { label: 'References', id: 'references' })
           }
@@ -678,24 +714,27 @@ export default {
     },
     canViewVersions: {
       handler: function(newValue) {
+        return false
         if (newValue) {
-          const hasVersionsTab = this.tabs.find(tab => tab.id === 'versions') !== undefined
+          const hasVersionsTab =
+            this.tabs.find(tab => tab.id === 'versions') !== undefined
           if (!hasVersionsTab) {
             this.tabs.splice(6, 0, { label: 'Versions', id: 'versions' })
           }
         }
+        
       },
       immediate: true
     },
     datasetTags: {
       handler: function(val) {
         if (val) {
-          this.entries.forEach(entry => {
-            const name = pathOr('', ['fields', 'name'], entry)
-            if (this.datasetTags.includes(name.toLowerCase())) {
-              this.subtitles.push(entry.fields.name)
-            }
-          })
+          // this.entries.forEach(entry => {
+          //   const name = pathOr('', ['fields', 'name'], entry)
+          //   if (this.datasetTags.includes(name.toLowerCase())) {
+          //     this.subtitles.push(entry.fields.name)
+          //   }
+          // })
         }
       },
       immediate: true
@@ -756,16 +795,18 @@ export default {
       try {
         algoliaIndex
           .getObject(this.datasetId, {
-            attributesToRetrieve: 'supportingAwards',
+            attributesToRetrieve: 'supportingAwards'
           })
-          .then(( { supportingAwards } ) => {
-            supportingAwards = supportingAwards.filter(award => propOr(null, 'identifier', award) != null)
-            supportingAwards.forEach(award => {
-              this.sparcAwardNumbers.push(`${award.identifier}`)
-            })
-          }).finally(async () => {
-            if (this.sparcAwardNumbers.length > 0)
-            {
+          .then(({ supportingAwards }) => {
+            // supportingAwards = supportingAwards.filter(
+            //   award => propOr(null, 'identifier', award) != null
+            // )
+            // supportingAwards.forEach(award => {
+            //   this.sparcAwardNumbers.push(`${award.identifier}`)
+            // })
+          })
+          .finally(async () => {
+            if (this.sparcAwardNumbers.length > 0) {
               let projects = await getAssociatedProjects(this.sparcAwardNumbers)
               this.associatedProjects = projects.length > 0 ? projects : null
             }
@@ -806,7 +847,7 @@ export default {
             throw error
           })
       }
-    },
+    }
   },
 
   head() {

@@ -42,6 +42,7 @@ import { propOr } from 'ramda'
 import { mapState } from 'vuex'
 
 import { baseName, extractSection, extractS3BucketName } from '@/utils/common'
+import { failMessage } from '@/utils/notification-messages'
 
 const getBiolucidaData = async datasetId => {
   try {
@@ -260,7 +261,7 @@ export default {
     if (Object.keys(biolucidaImageData).length === 0 &&
       Object.keys(scicrunchData).length === 0 ) {
       //Non critical error
-      this.$message(failMessage(ErrorMessages.methods.scicrunch()))
+      // this.$message(failMessage(ErrorMessages.methods.scicrunch()))
     }
     this.datasetBiolucida = biolucidaImageData
     this.datasetScicrunch = scicrunchData
