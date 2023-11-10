@@ -1,6 +1,6 @@
 <template>
   <div class="about-page pb-16">
-    <breadcrumb :breadcrumb="breadcrumb" title="About SPARC" />
+    <breadcrumb :breadcrumb="breadcrumb" title="About Epilepsy.Science" />
     <page-hero v-if="heroCopy">
       <h1>{{ pageTitle }}</h1>
       <!-- eslint-disable vue/no-v-html -->
@@ -8,64 +8,63 @@
       <div v-html="parseMarkdown(heroCopy)" />
     </page-hero>
     <div class="page-wrap container">
-      <paper
-        class="row mt-32"
-        :text="parseMarkdown(sparcPortal)"
-        :button-text="' View The Roadmap '"
-        button-link-external="https://docs.sparc.science/docs/sparc-portal-roadmap"
-      />
+      <h3>What are we doing here at Epilepsy.Science?</h3>
 
-      <div class="row mt-32">
-        <paper
-          class="row-item"
-          :text="parseMarkdown(whatWeOffer)"
-          :button-text="' What We Offer '"
-          :button-link="aboutLink(whatWeOfferPageId)"
-        />
-        <paper
-          class="row-item"
-          :text="parseMarkdown(teamLeadership)"
-          :button-text="' Who We Are '"
-          :button-link="aboutLink(teamAndLeadershipPageId)"
-        />
-        <paper
-          class="row-item"
-          :text="parseMarkdown(getInvolved)"
-          :button-text="' Help Us Grow '"
-          :button-link="aboutLink(getInvolvedPageId)"
-        />
-      </div>
+      <p>
+        Epilepsy.Science is a new cloud-based platform for managing, analyzing,
+        publishing, and sharing scientific datasets to accelerate epilepsy
+        research. This collaboration unites three leading organizations -
+        Pennsieve, the Brain Data Science Platform (BDSP), and the AWS Open Data
+        Sponsorship Program - to create an unparalleled open data resource for
+        the epilepsy community.
+      </p>
 
-      <div class="gallery-items-container p-32 mt-32">
-        <div class="heading2 mb-16">Portal Metrics</div>
-        <gallery
-          galleryItemType="metrics"
-          :items="metricsItems"
-        />
-        <nuxt-link
-          to="about/metrics"
-        >
-          <el-button class="secondary mt-16">
-            View All Metrics
-          </el-button>
-        </nuxt-link>
-      </div>
+      <p>
+        The mission of Epilepsy.Science is to drive progress in understanding,
+        treating, and ultimately curing epilepsy through open access to
+        multidimensional epilepsy data at scale. The platform provides over
+        200,000 EEG recordings from diverse contexts including routine
+        outpatient EEGs, critically ill patients, and epilepsy monitoring unit
+        evaluations. As it grows, it will also include extensive accompanying
+        clinical data like medications, imaging, genetics, and more from
+        institutions worldwide.
+      </p>
 
-      <div class="gallery-items-container p-32 mt-32">
-        <div class="heading2 mb-16">Highlights</div>
-        <gallery
-          galleryItemType="highlights"
-          :cardWidth="68"
-          :items="highlightsItems"
-        />
-      </div>
+      <p>
+        Researchers can use Epilepsy.Science to easily build customized cohorts
+        by connecting data points across datasets. The platform enables
+        scientists to publish -- at no cost -- high quality datasets for
+        citation, reuse, and reproducible research. By promoting open science,
+        Epilepsy.Science aims to accelerate discoveries and improve patient
+        outcomes.
+      </p>
 
-      <div class="gallery-items-container p-32 mt-32">
-        <div
-          class="about-page-text"
-          v-html="parseMarkdown(overview)"
-        />
-      </div>
+      <p>This collaboration brings together:</p>
+
+      <ul>
+        <li>
+          Pennsieve’s scalable data management and sharing capabilities and
+          graph-based data integration model.
+        </li>
+
+        <li>
+          BDSP’s extensive data resources including over 200,000 EEG recordings
+          and genetics, imaging, and clinical data. BDSP also contributes a
+          library of open-source analytics tools.
+        </li>
+
+        <li>
+          The AWS Open Data Sponsorship Program provides cloud credits to cover
+          storage costs, enabling sustainable public access.
+        </li>
+      </ul>
+
+      <p>
+        By combining the strengths of these leading organizations,
+        Epilepsy.Science offers unprecedented opportunities for open,
+        collaborative epilepsy research through its powerful data resources,
+        analytics tools, and cloud-based platform.
+      </p>
     </div>
   </div>
 </template>
