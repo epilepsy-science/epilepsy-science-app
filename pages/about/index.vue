@@ -13,10 +13,9 @@
       <p>
         Epilepsy.Science is a new cloud-based platform for managing, analyzing,
         publishing, and sharing scientific datasets to accelerate epilepsy
-        research. This collaboration unites three leading organizations -
-        Pennsieve, the Brain Data Science Platform (BDSP), and the AWS Open Data
-        Sponsorship Program - to create an unparalleled open data resource for
-        the epilepsy community.
+        research. Led by PennSieve and the Brain Data Science Platform (BDSP)
+        and with support from the AWS Open Data Sponsorship Program, we are
+        creating an unparalleled open data resource for the epilepsy community.
       </p>
 
       <p>
@@ -54,13 +53,17 @@
         </li>
 
         <li>
-          The AWS Open Data Sponsorship Program provides cloud credits to cover
-          storage costs, enabling sustainable public access.
+          The AWS Open Data Sponsorship Program covers the cost of storage for
+          publicly available high-value cloud-optimized datasets. We work with
+          data providers who seek to democratize access to data by making it
+          available for analysis on AWS, develop new cloud-native techniques,
+          formats, and tools that lower the cost of working with data, and
+          encourage the development of communities that benefit from access to
+          shared datasets.
         </li>
       </ul>
 
       <p>
-        By combining the strengths of these leading organizations,
         Epilepsy.Science offers unprecedented opportunities for open,
         collaborative epilepsy research through its powerful data resources,
         analytics tools, and cloud-based platform.
