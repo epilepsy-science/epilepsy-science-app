@@ -172,7 +172,7 @@ export default {
 .btn-clear-search {
   background: none;
   border: none;
-  color: #8300bf;
+  color: #e76f51;
   padding: 0;
 }
 </style>

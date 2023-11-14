@@ -14,7 +14,7 @@
                 {{ footerData.copy }}
               </p>
             </div>
-            <div class="footer__info--social">
+            <!-- <div class="footer__info--social">
               <a href="https://twitter.com/sparc_science" target="_blank">
                 <svg-icon
                   icon="icon-twitter"
@@ -45,64 +45,7 @@
                   width="32px"
                 />
               </a>
-            </div>
-            <!-- <div class="footer__info--re3data">
-              <object type="image/svg+xml" data="/images/100013719.svg">
-                <img src="/images/100013719.svg" alt="re3data badge"/>
-              </object>
             </div> -->
-          </div>
-        </el-col>
-        <el-col :sm="{ span: 22, offset: 1 }" :md="{ span: 8, offset: 4 }">
-          <div class="footer__links">
-            <el-row :gutter="32">
-              <el-col :span="12">
-                <h3>Learn More</h3>
-                <ul>
-                  <li
-                    v-for="learnMoreLink in footerData.learnMoreLinks"
-                    :key="learnMoreLink.fields.url"
-                  >
-                    <footer-link :link="learnMoreLink" />
-                  </li>
-                </ul>
-              </el-col>
-              <el-col :span="12">
-                <h3>Policies</h3>
-                <ul>
-                  <li
-                    v-for="policiesLink in footerData.policiesLinks"
-                    :key="policiesLink.fields.url"
-                  >
-                    <footer-link :link="policiesLink" />
-                  </li>
-                </ul>
-              </el-col>
-            </el-row>
-            <el-row :gutter="32">
-              <el-col :span="12">
-                <h3>Help Us Improve</h3>
-                <ul>
-                  <li
-                    v-for="helpUsImproveLink in footerData.helpUsImproveLinks"
-                    :key="helpUsImproveLink.fields.url"
-                  >
-                    <footer-link :link="helpUsImproveLink" />
-                  </li>
-                </ul>
-              </el-col>
-              <el-col :span="12">
-                <h3>Stay Up-to-Date</h3>
-                <ul>
-                  <li
-                    v-for="stayUpdatedLink in footerData.stayUpdatedLinks"
-                    :key="stayUpdatedLink.fields.url"
-                  >
-                    <footer-link :link="stayUpdatedLink" />
-                  </li>
-                </ul>
-              </el-col>
-            </el-row>
           </div>
         </el-col>
       </el-row>

@@ -111,7 +111,7 @@ export default {
     a {
       text-decoration: none;
       text-transform: uppercase;
-      color: #8300bf;
+      color: #e76f51;
     }
   }
 }

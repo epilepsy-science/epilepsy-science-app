@@ -89,74 +89,6 @@
             </client-only>
           </el-col>
         </el-row>
-
-        <div>
-          <div class="heading2 mb-16 mt-32">Community Spotlight</div>
-          <community-spotlight-listings :stories="stories.items" :bottom-link="true" />
-        </div>
-
-        <div id="stayConnected" class="heading2 mt-32 mb-16">Stay Connected</div>
-        <div class="subpage py-16">
-          <el-row :gutter="32">
-            <el-col :xs="24" :sm="12" class="newsletter-wrap">
-              <div class="heading2">Sign up for the Epilepsy.Science Newsletter</div>
-              <div class="body1 mb-16 mt-8">Keep up to date with all the latest news and events from the Epilepsy.Science Portal.</div>
-              <newsletter-form />
-              <div class="newsletter-archive mt-16">
-                <style type="text/css">
-                  .campaign { margin-top: .5rem; }
-                </style>
-                <div class="heading2 mt-24">Current Newsletter</div>
-                <div id="newsletter-archive" />
-                <a class="mt-8" href="//us2.campaign-archive.com/home/?u=e60c48f231a30b544eed731ea&id=c81a347bd8" target="_blank">
-                  View all Newsletters<svg-icon icon="icon-open" height="20" width="20" />
-                </a>
-              </div>
-              <div class="heading2 mt-24">Get Involved</div>
-              <div class="body1 mb-16 mt-8">Empower SPARC to promote your science and interests by submitting your science story, news, or event.</div>
-              <div class="get-involved-buttons-container">
-                <nuxt-link
-                  :to="{
-                    name: 'contact-us',
-                    query: {
-                      type: 'news-event'
-                    }
-                  }"
-                  target="_blank"
-                >
-                  <el-button class="get-involved-button secondary">
-                    Share news or events
-                  </el-button>
-                </nuxt-link>
-                <nuxt-link
-                  :to="{
-                    name: 'contact-us',
-                    query: {
-                      type: 'story'
-                    }
-                  }"
-                  target="_blank"
-                >
-                  <el-button class="get-involved-button secondary mt-8">
-                    Submit a community spotlight idea
-                  </el-button>
-                </nuxt-link>
-              </div>
-            </el-col>
-            <el-col :xs="24" :sm="12" class="twitter-wrap">
-              <div v-twitter-widgets>
-                <a
-                  class="twitter-timeline"
-                  href="https://twitter.com/sparc_science?ref_src=twsrc%5Etfw"
-                  data-height="500"
-                  target="_blank"
-                >
-                  Tweets by sparc_science
-                </a>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
       </div>
     </div>
   </div>
@@ -317,7 +249,6 @@ export default Vue.extend<Data, Methods, Computed, never>({
   },
 
   mounted() {
-    this.$injectNewsletterArchive('#newsletter-archive')
   }
 })
 </script>

@@ -14,6 +14,7 @@ export const mutations = {
     state.disableScrolling = data
   },
   SET_FOOTER_DATA(state, data) {
+    console.log(data)
     state.footerData = data
   },
   SET_HAS_ACCEPTED_GDPR(state, hasAcceptedGDPR) {

@@ -468,13 +468,13 @@ export default {
   @import '~@abi-software/mapintegratedvuer/dist/mapintegratedvuer';
 
   .map-icon {
-    color: #8300bf!important;
+    color: #e76f51!important;
   }
 }
 
 .gallery-popper {
-  background: #f3ecf6 !important;
-  border: 1px solid #8300bf;
+  background: #eed4ce !important;
+  border: 1px solid #e76f51;
   border-radius: 4px;
   color: #303133 !important;
   font-size: 12px;
@@ -483,10 +483,10 @@ export default {
   padding: 10px;
   &.el-popper[x-placement^='top'] {
     .popper__arrow {
-      border-top-color: #8300bf !important;
+      border-top-color: #e76f51 !important;
     }
     .popper__arrow:after {
-      border-top-color: #f3ecf6 !important;
+      border-top-color: #eed4ce !important;
     }
   }
 }

@@ -49,7 +49,7 @@ export default {
         }
 
         &.active {
-          color: #8300bf;
+          color: #e76f51;
           font-weight: bold;
         }
       }

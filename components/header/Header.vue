@@ -3,12 +3,8 @@
     <div class="header__nav">
       <div class="header__nav--parent">
         <svg-icon class="mr-4" icon="icon-contact" width="18" height="18" />
-        <nuxt-link :to="`/contact-us?source_url=${currentUrl}`" target="_blank">
+        <a href="https://forms.gle/FEFiDXQG3VB2aVW57" target="_blank">
           Contact Us
-        </nuxt-link>
-        <svg-icon class="mr-4" icon="icon-help" width="18" height="18" />
-        <a href="https://docs.sparc.science/" target="_blank">
-          Help
         </a>
         <template v-if="showLoginFeature">
           <svg-icon
@@ -787,7 +783,7 @@ export default {
   height: fit-content !important;
 }
 .user-submenu:hover {
-  color: #8300bf !important;
+  color: #e76f51 !important;
 }
 .login-logo {
   margin-top: .2rem;

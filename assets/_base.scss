@@ -145,3 +145,41 @@ input {
   color: #e76f51;
   padding: 0 0.3125rem;
 }
+.el-button, 
+.el-checkbox__input.is-checked .el-checkbox__inner.el-checkbox__inner, 
+.el-checkbox__inner:hover,
+li.number.active
+{
+  background:#e76f50!important;
+  border: 1px solid #e76f50!important;
+}
+
+.el-table a, table:not([class^=el-table__]) a, 
+.filter-dropdown, 
+.el-link--inner, 
+.el-checkbox__label,
+.el-tree-node.is-checked .custom-tree-node,
+.expand-options-container,
+.breadcrumb-link
+{
+    color: #e76f50!important;
+}
+
+.tags-container .purple-fill,
+.help-icon{
+  fill:#e76f50!important;
+}
+
+.el-popover,
+.el-tooltip__popper{
+  background:#eed4ce!important;
+  border: 1px solid #e76f50!important;
+}
+
+.tab-link.active.style1, 
+.tab-link.active.style3, 
+.tab-link:hover.style1, 
+.tab-link:hover.style3{
+  border-bottom: 0.125em solid #e76f50!important;
+  color: #e76f50!important;
+}
