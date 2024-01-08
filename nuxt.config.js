@@ -26,19 +26,19 @@ export default {
       // default social cards information for site sharing url's
       { hid: 'og:type', property: 'og:type', content: 'website' },
       { hid: 'og:title', property: 'og:title', content: 'Epilepsy.Science' },
-      { hid: 'og:description', property: 'og:description', content: 'Progressing Epilepsy research around the globe' },
+      { hid: 'og:description', property: 'og:description', content: 'Advancing Epilepsy Research through Open Science' },
       { hid: 'og:image', property: 'og:image',
         content: 'http://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
       },
       { hid: 'og:image:secure_url', property: 'og:image:secure_url',
         content: 'http://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
       },
-      { hid: 'og:url', property: 'og:url', content: process.env.ROOT_URL || 'sparc.science' },
+      { hid: 'og:url', property: 'og:url', content: process.env.ROOT_URL || 'epilepsy.science' },
       { hid: 't-type', name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:site', content: '@sparc_science' },
-      { name: 'twitter:title', content: 'SPARC Portal' },
+      { name: 'twitter:site', content: '@epilepsy_science' },
+      { name: 'twitter:title', content: 'Epilepsy.Science' },
       { name: 'twitter:image', content: 'http://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png' },
-      { name: 'twitter:description', content: 'Stimulating Peripheral Activity to Relieve Conditions (SPARC)' }
+      { name: 'twitter:description', content: 'Advancing Epilepsy Research through Open Science' }
     ],
     link: [
       {

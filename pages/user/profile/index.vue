@@ -31,7 +31,7 @@
         <div class="section heading2 p-16 mt-16">
           Available Resources
           <div class="resource-container heading2">
-            SPARC Newsletter: 
+            Epilepsy.Science Newsletter:
             <template v-if="!isSubscribed">
               <div class="heading3"><b>You are not subscribed.</b></div>
               <div class="body1">
@@ -79,7 +79,7 @@
                 >
                 <svg-icon slot="reference" class="icon-help" icon="icon-help" width="26" height="26" />
                 <div>
-                  My published Datasets relates to all Datasets, Computational and Anatomical models where you have been associated to the dataset using your ORCID number. If there are datasets that you feel should be linked to you please contact curation@sparc.science
+                  My published Datasets relates to all Datasets,
                 </div>
               </el-popover>
             </span>
@@ -134,7 +134,7 @@ export default {
 
   data: () => {
     return {
-      title: "SPARC Profile",
+      title: "Pennsieve Profile",
       breadcrumb: [
         {
           to: {
@@ -159,7 +159,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'The SPARC Portal account allows you to fully utilize portal functionality.'
+          content: 'The Pennsieve account allows you to fully utilize portal functionality.'
         },
       ]
     }

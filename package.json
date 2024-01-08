@@ -1,8 +1,8 @@
 {
-  "name": "sparc-portal",
+  "name": "epilepsy.science",
   "version": "1.0.0",
-  "description": "SPARC Portal Web Application",
-  "author": "The SPARC Data Resource Center",
+  "description": "Epilepsy.Science",
+  "author": "Epilepsy.Science Development Team",
   "private": true,
   "scripts": {
     "dev": "nuxt",

@@ -1,7 +1,5 @@
-# SPARC WEB APPLICATION
-This is the repository for the SPARC-Portal Web Application. The application is build using [Nuxt.js](https://nuxtjs.org) and [Vue.js](https://vuejs.org/).
-
-It depends on the SPARC-API which can be found [here](https://github.com/nih-sparc/sparc-api) 
+# EPILEPSY.SCIENCE WEB APPLICATION
+This is the repository for the Epilepsy.Science Web Application. The application is build using [Nuxt.js](https://nuxtjs.org) and [Vue.js](https://vuejs.org/).
 
 ## Build Setup
 
@@ -22,7 +20,7 @@ $ yarn generate
 
 ## Important Note on Running Locally
 
-Ensure that the following configuration variables are set in your environment prior to running (values can be obtained once you are given access to the sparc-portal developer apps on Heroku):
+Ensure that the following configuration variables are set in your environment prior to running (values can be obtained once you are given access to epilepsy.science developer apps on Heroku):
 * ALGOLIA_API_KEY
 * ALGOLIA_APP_ID
 * ALGOLIA_INDEX

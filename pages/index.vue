@@ -133,8 +133,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content:
-            'Stimulating Peripheral Activity to Relieve Conditions (SPARC)'
+          content: 'Advancing Epilepsy Research through Open Science'
         },
         {
           name: 'og:type',
@@ -143,19 +142,23 @@ export default {
         {
           hid: 'og:title',
           property: 'og:title',
-          content: 'SPARC Portal'
+          content: 'Epilepsy.Science'
         },
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
+          content:
+            'https://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
         },
-        { hid: 'og:image:secure_url', property: 'og:image:secure_url',
-          content: 'https://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
+        {
+          hid: 'og:image:secure_url',
+          property: 'og:image:secure_url',
+          content:
+            'https://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
         },
         {
           name: 'og:site_name',
-          content: 'SPARC Portal'
+          content: 'Epilepsy.Science'
         },
         {
           name: 'twitter:card',
@@ -163,19 +166,20 @@ export default {
         },
         {
           name: 'twitter:site',
-          content: '@sparc_science'
+          content: '@epilepsy_science'
         },
         {
           name: 'twitter:title',
-          content: 'SPARC Portal'
+          content: 'Epilepsy.Science'
         },
         {
           name: 'twitter:image',
-          content: 'https://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
+          content:
+            'https://images.ctfassets.net/erzgaqq17mnz/46BUPtc8c1AJXcI8kpHrN4/8b2a49b4f55525c675330c6f4c9a55a9/epilepsy.science.png'
         },
         {
           name: 'twitter:description',
-          content: 'Stimulating Peripheral Activity to Relieve Conditions (SPARC)'
+          content: 'Advancing Epilepsy Research through Open Science'
         }
       ]
     }
