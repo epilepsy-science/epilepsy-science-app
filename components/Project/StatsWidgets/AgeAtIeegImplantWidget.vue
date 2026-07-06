@@ -41,8 +41,6 @@
     <div v-if="hasData" class="widget-footer">
       Median <span class="footer-value">{{ medianAgeRounded }}</span>
       <span class="footer-sep">·</span>
-      IQR <span class="footer-value">{{ q1AgeRounded }}–{{ q3AgeRounded }}</span>
-      <span class="footer-sep">·</span>
       Range <span class="footer-value">{{ minAgeRounded }}–{{ maxAgeRounded }}</span>
       <span class="footer-sep">·</span>
       N <span class="footer-value">{{ totalCount }}</span>
@@ -124,8 +122,6 @@ const xAxisTickLabels = computed(() => {
 })
 
 const medianAgeRounded = computed(() => Math.round(props.medianAge ?? 0))
-const q1AgeRounded = computed(() => Math.round(props.q1Age ?? 0))
-const q3AgeRounded = computed(() => Math.round(props.q3Age ?? 0))
 const minAgeRounded = computed(() => Math.round(props.minAge ?? 0))
 const maxAgeRounded = computed(() => Math.round(props.maxAge ?? 0))
 </script>
