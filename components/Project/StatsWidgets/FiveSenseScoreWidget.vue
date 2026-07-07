@@ -33,8 +33,7 @@
           v-for="(tick, index) in xAxisTicks"
           :key="`x-tick-${index}`"
           class="x-tick"
-          :style="{ left: `${tick.leftPercent}%` }"
-        >{{ tick.value.toFixed(1) }}</span>
+        ><span class="x-tick-label">{{ tick.label }}</span></span>
       </div>
       <div class="x-axis-title">5-SENSE score</div>
     </div>
@@ -101,19 +100,19 @@ const histogramBars = computed(() => {
   }))
 })
 
-// Ticks sit at the bin edges of the continuous score scale (e.g. 0.0 … 1.0).
+// One label per bar, centered beneath it, showing the score range that bin covers
+// (e.g. "0.0–0.1").
 const xAxisTicks = computed(() => {
   if (!hasData.value) return []
-  const ticks = []
-  const tickCount = props.binCounts.length + 1
-  for (let tickIndex = 0; tickIndex < tickCount; tickIndex++) {
-    const tickFraction = tickIndex / (tickCount - 1)
-    ticks.push({
-      value: props.scoreMin + tickFraction * (props.scoreMax - props.scoreMin),
-      leftPercent: tickFraction * 100,
-    })
-  }
-  return ticks
+  const binCount = props.binCounts.length
+  const scoreRange = props.scoreMax - props.scoreMin
+  return props.binCounts.map((countInBin, binIndex) => {
+    const lowerEdge = props.scoreMin + (binIndex / binCount) * scoreRange
+    const upperEdge = props.scoreMin + ((binIndex + 1) / binCount) * scoreRange
+    return {
+      label: `${lowerEdge.toFixed(1)}–${upperEdge.toFixed(1)}`,
+    }
+  })
 })
 
 function formatScore(scoreValue) {
@@ -240,13 +239,34 @@ const medianScoreFormatted = computed(() => formatScore(props.medianScore))
 .x-axis-ticks {
   grid-column: 3;
   grid-row: 2;
-  position: relative;
-  height: 14px;
+  display: flex;
+  margin-top: -4px;
+  height: 52px;
 }
 
 .x-tick {
+  position: relative;
+  flex: 1;
+}
+
+.x-tick::before {
+  content: '';
   position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 1.5px;
+  height: 6px;
+  background: $gray_3;
   transform: translateX(-50%);
+}
+
+.x-tick-label {
+  position: absolute;
+  top: 8px;
+  right: 50%;
+  transform: rotate(-45deg);
+  transform-origin: top right;
+  white-space: nowrap;
   font-size: 11px;
   font-weight: 600;
   color: $neutralGrey;
