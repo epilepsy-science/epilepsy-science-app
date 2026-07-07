@@ -42,10 +42,7 @@
     <div v-if="hasData" class="widget-footer">
       Median <span class="footer-value">{{ medianScoreFormatted }}</span>
       <span class="footer-sep">·</span>
-      IQR <span class="footer-value">{{ q1ScoreFormatted }}–{{ q3ScoreFormatted }}</span>
-      <span class="footer-sep">·</span>
-      N <span class="footer-value">{{ totalScoredCount }}</span> of
-      <span class="footer-value">{{ totalPatientCount }}</span>
+      N <span class="footer-value">{{ totalScoredCount }}</span>
     </div>
   </div>
 </template>
@@ -124,8 +121,6 @@ function formatScore(scoreValue) {
 }
 
 const medianScoreFormatted = computed(() => formatScore(props.medianScore))
-const q1ScoreFormatted = computed(() => formatScore(props.q1Score))
-const q3ScoreFormatted = computed(() => formatScore(props.q3Score))
 </script>
 
 <style scoped lang="scss">
