@@ -41,8 +41,6 @@
     <div v-if="hasData" class="widget-footer">
       Median <span class="footer-value">{{ medianAgeRounded }}</span>
       <span class="footer-sep">·</span>
-      IQR <span class="footer-value">{{ q1AgeRounded }}–{{ q3AgeRounded }}</span>
-      <span class="footer-sep">·</span>
       Range <span class="footer-value">{{ minAgeRounded }}–{{ maxAgeRounded }}</span>
       <span class="footer-sep">·</span>
       N <span class="footer-value">{{ totalCount }}</span>
@@ -124,8 +122,6 @@ const xAxisTickLabels = computed(() => {
 })
 
 const medianAgeRounded = computed(() => Math.round(props.medianAge ?? 0))
-const q1AgeRounded = computed(() => Math.round(props.q1Age ?? 0))
-const q3AgeRounded = computed(() => Math.round(props.q3Age ?? 0))
 const minAgeRounded = computed(() => Math.round(props.minAge ?? 0))
 const maxAgeRounded = computed(() => Math.round(props.maxAge ?? 0))
 </script>
@@ -248,15 +244,29 @@ const maxAgeRounded = computed(() => Math.round(props.maxAge ?? 0))
   grid-column: 3;
   grid-row: 2;
   display: flex;
+  margin-top: -4px;
 }
 
 .x-tick {
+  position: relative;
   flex: 1;
+  padding-top: 8px;
   text-align: center;
   font-size: 11px;
   font-weight: 600;
   color: $neutralGrey;
   font-variant-numeric: tabular-nums;
+}
+
+.x-tick::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 1.5px;
+  height: 6px;
+  background: $gray_3;
+  transform: translateX(-50%);
 }
 
 .x-axis-title {

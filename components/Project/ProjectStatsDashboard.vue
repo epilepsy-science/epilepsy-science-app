@@ -133,7 +133,7 @@ const defaultLayout = computed(() => [
   sectionHeaderWidget({ id: 'section-preimplant', x: 0, y: 18, w: 12, title: 'Preimplant' }),
   {
     id: 'stats-mri-lesion',
-    x: 0, y: 19, w: 6, h: 8,
+    x: 0, y: 19, w: 12, h: 8,
     componentKey: 'MriLesionWidget',
     component: markRaw(MriLesionWidget),
     componentName: '',
@@ -147,7 +147,7 @@ const defaultLayout = computed(() => [
   },
   {
     id: 'stats-five-sense',
-    x: 6, y: 19, w: 6, h: 8,
+    x: 0, y: 27, w: 12, h: 8,
     componentKey: 'FiveSenseScoreWidget',
     component: markRaw(FiveSenseScoreWidget),
     componentName: '',
@@ -161,10 +161,10 @@ const defaultLayout = computed(() => [
       totalPatientCount: epilepsyStats.value.fiveSenseScore.totalPatientCount,
     },
   },
-  sectionHeaderWidget({ id: 'section-postimplant', x: 0, y: 27, w: 12, title: 'Postimplant' }),
+  sectionHeaderWidget({ id: 'section-postimplant', x: 0, y: 35, w: 12, title: 'Postimplant' }),
   {
     id: 'stats-ieeg-focality',
-    x: 0, y: 28, w: 12, h: 6,
+    x: 0, y: 36, w: 12, h: 6,
     componentKey: 'IeegFocalityWidget',
     component: markRaw(IeegFocalityWidget),
     componentName: '',
@@ -175,7 +175,7 @@ const defaultLayout = computed(() => [
   },
   {
     id: 'stats-intervention-type',
-    x: 0, y: 34, w: 12, h: 8,
+    x: 0, y: 42, w: 12, h: 8,
     componentKey: 'InterventionTypeWidget',
     component: markRaw(InterventionTypeWidget),
     componentName: '',
