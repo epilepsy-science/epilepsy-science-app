@@ -1,6 +1,6 @@
 {
   "pennepi_person.parquet": {
-    "rows": 107,
+    "rows": 100,
     "description": "Patient demographics",
     "columns": {
       "person_id": "string",
@@ -9,15 +9,11 @@
       "sex": "string (Male/Female)",
       "species": "string",
       "population": "string (adult)",
-      "created_at": "string (ISO timestamp)",
-      "id": "string (UUID)",
-      "model_id": "string (UUID)",
-      "model_version": "string",
-      "provenance_id": "string (UUID)"
+      "id": "string (UUID)"
     }
   },
   "pennepi_ieeg_recording_parameters.parquet": {
-    "rows": 118,
+    "rows": 100,
     "description": "iEEG recording parameters and equipment details",
     "columns": {
       "person_id": "string",
@@ -41,74 +37,52 @@
       "electrodemanufacturer": "string",
       "institutionname": "string",
       "powerlinefrequency": "string (numeric)",
-      "hardwarefilters": "string",
-      "softwarefilters": "string",
       "ieegground": "string",
       "ieegreference": "string",
       "taskname": "string",
       "taskdescription": "string",
-      "scans_filename": "string",
-      "scans_description": "string",
-      "acq_date_gmt_5": "string",
-      "acq_time": "string",
-      "created_at": "string (ISO timestamp)",
-      "id": "string (UUID)",
-      "model_id": "string (UUID)",
-      "model_version": "string",
-      "provenance_id": "string (UUID)"
+      "id": "string (UUID)"
     }
   },
   "pennepi_intervention.parquet": {
-    "rows": 107,
+    "rows": 100,
     "description": "Surgical interventions and seizure outcomes",
     "columns": {
       "person_id": "string",
       "dataset_name": "string",
       "session_id": "string",
       "age_intervention": "string (numeric)",
-      "intervention_type": "string (resection, RNS, etc.)",
-      "intervention_side": "string (Left/Right/None)",
-      "intervention_location": "string (temporal lobectomy, etc.)",
+      "intervention_type": "string (ablation/resection/medication/RNS/VNS/DBS)",
+      "intervention_side": "string (Left/Right/Bilateral/n/a)",
+      "intervention_location": "string",
       "seizure_engel12m": "string (Engel score at 12 months)",
       "seizure_engel24m": "string (Engel score at 24 months)",
-      "created_at": "string (ISO timestamp)",
-      "id": "string (UUID)",
-      "model_id": "string (UUID)",
-      "model_version": "string",
-      "provenance_id": "string (UUID)"
+      "id": "string (UUID)"
     }
   },
   "pennepi_mri.parquet": {
-    "rows": 74,
+    "rows": 67,
     "description": "MRI scan findings",
     "columns": {
       "person_id": "string",
       "dataset_name": "string",
       "session_id": "string",
       "age_at_scan": "string (numeric)",
-      "mri_lesion": "string (nonlesional/lesional)",
-      "mri_lesiontype": "string",
+      "mri_lesion": "string (lesional/nonlesional)",
+      "mri_lesiontype": "string (FCD/MTS/Other/PVNH/Tubers/Encephalocele/Multiple/Prior surgery/n/a)",
       "mri_lesiondetails": "string",
-      "created_at": "string (ISO timestamp)",
-      "id": "string (UUID)",
-      "model_id": "string (UUID)",
-      "model_version": "string",
-      "provenance_id": "string (UUID)"
+      "id": "string (UUID)"
     }
   },
   "pennepi_5sense.parquet": {
-    "rows": 71,
+    "rows": 64,
     "description": "5-SENSE seizure prediction scores",
     "columns": {
       "person_id": "string",
       "dataset_name": "string",
       "session_id": "string",
       "fivesensescore": "string (numeric, 0-1)",
-      "created_at": "string (ISO timestamp)",
-      "id": "string (UUID)",
-      "model_id": "string (UUID)",
-      "model_version": "string",
-      "provenance_id": "string (UUID)"
+      "id": "string (UUID)"
     }
   }
 }
