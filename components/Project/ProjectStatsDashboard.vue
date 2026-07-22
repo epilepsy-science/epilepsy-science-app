@@ -112,8 +112,6 @@ const defaultLayout = computed(() => [
       binStartAge: epilepsyStats.value.ageAtIeegImplant.binStartAge,
       binWidthYears: epilepsyStats.value.ageAtIeegImplant.binWidthYears,
       medianAge: epilepsyStats.value.ageAtIeegImplant.medianAge,
-      q1Age: epilepsyStats.value.ageAtIeegImplant.q1Age,
-      q3Age: epilepsyStats.value.ageAtIeegImplant.q3Age,
       minAge: epilepsyStats.value.ageAtIeegImplant.minAge,
       maxAge: epilepsyStats.value.ageAtIeegImplant.maxAge,
       totalCount: epilepsyStats.value.ageAtIeegImplant.totalCount,
@@ -157,8 +155,6 @@ const defaultLayout = computed(() => [
     Props: {
       binCounts: epilepsyStats.value.fiveSenseScore.binCounts,
       medianScore: epilepsyStats.value.fiveSenseScore.medianScore,
-      q1Score: epilepsyStats.value.fiveSenseScore.q1Score,
-      q3Score: epilepsyStats.value.fiveSenseScore.q3Score,
       totalScoredCount: epilepsyStats.value.fiveSenseScore.totalScoredCount,
       totalPatientCount: epilepsyStats.value.fiveSenseScore.totalPatientCount,
     },

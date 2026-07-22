@@ -25,8 +25,6 @@ const EMPTY_AGE_BREAKDOWN = {
   binStartAge: 0,
   binWidthYears: 10,
   medianAge: null,
-  q1Age: null,
-  q3Age: null,
   minAge: null,
   maxAge: null,
 }
@@ -41,8 +39,6 @@ const EMPTY_MRI_BREAKDOWN = {
 const EMPTY_FIVE_SENSE_BREAKDOWN = {
   binCounts: [],
   medianScore: null,
-  q1Score: null,
-  q3Score: null,
   totalScoredCount: 0,
   totalPatientCount: 0,
 }
@@ -201,8 +197,6 @@ function buildAgeBreakdown(rows) {
   const minAge = agesAtImplant[0]
   const maxAge = agesAtImplant[totalCount - 1]
   const medianAge = computePercentile(agesAtImplant, 0.5)
-  const q1Age = computePercentile(agesAtImplant, 0.25)
-  const q3Age = computePercentile(agesAtImplant, 0.75)
   const binStartAge = Math.floor(minAge / AGE_HISTOGRAM_BIN_WIDTH_YEARS) * AGE_HISTOGRAM_BIN_WIDTH_YEARS
   const binEndAge = Math.floor(maxAge / AGE_HISTOGRAM_BIN_WIDTH_YEARS) * AGE_HISTOGRAM_BIN_WIDTH_YEARS + AGE_HISTOGRAM_BIN_WIDTH_YEARS
   const binCount = Math.max(1, Math.round((binEndAge - binStartAge) / AGE_HISTOGRAM_BIN_WIDTH_YEARS))
@@ -213,8 +207,6 @@ function buildAgeBreakdown(rows) {
     minAge,
     maxAge,
     medianAge,
-    q1Age,
-    q3Age,
     binCounts,
     binStartAge,
     binWidthYears: AGE_HISTOGRAM_BIN_WIDTH_YEARS,
@@ -316,8 +308,6 @@ function buildFiveSenseBreakdown(rows, totalPatientCount) {
     totalScoredCount: scoreValues.length,
     totalPatientCount,
     medianScore: computePercentile(scoreValues, 0.5),
-    q1Score: computePercentile(scoreValues, 0.25),
-    q3Score: computePercentile(scoreValues, 0.75),
     binCounts: computeHistogramBinCounts(
       scoreValues,
       FIVE_SENSE_SCALE_MIN,
