@@ -56,8 +56,6 @@ const props = defineProps({
   binStartAge: { type: Number, default: 0 },
   binWidthYears: { type: Number, default: 10 },
   medianAge: { type: Number, default: null },
-  q1Age: { type: Number, default: null },
-  q3Age: { type: Number, default: null },
   minAge: { type: Number, default: null },
   maxAge: { type: Number, default: null },
   totalCount: { type: Number, required: true },

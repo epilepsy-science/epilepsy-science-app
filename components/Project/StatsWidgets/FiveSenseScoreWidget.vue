@@ -52,8 +52,6 @@ import { computed } from 'vue'
 const props = defineProps({
   binCounts: { type: Array, required: true },
   medianScore: { type: Number, default: null },
-  q1Score: { type: Number, default: null },
-  q3Score: { type: Number, default: null },
   totalScoredCount: { type: Number, required: true },
   totalPatientCount: { type: Number, required: true },
   scoreMin: { type: Number, default: 0 },
