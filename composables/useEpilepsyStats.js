@@ -89,7 +89,7 @@ export function useEpilepsyStats() {
         FROM ${table('pennepi_person.parquet')}
       `),
       queryRaw(`
-        SELECT COUNT(DISTINCT (person_id, session_id, scans_filename)) AS total
+        SELECT COUNT(*) AS total
         FROM ${table('pennepi_ieeg_recording_parameters.parquet')}
       `),
       queryRaw(`
