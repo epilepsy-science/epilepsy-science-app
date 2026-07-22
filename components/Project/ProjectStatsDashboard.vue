@@ -63,7 +63,6 @@ function textWidget({ id, x, y, w, h, name, value }) {
   return {
     id, x, y, w, h,
     componentKey: 'StatWidget',
-    component: markRaw(StatWidget),
     componentName: '',
     hideHeader: true,
     Props: { label: name, value: String(value) },
@@ -74,7 +73,6 @@ function sectionHeaderWidget({ id, x, y, w, title }) {
   return {
     id, x, y, w, h: 1,
     componentKey: 'SectionHeaderWidget',
-    component: markRaw(SectionHeaderWidget),
     componentName: '',
     hideHeader: true,
     Props: { title },
@@ -91,7 +89,6 @@ const defaultLayout = computed(() => [
     id: 'stats-sex',
     x: 0, y: 4, w: 6, h: 7,
     componentKey: 'SexBreakdownWidget',
-    component: markRaw(SexBreakdownWidget),
     componentName: '',
     hideHeader: true,
     Props: {
@@ -104,7 +101,6 @@ const defaultLayout = computed(() => [
     id: 'stats-age-ieeg-implant',
     x: 6, y: 4, w: 6, h: 7,
     componentKey: 'AgeAtIeegImplantWidget',
-    component: markRaw(AgeAtIeegImplantWidget),
     componentName: '',
     hideHeader: true,
     Props: {
@@ -124,7 +120,6 @@ const defaultLayout = computed(() => [
     id: 'stats-modality-coverage',
     x: 0, y: 12, w: 12, h: 5,
     componentKey: 'ModalityCoverageWidget',
-    component: markRaw(ModalityCoverageWidget),
     componentName: '',
     hideHeader: true,
     Props: {
@@ -137,7 +132,6 @@ const defaultLayout = computed(() => [
     id: 'stats-mri-lesion',
     x: 0, y: 18, w: 12, h: 8,
     componentKey: 'MriLesionWidget',
-    component: markRaw(MriLesionWidget),
     componentName: '',
     hideHeader: true,
     Props: {
@@ -151,7 +145,6 @@ const defaultLayout = computed(() => [
     id: 'stats-five-sense',
     x: 0, y: 26, w: 12, h: 8,
     componentKey: 'FiveSenseScoreWidget',
-    component: markRaw(FiveSenseScoreWidget),
     componentName: '',
     hideHeader: true,
     Props: {
@@ -168,7 +161,6 @@ const defaultLayout = computed(() => [
     id: 'stats-ieeg-focality',
     x: 0, y: 35, w: 12, h: 6,
     componentKey: 'IeegFocalityWidget',
-    component: markRaw(IeegFocalityWidget),
     componentName: '',
     hideHeader: true,
     Props: {
@@ -179,7 +171,6 @@ const defaultLayout = computed(() => [
     id: 'stats-intervention-type',
     x: 0, y: 41, w: 12, h: 8,
     componentKey: 'InterventionTypeWidget',
-    component: markRaw(InterventionTypeWidget),
     componentName: '',
     hideHeader: true,
     Props: {
