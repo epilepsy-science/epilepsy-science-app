@@ -8,8 +8,9 @@
 
 <script setup>
 import { computed, markRaw, onMounted, toRef } from 'vue'
-import { PennsieveDashboard, TextWidget } from 'pennsieve-dashboard'
+import { PennsieveDashboard } from 'pennsieve-dashboard'
 import 'pennsieve-dashboard/style.css'
+import StatWidget from './StatsWidgets/StatWidget.vue'
 import ModalityCoverageWidget from './StatsWidgets/ModalityCoverageWidget.vue'
 import SexBreakdownWidget from './StatsWidgets/SexBreakdownWidget.vue'
 import AgeAtIeegImplantWidget from './StatsWidgets/AgeAtIeegImplantWidget.vue'
@@ -47,7 +48,7 @@ const totalDatasetSize = computed(() =>
 const formattedTotalSize = computed(() => useFormatMetric(totalDatasetSize.value))
 
 const availableWidgets = [
-  { name: 'TextWidget', component: markRaw(TextWidget) },
+  { name: 'StatWidget', component: markRaw(StatWidget) },
   { name: 'ModalityCoverageWidget', component: markRaw(ModalityCoverageWidget) },
   { name: 'SexBreakdownWidget', component: markRaw(SexBreakdownWidget) },
   { name: 'AgeAtIeegImplantWidget', component: markRaw(AgeAtIeegImplantWidget) },
@@ -61,10 +62,11 @@ const availableWidgets = [
 function textWidget({ id, x, y, w, h, name, value }) {
   return {
     id, x, y, w, h,
-    componentKey: 'TextWidget',
-    component: markRaw(TextWidget),
-    componentName: name,
-    Props: { displayText: value },
+    componentKey: 'StatWidget',
+    component: markRaw(StatWidget),
+    componentName: '',
+    hideHeader: true,
+    Props: { label: name, value: String(value) },
   }
 }
 
@@ -80,14 +82,14 @@ function sectionHeaderWidget({ id, x, y, w, title }) {
 }
 
 const defaultLayout = computed(() => [
-  textWidget({ id: 'stats-patients',         x: 0, y: 0, w: 3, h: 4, name: 'Patients',            value: epilepsyStats.value.patients }),
-  textWidget({ id: 'stats-ieeg-recordings',  x: 3, y: 0, w: 3, h: 4, name: 'iEEG Recordings',     value: epilepsyStats.value.ieegRecordings }),
-  textWidget({ id: 'stats-datasets',         x: 6, y: 0, w: 3, h: 4, name: 'Datasets Available',  value: String(datasetsAvailable.value) }),
-  textWidget({ id: 'stats-total-data',       x: 9, y: 0, w: 3, h: 4, name: 'Total Data',          value: formattedTotalSize.value }),
-  sectionHeaderWidget({ id: 'section-demographics', x: 0, y: 4, w: 12, title: 'Demographics' }),
+  textWidget({ id: 'stats-patients',         x: 0, y: 0, w: 3, h: 3, name: 'Patients',            value: epilepsyStats.value.patients }),
+  textWidget({ id: 'stats-ieeg-recordings',  x: 3, y: 0, w: 3, h: 3, name: 'iEEG Recordings',     value: epilepsyStats.value.ieegRecordings }),
+  textWidget({ id: 'stats-datasets',         x: 6, y: 0, w: 3, h: 3, name: 'Datasets Available',  value: String(datasetsAvailable.value) }),
+  textWidget({ id: 'stats-total-data',       x: 9, y: 0, w: 3, h: 3, name: 'Total Data',          value: formattedTotalSize.value }),
+  sectionHeaderWidget({ id: 'section-demographics', x: 0, y: 3, w: 12, title: 'Demographics' }),
   {
     id: 'stats-sex',
-    x: 0, y: 5, w: 6, h: 7,
+    x: 0, y: 4, w: 6, h: 7,
     componentKey: 'SexBreakdownWidget',
     component: markRaw(SexBreakdownWidget),
     componentName: '',
@@ -100,7 +102,7 @@ const defaultLayout = computed(() => [
   },
   {
     id: 'stats-age-ieeg-implant',
-    x: 6, y: 5, w: 6, h: 7,
+    x: 6, y: 4, w: 6, h: 7,
     componentKey: 'AgeAtIeegImplantWidget',
     component: markRaw(AgeAtIeegImplantWidget),
     componentName: '',
@@ -117,10 +119,10 @@ const defaultLayout = computed(() => [
       totalCount: epilepsyStats.value.ageAtIeegImplant.totalCount,
     },
   },
-  sectionHeaderWidget({ id: 'section-modality-coverage', x: 0, y: 12, w: 12, title: 'Modality Coverage' }),
+  sectionHeaderWidget({ id: 'section-modality-coverage', x: 0, y: 11, w: 12, title: 'Modality Coverage' }),
   {
     id: 'stats-modality-coverage',
-    x: 0, y: 13, w: 12, h: 5,
+    x: 0, y: 12, w: 12, h: 5,
     componentKey: 'ModalityCoverageWidget',
     component: markRaw(ModalityCoverageWidget),
     componentName: '',
@@ -130,10 +132,10 @@ const defaultLayout = computed(() => [
       totalPatientCount: totalPatientCount.value,
     },
   },
-  sectionHeaderWidget({ id: 'section-preimplant', x: 0, y: 18, w: 12, title: 'Preimplant' }),
+  sectionHeaderWidget({ id: 'section-preimplant', x: 0, y: 17, w: 12, title: 'Preimplant' }),
   {
     id: 'stats-mri-lesion',
-    x: 0, y: 19, w: 12, h: 8,
+    x: 0, y: 18, w: 12, h: 8,
     componentKey: 'MriLesionWidget',
     component: markRaw(MriLesionWidget),
     componentName: '',
@@ -147,7 +149,7 @@ const defaultLayout = computed(() => [
   },
   {
     id: 'stats-five-sense',
-    x: 0, y: 27, w: 12, h: 8,
+    x: 0, y: 26, w: 12, h: 8,
     componentKey: 'FiveSenseScoreWidget',
     component: markRaw(FiveSenseScoreWidget),
     componentName: '',
@@ -161,10 +163,10 @@ const defaultLayout = computed(() => [
       totalPatientCount: epilepsyStats.value.fiveSenseScore.totalPatientCount,
     },
   },
-  sectionHeaderWidget({ id: 'section-postimplant', x: 0, y: 35, w: 12, title: 'Postimplant' }),
+  sectionHeaderWidget({ id: 'section-postimplant', x: 0, y: 34, w: 12, title: 'Postimplant' }),
   {
     id: 'stats-ieeg-focality',
-    x: 0, y: 36, w: 12, h: 6,
+    x: 0, y: 35, w: 12, h: 6,
     componentKey: 'IeegFocalityWidget',
     component: markRaw(IeegFocalityWidget),
     componentName: '',
@@ -175,7 +177,7 @@ const defaultLayout = computed(() => [
   },
   {
     id: 'stats-intervention-type',
-    x: 0, y: 42, w: 12, h: 8,
+    x: 0, y: 41, w: 12, h: 8,
     componentKey: 'InterventionTypeWidget',
     component: markRaw(InterventionTypeWidget),
     componentName: '',
@@ -206,18 +208,6 @@ onMounted(() => {
   font-family: 'Montserrat', sans-serif;
 }
 
-.project-stats-dashboard :deep(.text-widget-wrap h2) {
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 1.1;
-  margin: 0;
-  color: $gray_6;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.project-stats-dashboard :deep(.widget-name) {
-  font-family: 'Montserrat', sans-serif;
-}
 
 .project-stats-dashboard :deep(.grid-stack-item-content:has(.section-header-widget)) {
   background: transparent;
