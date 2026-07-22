@@ -1,81 +1,29 @@
 <template>
   <div class="intervention-type-widget">
     <h3 class="widget-title">Intervention Type</h3>
-    <div v-if="hasData" class="widget-body">
-      <svg
-        class="bar-chart"
-        :viewBox="`0 0 ${chartViewWidth} ${chartViewHeight}`"
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden="true"
-      >
-        <g
-          v-for="(row) in chartRows"
-          :key="row.label"
-          class="bar-row"
-        >
-          <text
-            class="row-label"
-            :x="chartPlotLeft - 8"
-            :y="row.centerY + 4"
-            text-anchor="end"
-          >{{ row.label }}</text>
-          <rect
-            class="bar-fill"
-            :x="chartPlotLeft"
-            :y="row.barY"
-            :width="row.barWidth"
-            :height="barHeight"
-            rx="2"
-          />
-          <text
-            class="bar-value"
-            :x="chartPlotLeft + row.barWidth + 6"
-            :y="row.centerY + 4"
-            text-anchor="start"
-          >{{ row.count }}</text>
-        </g>
-
-        <line
-          class="axis-line"
-          :x1="chartPlotLeft"
-          :x2="chartPlotLeft"
-          :y1="chartPlotTop"
-          :y2="chartPlotBottom"
-        />
-        <line
-          class="axis-line"
-          :x1="chartPlotLeft"
-          :x2="chartPlotRight"
-          :y1="chartPlotBottom"
-          :y2="chartPlotBottom"
-        />
-        <g
+    <div v-if="hasData" class="chart-wrap">
+      <div class="labels-col">
+        <div v-for="row in chartRows" :key="row.label" class="row-label">
+          {{ row.label }}
+        </div>
+      </div>
+      <div class="bars-col">
+        <div v-for="row in chartRows" :key="row.label" class="bar-row">
+          <div class="bar-fill" :style="{ width: `${row.widthPercent}%` }" />
+          <span class="bar-value">{{ row.count }}</span>
+        </div>
+      </div>
+      <div class="x-ticks">
+        <span
           v-for="tick in xAxisTicks"
-          :key="`x-${tick.value}`"
-          class="x-axis-tick"
-        >
-          <line
-            :x1="tick.x"
-            :x2="tick.x"
-            :y1="chartPlotBottom"
-            :y2="chartPlotBottom + 5"
-          />
-          <text
-            class="axis-label"
-            :x="tick.x"
-            :y="chartPlotBottom + 20"
-            text-anchor="middle"
-          >{{ tick.value }}</text>
-        </g>
-        <text
-          class="axis-title"
-          :x="(chartPlotLeft + chartPlotRight) / 2"
-          :y="chartViewHeight - 4"
-          text-anchor="middle"
-        >Number of patients</text>
-      </svg>
+          :key="tick.value"
+          class="x-tick"
+          :style="{ left: `${tick.percent}%` }"
+        >{{ tick.value }}</span>
+      </div>
+      <div class="axis-title">Number of patients (total = {{ totalPatientCount }})</div>
     </div>
-    <div v-else class="widget-body widget-body-empty">No data</div>
+    <div v-else class="widget-body-empty">No data</div>
   </div>
 </template>
 
@@ -86,22 +34,6 @@ const props = defineProps({
   categories: { type: Array, required: true },
   totalPatientCount: { type: Number, required: true },
 })
-
-// viewBox height is sized close to the rendered cell height so that, since a
-// full-row cell is wider than this aspect ratio (height-constrained scaling),
-// `font-size` in user units renders at roughly the same pixel size as the
-// 12px HTML text in the Modality Coverage widget.
-const chartViewWidth = 1000
-const chartViewHeight = 280
-const chartPlotLeft = 230
-const chartPlotRight = chartViewWidth - 24
-const chartPlotTop = 16
-const chartPlotBottom = chartViewHeight - 44
-
-const innerPlotWidth = chartPlotRight - chartPlotLeft
-const innerPlotHeight = chartPlotBottom - chartPlotTop
-
-const barHeight = 18
 
 const hasData = computed(() => props.categories.length > 0)
 
@@ -121,27 +53,19 @@ const xAxisTicks = computed(() => {
     const tickValue = tickStep * tickIndex
     ticks.push({
       value: Math.round(tickValue),
-      x: chartPlotLeft + (tickValue / niceMax.value) * innerPlotWidth,
+      percent: (tickValue / niceMax.value) * 100,
     })
   }
   return ticks
 })
 
 const chartRows = computed(() => {
-  const rowCount = props.categories.length
-  if (rowCount === 0) return []
-  const rowHeight = innerPlotHeight / rowCount
-  return props.categories.map((category, rowIndex) => {
-    const rowCenterY = chartPlotTop + rowHeight * (rowIndex + 0.5)
-    const barWidth = (category.count / niceMax.value) * innerPlotWidth
-    return {
-      label: category.label,
-      count: category.count,
-      centerY: rowCenterY,
-      barY: rowCenterY - barHeight / 2,
-      barWidth,
-    }
-  })
+  if (!hasData.value) return []
+  return props.categories.map((category) => ({
+    label: category.label,
+    count: category.count,
+    widthPercent: (category.count / niceMax.value) * 100,
+  }))
 })
 
 function computeNiceMax(rawMax, desiredTickCount) {
@@ -180,61 +104,104 @@ function computeNiceMax(rawMax, desiredTickCount) {
   align-self: flex-start;
 }
 
-.widget-body {
+// 4 grid items with explicit placement:
+//   labels-col  → col 1, row 1 (stretches to fill row)
+//   bars-col    → col 2, row 1 (stretches to fill row, draws L-shaped axes)
+//   x-ticks     → col 2, row 2 (auto-sized)
+//   axis-title  → col 2, row 3 (auto-sized)
+.chart-wrap {
   flex: 1;
   min-height: 0;
-  min-width: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto auto;
+}
+
+.labels-col {
+  grid-column: 1;
+  grid-row: 1;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 4px 10px 4px 0;
 }
 
-.widget-body-empty {
-  justify-content: center;
-  align-items: center;
-  color: $neutralGrey;
-  font-size: 13px;
-}
-
-.bar-chart {
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  display: block;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.bar-fill {
-  fill: $es-primary-color;
+.bars-col {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-left: 1.5px solid $gray_5;
+  border-bottom: 1.5px solid $gray_5;
+  padding: 4px 0;
 }
 
 .row-label {
   font-size: 12px;
   font-weight: 500;
-  fill: $gray_6;
+  color: $gray_6;
+  text-align: right;
+  line-height: 1.3;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+}
+
+.bar-fill {
+  height: 14px;
+  background: $es-primary-color;
+  border-radius: 2px;
+  flex-shrink: 0;
+  min-width: 2px;
 }
 
 .bar-value {
+  margin-left: 6px;
   font-size: 12px;
   font-weight: 600;
-  fill: $gray_6;
+  color: $gray_6;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
-.axis-label {
+.x-ticks {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  height: 22px;
+  margin-top: 2px;
+}
+
+.x-tick {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
   font-size: 11px;
   font-weight: 500;
-  fill: $gray_6;
+  color: $gray_6;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .axis-title {
+  grid-column: 2;
+  grid-row: 3;
+  text-align: center;
   font-size: 12px;
-  fill: $gray_6;
   font-weight: 500;
+  color: $gray_6;
+  padding-top: 4px;
 }
 
-.axis-line,
-.x-axis-tick line {
-  stroke: $gray_5;
-  stroke-width: 1;
+.widget-body-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $neutralGrey;
+  font-size: 13px;
 }
 </style>
