@@ -37,7 +37,7 @@
         <div v-if="activeTab === 'overview'" class="overview-section">
           <div class="overview-layout">
             <div class="overview-main">
-              <ProjectStatsDashboard v-if="isPennTestProject" :project="project" />
+              <ProjectStatsDashboard v-if="isStatsDashboardAvailable" :project="project" />
               <div v-else class="dashboard-placeholder">
                 <IconDashboardComingSoon class="dashboard-placeholder-icon" />
                 <p class="dashboard-placeholder-message">
@@ -80,6 +80,7 @@
 <script setup>
 import { computed, watch } from 'vue'
 import DatasetCard from '~/components/Datasets/DatasetCard/DatasetCard.vue'
+import { PROJECT_STATS_AVAILABLE_IDS } from '~/utils/constants.js'
 
 const route = useRoute()
 const { $contentfulClient } = useNuxtApp()
@@ -91,12 +92,12 @@ const { data: project, error, status } = useLazyAsyncData(
   () => $contentfulClient.getEntry(route.params.id),
 )
 
-const PENN_TEST_PROJECT_ID = 'pennTest'
-
 const isLoading = computed(() => status.value === 'pending')
 const projectName = computed(() => project.value?.fields?.name || '')
 const projectSummary = computed(() => project.value?.fields?.summary || '')
-const isPennTestProject = computed(() => project.value?.fields?.projectId === PENN_TEST_PROJECT_ID)
+const isStatsDashboardAvailable = computed(() =>
+  PROJECT_STATS_AVAILABLE_IDS.includes(project.value?.fields?.projectId),
+)
 
 const {
   datasets,

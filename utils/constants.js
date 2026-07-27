@@ -21,3 +21,10 @@ export const referenceTypeOptions = Object.freeze({
   Requires: 'Requires'
 })
 
+// projectId values (Contentful) that have parquet stats files available,
+// used to gate display of the project stats dashboard. Add a key here once
+// its parquet files are uploaded.
+export const PROJECT_STATS_AVAILABLE_IDS = Object.freeze([
+  'pennTest',
+])
+
