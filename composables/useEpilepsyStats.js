@@ -63,11 +63,12 @@ const DEFAULT_STATS = {
   interventionTypeBreakdown: EMPTY_INTERVENTION_BREAKDOWN,
 }
 
-export function useEpilepsyStats() {
+export function useEpilepsyStats(projectId) {
   const stats = ref({ ...DEFAULT_STATS })
 
   async function fetchStats() {
     const { queryRaw, table } = useDuckDB()
+    const projectTable = (suffix) => table(`${projectId}_${suffix}`)
 
     const [
       patientCountRows,
@@ -82,50 +83,50 @@ export function useEpilepsyStats() {
     ] = await Promise.all([
       queryRaw(`
         SELECT COUNT(DISTINCT person_id) AS total
-        FROM ${table('pennepi_person.parquet')}
+        FROM ${projectTable('person.parquet')}
       `),
       queryRaw(`
         SELECT COUNT(*) AS total
-        FROM ${table('pennepi_ieeg_recording_parameters.parquet')}
+        FROM ${projectTable('ieeg_recording_parameters.parquet')}
       `),
       queryRaw(`
         SELECT sex, COUNT(*) AS count
-        FROM ${table('pennepi_person.parquet')}
+        FROM ${projectTable('person.parquet')}
         WHERE sex IS NOT NULL AND TRIM(sex) != ''
         GROUP BY sex
       `),
       queryRaw(`
         SELECT MAX(CAST(age_ieegimplant AS DOUBLE)) AS age
-        FROM ${table('pennepi_ieeg_recording_parameters.parquet')}
+        FROM ${projectTable('ieeg_recording_parameters.parquet')}
         WHERE age_ieegimplant IS NOT NULL AND TRIM(age_ieegimplant) != ''
         GROUP BY person_id
       `),
       queryRaw(`
         SELECT LOWER(TRIM(mri_lesion)) AS mri_lesion, COUNT(DISTINCT person_id) AS count
-        FROM ${table('pennepi_mri.parquet')}
+        FROM ${projectTable('mri.parquet')}
         WHERE mri_lesion IS NOT NULL AND TRIM(mri_lesion) != ''
         GROUP BY LOWER(TRIM(mri_lesion))
       `),
       queryRaw(`
         SELECT MAX(CAST(fivesensescore AS DOUBLE)) AS score
-        FROM ${table('pennepi_5sense.parquet')}
+        FROM ${projectTable('5sense.parquet')}
         WHERE fivesensescore IS NOT NULL AND TRIM(fivesensescore) != ''
         GROUP BY person_id
       `),
       queryRaw(`
         SELECT LOWER(TRIM(ieeg_isfocal)) AS ieeg_isfocal, COUNT(DISTINCT person_id) AS count
-        FROM ${table('pennepi_ieeg_recording_parameters.parquet')}
+        FROM ${projectTable('ieeg_recording_parameters.parquet')}
         WHERE ieeg_isfocal IS NOT NULL AND TRIM(ieeg_isfocal) != ''
         GROUP BY LOWER(TRIM(ieeg_isfocal))
       `),
       queryRaw(`
         SELECT COUNT(DISTINCT person_id) AS total
-        FROM ${table('pennepi_ieeg_recording_parameters.parquet')}
+        FROM ${projectTable('ieeg_recording_parameters.parquet')}
         WHERE ieeg_isfocal IS NOT NULL AND TRIM(ieeg_isfocal) != ''
       `),
       queryRaw(`
         SELECT intervention_type, COUNT(DISTINCT person_id) AS count
-        FROM ${table('pennepi_intervention.parquet')}
+        FROM ${projectTable('intervention.parquet')}
         WHERE intervention_type IS NOT NULL AND TRIM(intervention_type) != ''
         GROUP BY intervention_type
         ORDER BY count DESC

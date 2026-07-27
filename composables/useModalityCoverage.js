@@ -1,13 +1,13 @@
 import { ref } from 'vue'
 
 const MODALITY_TABLES = [
-  { key: 'mri',             label: 'Magnetic Resonance Imaging',                parquetFilename: 'pennepi_mri.parquet',                       valueColumn: 'mri_lesion' },
-  { key: 'ieeg',            label: 'Intracranial Electroencephalography',       parquetFilename: 'pennepi_ieeg_recording_parameters.parquet' },
-  { key: 'fiveSense',       label: 'Phenotypic and Assessment Data: 5-SENSE',   parquetFilename: 'pennepi_5sense.parquet',                    valueColumn: 'fivesensescore' },
-  { key: 'surgicalOutcome', label: 'Surgical Outcome Assessment Data: Engel',   parquetFilename: 'pennepi_intervention.parquet' },
+  { key: 'mri',             label: 'Magnetic Resonance Imaging',                parquetFilename: 'mri.parquet',                       valueColumn: 'mri_lesion' },
+  { key: 'ieeg',            label: 'Intracranial Electroencephalography',       parquetFilename: 'ieeg_recording_parameters.parquet' },
+  { key: 'fiveSense',       label: 'Phenotypic and Assessment Data: 5-SENSE',   parquetFilename: '5sense.parquet',                    valueColumn: 'fivesensescore' },
+  { key: 'surgicalOutcome', label: 'Surgical Outcome Assessment Data: Engel',   parquetFilename: 'intervention.parquet' },
 ]
 
-export function useModalityCoverage() {
+export function useModalityCoverage(projectId) {
   const modalityCoverage = ref(
     MODALITY_TABLES.map(({ key, label }) => ({ key, label, coveredPatientCount: 0, coveragePercent: 0 }))
   )
@@ -18,10 +18,11 @@ export function useModalityCoverage() {
     isLoading.value = true
     try {
       const { queryRaw, table } = useDuckDB()
+      const projectTable = (suffix) => table(`${projectId}_${suffix}`)
 
       const totalPatientsPromise = queryRaw(`
         SELECT COUNT(DISTINCT person_id) AS total
-        FROM ${table('pennepi_person.parquet')}
+        FROM ${projectTable('person.parquet')}
       `)
       const modalityCoveragePromises = MODALITY_TABLES.map(({ parquetFilename, valueColumn }) => {
         const nonNullValueFilter = valueColumn
@@ -29,7 +30,7 @@ export function useModalityCoverage() {
           : ''
         return queryRaw(`
           SELECT COUNT(DISTINCT person_id) AS covered
-          FROM ${table(parquetFilename)}
+          FROM ${projectTable(parquetFilename)}
           ${nonNullValueFilter}
         `)
       })
