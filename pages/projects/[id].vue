@@ -37,7 +37,13 @@
         <div v-if="activeTab === 'overview'" class="overview-section">
           <div class="overview-layout">
             <div class="overview-main">
-              <ProjectStatsDashboard :project="project" />
+              <ProjectStatsDashboard v-if="isStatsDashboardAvailable" :project="project" />
+              <div v-else class="dashboard-placeholder">
+                <IconDashboardComingSoon class="dashboard-placeholder-icon" />
+                <p class="dashboard-placeholder-message">
+                  A statistics dashboard for this project's metadata will be available soon.
+                </p>
+              </div>
             </div>
             <ProjectSidebar :project="project" />
           </div>
@@ -74,6 +80,7 @@
 <script setup>
 import { computed, watch } from 'vue'
 import DatasetCard from '~/components/Datasets/DatasetCard/DatasetCard.vue'
+import { PROJECT_STATS_AVAILABLE_IDS } from '~/utils/constants.js'
 
 const route = useRoute()
 const { $contentfulClient } = useNuxtApp()
@@ -88,6 +95,9 @@ const { data: project, error, status } = useLazyAsyncData(
 const isLoading = computed(() => status.value === 'pending')
 const projectName = computed(() => project.value?.fields?.name || '')
 const projectSummary = computed(() => project.value?.fields?.summary || '')
+const isStatsDashboardAvailable = computed(() =>
+  PROJECT_STATS_AVAILABLE_IDS.includes(project.value?.fields?.projectId?.toLowerCase()),
+)
 
 const {
   datasets,
@@ -235,6 +245,26 @@ useHead({
   text-align: center;
   padding: 3rem;
   color: #666;
+}
+
+.dashboard-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+
+  .dashboard-placeholder-icon {
+    color: #b0b6c1;
+  }
+
+  .dashboard-placeholder-message {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+  }
 }
 
 @media (max-width: 768px) {

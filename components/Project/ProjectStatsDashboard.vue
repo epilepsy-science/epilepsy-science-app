@@ -28,13 +28,14 @@ const props = defineProps({
 })
 
 const projectRef = toRef(props, 'project')
+const projectId = props.project?.fields?.projectId?.toLowerCase()
 
-const { stats: epilepsyStats, fetchStats: fetchEpilepsyStats } = useEpilepsyStats()
+const { stats: epilepsyStats, fetchStats: fetchEpilepsyStats } = useEpilepsyStats(projectId)
 const {
   modalityCoverage,
   totalPatientCount,
   fetchModalityCoverage,
-} = useModalityCoverage()
+} = useModalityCoverage(projectId)
 
 const { datasets: projectDatasets, fetchDatasets: fetchProjectDatasets } =
   useProjectDatasets(projectRef)
