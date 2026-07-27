@@ -37,7 +37,13 @@
         <div v-if="activeTab === 'overview'" class="overview-section">
           <div class="overview-layout">
             <div class="overview-main">
-              <ProjectStatsDashboard :project="project" />
+              <ProjectStatsDashboard v-if="isPennTestProject" :project="project" />
+              <div v-else class="dashboard-placeholder">
+                <IconDashboardComingSoon class="dashboard-placeholder-icon" />
+                <p class="dashboard-placeholder-message">
+                  A statistics dashboard for this project's metadata will be available soon.
+                </p>
+              </div>
             </div>
             <ProjectSidebar :project="project" />
           </div>
@@ -85,9 +91,12 @@ const { data: project, error, status } = useLazyAsyncData(
   () => $contentfulClient.getEntry(route.params.id),
 )
 
+const PENN_TEST_PROJECT_ID = 'pennTest'
+
 const isLoading = computed(() => status.value === 'pending')
 const projectName = computed(() => project.value?.fields?.name || '')
 const projectSummary = computed(() => project.value?.fields?.summary || '')
+const isPennTestProject = computed(() => project.value?.fields?.projectId === PENN_TEST_PROJECT_ID)
 
 const {
   datasets,
@@ -235,6 +244,26 @@ useHead({
   text-align: center;
   padding: 3rem;
   color: #666;
+}
+
+.dashboard-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+
+  .dashboard-placeholder-icon {
+    color: #b0b6c1;
+  }
+
+  .dashboard-placeholder-message {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+  }
 }
 
 @media (max-width: 768px) {
