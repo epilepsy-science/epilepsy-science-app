@@ -28,7 +28,7 @@ const props = defineProps({
 })
 
 const projectRef = toRef(props, 'project')
-const projectId = props.project?.fields?.projectId
+const projectId = props.project?.fields?.projectId?.toLowerCase()
 
 const { stats: epilepsyStats, fetchStats: fetchEpilepsyStats } = useEpilepsyStats(projectId)
 const {

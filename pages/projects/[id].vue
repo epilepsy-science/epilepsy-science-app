@@ -96,7 +96,7 @@ const isLoading = computed(() => status.value === 'pending')
 const projectName = computed(() => project.value?.fields?.name || '')
 const projectSummary = computed(() => project.value?.fields?.summary || '')
 const isStatsDashboardAvailable = computed(() =>
-  PROJECT_STATS_AVAILABLE_IDS.includes(project.value?.fields?.projectId),
+  PROJECT_STATS_AVAILABLE_IDS.includes(project.value?.fields?.projectId?.toLowerCase()),
 )
 
 const {

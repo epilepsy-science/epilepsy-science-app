@@ -25,6 +25,6 @@ export const referenceTypeOptions = Object.freeze({
 // used to gate display of the project stats dashboard. Add a key here once
 // its parquet files are uploaded.
 export const PROJECT_STATS_AVAILABLE_IDS = Object.freeze([
-  'pennTest',
+  'pennepi',
 ])
 
