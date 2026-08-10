@@ -9,7 +9,7 @@ export function useProjectDatasets(project) {
 
   const datasetsUrl = computed(() => {
     const collectionId = project.value?.fields?.collectionIds?.[0]
-    if (!collectionId) return null
+    if (!collectionId || Number(collectionId) === 0) return null
     return `${runtimeConfig.public.discover_api_host}/datasets/${collectionId}/versions/1/dois?limit=200&offset=0`
   })
 
