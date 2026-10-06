@@ -3,8 +3,12 @@
 import {compose, head, propOr} from "ramda";
 
 import BfButton from '~/components/Shared/BfButton/BfButton.vue'
+import AgentDownloadCommand from '~/components/Dataset/AgentDownloadCommand/AgentDownloadCommand.vue'
+import PublicArchiveStatus from '~/components/Dataset/PublicArchiveStatus/PublicArchiveStatus.vue'
 import { CopyDocument } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { usePublicArchive } from '~/composables/usePublicArchive'
+import { isActive, rememberedArchives } from '~/utils/publicDownloads'
 
 
 const runtimeConfig = useRuntimeConfig()
@@ -27,8 +31,22 @@ const props = defineProps({
   }
 })
 
+// The zip of the version, built by download-service.
+const {
+  archive,
+  error: archiveError,
+  starting,
+  signedIn,
+  start: startArchive,
+  resume: resumeArchive,
+  download: downloadArchive,
+  remove: removeArchive,
+} = usePublicArchive()
+
+const downloadBusy = computed(() => starting.value || isActive(archive.value))
+
 /**
- * Checks whether the dataset download size is larger or smaller than 1GB
+ * Checks whether the dataset is larger than download-service zips
  * @returns {Boolean}
  */
 const isDatasetSizeLarge = computed(() => {
@@ -37,11 +55,12 @@ const isDatasetSizeLarge = computed(() => {
 })
 
 /**
- * Compute width based on isDatasetSizeLarge
+ * Compute width based on isDatasetSizeLarge: a large dataset's single column
+ * holds the agent and AWS commands.
  * @returns {String}
  */
 const width = computed(() => {
-  return isDatasetSizeLarge.value ? '540px' : '772px'
+  return isDatasetSizeLarge.value ? 'clamp(min(760px, 92vw), 50%, 92vw)' : '772px'
 })
 
 /**
@@ -117,24 +136,25 @@ const isLatestVersion = computed(() => {
 })
 
 
-/**
- * Computes the API url for downloading a dataset
- * @returns {String}
- */
+// On opening, show the last zip of the whole version this browser asked
+// for.
+watch(
+  () => props.visible,
+  async (visible) => {
+    if (!visible || archive.value) return
+    const remembered = rememberedArchives({ datasetId: datasetId.value, version: version.value }).filter((a) => a.whole)
+    if (remembered.length) await resumeArchive(remembered[remembered.length - 1])
+  },
+  { immediate: true }
+)
 
+/**
+ * Starts a zip of the version; it downloads when it's ready.
+ */
 function downloadDataset(event) {
-  try {
-  event.preventDefault();
-  const url = `${runtimeConfig.public.discover_api_host}/datasets/${datasetId.value}/versions/${version.value}/download?downloadOrigin=Discover`;
-  const downloadLink = document.createElement('a');
-  downloadLink.href = url;
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-    
-  } catch (err) {
-    console.error("Download failed:", err);
-  }
+  event.preventDefault()
+  if (downloadBusy.value) return
+  startArchive({ datasetId: datasetId.value, version: version.value, archiveName: props.datasetDetails.name })
 }
 
 
@@ -182,13 +202,24 @@ function openRehydrationModal() {
           <h1>Direct Download</h1>
           <p>
             You can download the raw files and metadata directly to your
-            computer as a zip archive.
+            computer as a zip archive. Larger datasets take a few minutes to
+            prepare.
           </p>
-          <bf-button @click="downloadDataset" class="download-button">Download Dataset</bf-button>
+          <bf-button @click="downloadDataset" class="download-button" :disabled="downloadBusy">Download Dataset</bf-button>
 
           <div class="size">
             {{ useFormatMetric(props.datasetDetails.size) }}
           </div>
+          <public-archive-status
+            class="archive-status"
+            inverted
+            :archive="archive"
+            :error="archiveError"
+            :starting="starting"
+            :signed-in="signedIn"
+            @download="downloadArchive"
+            @remove="removeArchive"
+          />
           <img
             class="download-illo"
             src="../../../assets/images/illustrations/illo-data-management.svg"
@@ -241,6 +272,19 @@ function openRehydrationModal() {
               class="close-icon"
             />
           </button>
+          <template v-if="isDatasetSizeLarge">
+            <h1 class="agent-title">Download with the Pennsieve Agent</h1>
+            <p>
+              The Pennsieve agent downloads datasets of any size, in
+              parallel, and checks every file:
+            </p>
+            <agent-download-command
+              class="agent-command"
+              :dataset-id="datasetId"
+              :version="version"
+              :folder-name="props.datasetDetails.name"
+            />
+          </template>
           <h1>AWS Open Data</h1>
           <p>
             Access data directly from the registry of
@@ -319,6 +363,12 @@ function openRehydrationModal() {
       color: #cddaff;
       font-size: 16px;
       margin-top: 8px;
+    }
+
+    .archive-status {
+      position: relative;
+      z-index: 1;
+      margin: 16px 0 24px;
     }
 
     .size {
@@ -449,6 +499,15 @@ function openRehydrationModal() {
   .aws-block {
     box-sizing: border-box;
     padding: 40px;
+  }
+
+  .agent-command {
+    margin-bottom: 32px;
+  }
+
+  // Room for the close button, which floats beside the first heading.
+  .agent-title {
+    padding-right: 32px;
   }
 
   .download-illo {
