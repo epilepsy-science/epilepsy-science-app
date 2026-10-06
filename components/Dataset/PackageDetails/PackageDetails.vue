@@ -1,7 +1,10 @@
 <script setup>
-import { pathOr } from 'ramda'
+import { ElMessage } from 'element-plus'
 import { useMainStore } from '~/store/index.js'
 import BfButton from '~/components/Shared/BfButton/BfButton.vue'
+import PublicArchiveStatus from '~/components/Dataset/PublicArchiveStatus/PublicArchiveStatus.vue'
+import { usePublicArchive } from '~/composables/usePublicArchive'
+import { filePathOf, isActive, publicDownloadsBase, publicFileUrl, startBrowserDownload } from '~/utils/publicDownloads'
 
 const runtimeConfig = useRuntimeConfig()
 const store = useMainStore()
@@ -31,37 +34,53 @@ const backLinkLabel = 'Back to files'
 
 const downloadContent = computed(() => {
   const files = store.selectedPackage?.files || []
-  return files.length > 1 ? 'Download Package' : 'Download File'
+  return files.length > 1 || (files[0] && isFolder(files[0])) ? 'Download Package' : 'Download File'
 })
 
 function formatStorage(row, column, cellValue) {
   return useFormatMetric(cellValue)
 }
 
-function downloadFile(event) {
+// A file downloads through a download-service link; a folder (a MEF
+// recording) or several files as a zip that download-service builds.
+const {
+  archive,
+  error: archiveError,
+  starting,
+  signedIn,
+  start: startArchive,
+  download: downloadArchive,
+  remove: removeArchive,
+} = usePublicArchive()
+
+async function downloadFile(event) {
   event.preventDefault()
 
-  const datasetId = store.selectedPackage.datasetId
-  const version = store.selectedPackage.version
-  const filePaths = store.selectedPackage.files.map((f) => f.path)
+  const { datasetId, version, files = [] } = store.selectedPackage
+  if (files.length === 0) return
+  if (files.length > 1 || isFolder(files[0])) {
+    if (starting.value || isActive(archive.value)) return
+    await startArchive({ datasetId, version, paths: files.map(filePathOf) })
+    return
+  }
 
-  const manifestUrl = `${runtimeConfig.public.discover_api_host}/datasets/${datasetId}/versions/${version}/files/download-manifest`
-  useSendXhr(manifestUrl, {
-    method: 'POST',
-    body: { paths: filePaths }
-  })
-    .then(response => {
-      const presignedUrl = pathOr('', ['data', [0], 'url'], response)
-      if (presignedUrl) {
-        const link = document.createElement('a')
-        link.href = presignedUrl
-        link.setAttribute('download', true)
-        link.setAttribute('target', '_blank')
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      }
+  try {
+    const token = (await useGetToken()) || ''
+    const base = publicDownloadsBase({
+      api2Host: runtimeConfig.public.api2_host,
+      publicHost: runtimeConfig.public.download_public_host,
+      token,
     })
+    const { url } = await publicFileUrl({ base, token, datasetId, version, path: filePathOf(files[0]) })
+    startBrowserDownload(url)
+  } catch (e) {
+    ElMessage.error(e.message || "Couldn't download the file. Try again.")
+  }
+}
+
+function isFolder(file) {
+  const type = (file.type || '').toLowerCase()
+  return type === 'directory' || type === 'folder'
 }
 </script>
 
@@ -80,6 +99,15 @@ function downloadFile(event) {
         {{ downloadContent }}
       </bf-button>
     </div>
+    <public-archive-status
+      class="archive-status"
+      :archive="archive"
+      :error="archiveError"
+      :starting="starting"
+      :signed-in="signedIn"
+      @download="downloadArchive"
+      @remove="removeArchive"
+    />
       <div class="package-content">
         <el-table
           class="table"
@@ -112,6 +140,13 @@ function downloadFile(event) {
   &:focus {
     background-color: $purple_3;
   }
+}
+
+.archive-status {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border: 1px solid $gray_2;
+  border-radius: 4px;
 }
 
 .table {
