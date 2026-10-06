@@ -153,9 +153,9 @@ export default defineNuxtConfig({
       ALGOLIA_API_KEY: process.env.ALGOLIA_API_KEY,
       ALGOLIA_APP_ID: process.env.ALGOLIA_APP_ID,
       ALGOLIA_INDEX: process.env.ALGOLIA_INDEX || "epilepsy_science_index",
-      zipit_api_host: process.env.ZIPIT_API_HOST || "https://api.pennsieve.io/zipit/discover",
+      // download-service builds zips of up to 10 GB; above, the agent.
       max_download_size: parseInt(
-        process.env.MAX_DOWNLOAD_SIZE || "5000000000"
+        process.env.MAX_DOWNLOAD_SIZE || "10000000000"
       ),
       ROOT_URL: process.env.ROOT_URL || "https://epilepsy.science",
       INTERNAL_TRAFFIC_KEY:
@@ -167,7 +167,14 @@ export default defineNuxtConfig({
       masterUserName: process.env.MASTERUSER_USERNAME,
       masterUserPW: process.env.MASTERUSER_PASSWORD,
       pennsieve_api_host: process.env.PENNSIEVE_API_HOST || "https://api.pennsieve.io",
+      api2_host: process.env.PENNSIEVE_API2_HOST || "https://api2.pennsieve.io",
       packages_api_host: process.env.PACKAGES_API_HOST || "https://api2.pennsieve.io/packages",
+      // The anonymous public downloads API (https://downloads.pennsieve.io):
+      // file links, zips and selections without signing in. Empty means
+      // downloads.<domain> beside api2.<domain>.
+      download_public_host: process.env.PENNSIEVE_DOWNLOAD_PUBLIC_HOST || "",
+      workspace_app_host:
+        process.env.PENNSIEVE_WORKSPACE_APP_HOST || "https://app.pennsieve.io",
       deploy_env: process.env.DEPLOY_ENV || "prod",
       orthogonal_viewer_url:
         process.env.PENNSIEVE_ORTHOGONAL_VIEWER_URL ||
