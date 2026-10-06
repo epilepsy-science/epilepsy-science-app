@@ -1,45 +1,28 @@
 // composables/useFileContent.js
+import { filePathOf, publicDownloadsBase, publicFileUrl } from "~/utils/publicDownloads";
+
 export const useFileContent = () => {
   const runtimeConfig = useRuntimeConfig();
 
   /**
-   * Fetches file content from S3 using the zipit service with authentication
-   * @param {Object} file - File object with path, datasetId info
+   * Fetches a published file's content through a download-service link
+   * @param {Object} file - File object with path or uri
    * @param {Number} datasetId - Dataset ID
    * @param {Number} version - Dataset version
    * @returns {Promise<string>} File content as text
    */
   async function fetchFileContent(file, datasetId, version) {
     try {
-
-      // Extract path from URI if path property doesn't exist
-      let filePath = file.path;
-      if (!filePath && file.uri) {
-        // Extract path from S3 URI: s3://bucket/datasetId/path/to/file
-        const expr = /s3:\/\/[a-z-0-9]+\/[0-9]+\/(.*)/;
-        const match = file.uri.match(expr);
-        filePath = match ? match[1] : file.uri;
-      }
-
-      // Build payload with nested data structure
-      const payload = {
-        data: {
-          paths: [filePath],
-          datasetId: datasetId,
-          version: version,
-          userToken: "",
-        },
-      };
-
-      // Call zipit service to get the file
-      const response = await fetch(runtimeConfig.public.zipit_api_host, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+      const token = (await useGetToken()) || "";
+      const base = publicDownloadsBase({
+        api2Host: runtimeConfig.public.api2_host,
+        publicHost: runtimeConfig.public.download_public_host,
+        token,
       });
+      // A preview is a view, not a download.
+      const { url } = await publicFileUrl({ base, token, datasetId, version, path: filePathOf(file), purpose: "view" });
 
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch file: ${response.statusText}`);
       }
