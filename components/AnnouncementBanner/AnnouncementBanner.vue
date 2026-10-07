@@ -10,7 +10,7 @@
 <style lang="scss" scoped>
 .announcement-banner p {
   color: white;
-  background-color: #297fca;
+  background-color: $es-primary;
   text-align: center;
   padding-inline: 20px;
   padding-block: 4px;

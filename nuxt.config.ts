@@ -181,6 +181,7 @@ export default defineNuxtConfig({
   css: [
     "@/assets/base.scss",
     "@/assets/scss/_utilities.scss",
+    "@/assets/scss/_brand.scss",
     "@/assets/design-system-overrides.scss",
     "@/assets/new-design-base.scss",
     "@/assets/viewer.scss",

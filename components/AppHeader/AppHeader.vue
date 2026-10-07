@@ -12,8 +12,7 @@
 
       <nav class="header-nav" :class="{ 'is-mobile-menu': menuOpen }">
         <ul>
-          <li><nuxt-link to="/data?type=dataset">Data</nuxt-link></li>
-          <li><nuxt-link to="/projects">Projects</nuxt-link></li>
+          <li><nuxt-link to="/projects" :class="{ 'router-link-active': isDataSection }">Data</nuxt-link></li>
           <li><nuxt-link to="/about">About</nuxt-link></li>
           <li><a class="cde-link" href="https://cde.epilepsy.science" target="_blank" rel="noopener"><strong>CDE's</strong> <el-icon :size="12" style="vertical-align: middle; margin-left: 2px;"><TopRight /></el-icon></a></li>
         </ul>
@@ -23,8 +22,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { TopRight } from "@element-plus/icons-vue";
+
+const route = useRoute();
+const isDataSection = computed(() => /^\/(projects|data|datasets)(\/|$)/.test(route.path));
 
 const menuOpen = ref(false);
 const windowWidth = ref(typeof window !== "undefined" ? window.innerWidth : 0);
@@ -63,7 +65,7 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .app-header {
   background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid $es-border;
   padding: 10px 20px;
   display: flex;
   align-items: center;
@@ -98,7 +100,7 @@ onBeforeUnmount(() => {
 }
 
 .header-nav a {
-  color: #297fca;
+  color: $es-primary;
   text-decoration: none;
   text-transform: uppercase;
   display: inline-block;
@@ -113,13 +115,13 @@ onBeforeUnmount(() => {
     left: 0;
     height: 2px;
     width: 0;
-    background-color: #297FCA;
+    background-color: $es-primary;
     transition: width 0.4s ease;
   }
 }
 
 .header-nav a.cde-link {
-  background-color: #297fca;
+  background-color: $es-cta;
   color: #ffffff;
   border-radius: 4px;
   text-transform: none;
@@ -128,9 +130,9 @@ onBeforeUnmount(() => {
   &:hover,
   &:focus-visible {
     color: #ffffff;
-    background-color: #1a5a9e;
+    background-color: $es-cta-hover;
     transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(41, 127, 202, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -152,7 +154,7 @@ onBeforeUnmount(() => {
 }
 
 .header-nav ul li a:focus-visible {
-  outline: 2px solid #297fca;
+  outline: 2px solid $es-primary;
   outline-offset: 2px;
 }
 

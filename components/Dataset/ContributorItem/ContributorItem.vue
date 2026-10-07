@@ -193,7 +193,11 @@ export default {
 
 <style lang="scss" scoped>
 .has-orcid {
+  color: $es-primary;
   text-decoration: underline;
+  text-decoration-color: rgba(62, 120, 119, 0.4);
+  cursor: pointer;
+  &:hover { text-decoration-color: $es-primary; }
 }
 </style>
 <style lang="scss">

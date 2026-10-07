@@ -443,7 +443,7 @@ function handleTimeseriesDirectoryClick(row) {
 
 .dataset-files {
   position: relative;
-  margin-bottom: 94px;
+  margin-bottom: 0;
 
   &__message {
     font-weight: 700;
@@ -453,9 +453,9 @@ function handleTimeseriesDirectoryClick(row) {
   }
 
   h3 {
-    color: variables.$myelin;
-    font-size: 16px;
-    font-weight: 500;
+    color: #000;
+    font-size: 1rem;
+    font-weight: 600;
     line-height: 40px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -464,15 +464,15 @@ function handleTimeseriesDirectoryClick(row) {
 
   :deep(.el-table) {
     .el-table__empty-block {
-      border-left: solid 1px variables.$cortex;
-      border-right: solid 1px variables.$cortex;
-      border-bottom: solid 1px variables.$cortex;
+      border-left: solid 1px $es-border;
+      border-right: solid 1px $es-border;
+      border-bottom: solid 1px $es-border;
     }
 
     .el-table__header-wrapper {
       height: 40px;
       .el-table__header {
-        border-right: solid 2px variables.$axon;
+        border-right: solid 1px $es-border;
         .el-table_1_column_1 {
           :deep(.el-checkbox__input) {
             margin-left: 1px;
@@ -511,12 +511,12 @@ function handleTimeseriesDirectoryClick(row) {
       border-bottom: none;
 
       .el-table__body {
-        border: solid 1px variables.$cortex;
+        border: solid 1px $es-border;
         border-bottom: none;
       }
 
       .el-table__row {
-        border-right: solid 1px variables.$cortex;
+        border-right: solid 1px $es-border;
       }
     }
 
@@ -527,11 +527,13 @@ function handleTimeseriesDirectoryClick(row) {
     }
 
     th.is-leaf {
-      background-color: variables.$axon;
-      color: #000;
-      font-size: 14px;
-      font-weight: 500;
-      margin-top: 16px;
+      background-color: #f7f9fb;
+      color: #555;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid $es-border;
     }
 
     ::before {
@@ -540,14 +542,14 @@ function handleTimeseriesDirectoryClick(row) {
 
     td {
       padding: 5px 0 5px 0;
-      border-color: variables.$cortex;
+      border-color: $es-border;
     }
 
     .el-table__empty-block {
       width: 99% !important;
       padding-right: 7px;
       margin-top: -1px;
-      border-top: solid 1px variables.$cortex;
+      border-top: solid 1px $es-border;
     }
   }
 
@@ -559,7 +561,7 @@ function handleTimeseriesDirectoryClick(row) {
   :deep(.el-table::before,
   .el-table--group::after,
   .el-table--border::after) {
-    background-color: variables.$cortex;
+    background-color: $es-border;
     width: 0;
   }
 
@@ -590,8 +592,8 @@ function handleTimeseriesDirectoryClick(row) {
   }
 
   .selection-menu-wrap {
-    background: #e9edf6;
-    border: 1px solid variables.$cortex;
+    background: #eef6f3;
+    border: 1px solid $es-border;
     box-sizing: border-box;
     border-radius: 3px 3px 0 0;
     display: flex;

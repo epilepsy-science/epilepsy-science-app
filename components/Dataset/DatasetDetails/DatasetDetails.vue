@@ -368,8 +368,9 @@ function onClickCopy() {
 
 <template>
   <div class="dataset-details">
-    <div class="discover-content container-fluid">
-      <dataset-header
+    <div class="dataset-header-band es-dots">
+      <div class="discover-content container-fluid">
+        <dataset-header
         :dataset-details="datasetDetails"
         :versions="versions"
         :last-updated-date="lastUpdatedDate"
@@ -377,39 +378,31 @@ function onClickCopy() {
         :is-dataset-embargoed="isDatasetEmbargoed"
         :has-agreement="hasAgreement"
         :data-use-agreement="dataUseAgreement"
-        @update-embargo-access="$emit('update-embargo-access', $event)"
-      />
-    </div>
-    <div class="discover-content container-fluid">
-      <h3 class="discover-content-title">
-        Dataset Overview
-      </h3>
-      <div class="row">
-        <!-- eslint-disable vue/no-v-html -->
-        <div
-          class="col-xs-12 col-md-8 description-container"
-          v-html="parsedMarkdown"
+          @update-embargo-access="$emit('update-embargo-access', $event)"
         />
-
-        <div
-          v-if="!!datasetDetails.sponsorship"
-          class="col-xs-12 col-md-4 first-xs last-md"
-        >
-<!--          <sponsor-card :sponsorship="datasetDetails.sponsorship" />-->
-        </div>
       </div>
-      <dataset-files
-        :is-embargoed="isDatasetEmbargoed"
-        :embargoed-release-date="embargoedReleaseDate"
-        :version="currentVersion"
-        :dataset-id="datasetId"
-        :dataset-type="props.datasetDetails.datasetType"
-      />
     </div>
-    <div class="dataset-info">
-      <div class="discover-content container-fluid dataset-info-container">
+    <div class="discover-content container-fluid dataset-body">
+      <div class="dataset-main">
+        <h3 class="discover-content-title">
+          Dataset Overview
+        </h3>
+        <div class="es-heading-bar"><i></i></div>
+        <!-- eslint-disable vue/no-v-html -->
+        <div class="description-container" v-html="parsedMarkdown" />
+        <dataset-files
+          :is-embargoed="isDatasetEmbargoed"
+          :embargoed-release-date="embargoedReleaseDate"
+          :version="currentVersion"
+          :dataset-id="datasetId"
+          :dataset-type="props.datasetDetails.datasetType"
+        />
+      </div>
+
+      <aside class="dataset-info">
         <div class="row">
           <div class="col-xs-12">
+            <p class="es-label">Details</p>
             <h2>
               About this dataset
             </h2>
@@ -617,7 +610,7 @@ function onClickCopy() {
               v-for="referenceType in Object.keys(groupedReferences)"
               :key="referenceType"
             >
-              <h4>
+              <h4 v-if="Object.keys(groupedReferences).length > 1">
                 {{ referenceHeading(referenceType) }}
               </h4>
               <external-publication-list-item
@@ -629,7 +622,7 @@ function onClickCopy() {
             </div>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
 
     <dataset-version-message
@@ -742,18 +735,44 @@ function onClickCopy() {
 
 <style lang="scss" scoped>
 @use '@/assets/scss/variables';
+
 .dataset-details {
   background-color: #ffffff;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.dataset-header-band {
+  border-bottom: 1px solid $es-border;
+  padding: 60px 0 40px;
+}
+
+.dataset-body {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 72px;
+
+  @media (min-width: 1100px) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 48px;
+  }
+}
+
+.dataset-main {
+  flex: 1;
+  min-width: 0;
 }
 
 .discover-content-title {
-  color: variables.$myelin;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 40px;
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 32px;
+  margin: 40px 0 0;
 }
 
 .copy-success-notification {
@@ -761,209 +780,160 @@ function onClickCopy() {
   margin-left: 5px;
 }
 
-.fade-leave-active {
-  transition: opacity 0.5s ease-out 2s;
-}
+.fade-leave-active { transition: opacity 0.5s ease-out 2s; }
+.fade-enter { opacity: 1; }
+.fade-leave-to { opacity: 0; }
 
-.fade-enter {
-  opacity: 1;
-}
+/* "About" panel: full width below content on narrow screens, sticky sidebar when wide */
+.dataset-info {
+  background-color: #f7f9fb;
+  border: 1px solid $es-border;
+  border-radius: $es-radius;
+  padding: 8px 24px 24px;
 
-.fade-leave-to {
-  opacity: 0;
-}
+  .row { margin-left: 0; margin-right: 0; }
+  .row:not(.mb-24):not(.mt-24):not(.share-dataset) { margin-bottom: 20px; }
+  [class*='col-'] { padding: 0; }
+  .tag-list { text-align: left; }
 
-.dataset-details {
-  width: 100%;
-  overflow-x: hidden;
-
-  .dataset-info {
-    background-color: #414553;
-    padding-bottom: 64px;
+  @media (min-width: 1100px) {
+    width: 360px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 24px;
+    margin-top: 40px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
   }
 }
 
-// Markdown styles
+/* Markdown styles */
 .description-container {
-  color: #000;
-  font-size: 16px;
-  line-height: 24px;
-  padding-top: 32px;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.65;
+  padding-top: 24px;
 
-    h1,
-    p,
-    h2,
-    h3,
-    blockquote,
-    h4,
-    pre {
-      max-width: 616px;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5 {
-      margin: 0 0 8px;
-    }
-
-    h1 {
-      font-size: 32px;
-      font-weight: bold;
-      line-height: 40px;
-    }
-
-    p {
-      margin-bottom: 16px;
-    }
-
-    img {
-      height: auto;
-      max-width: 170%;
-      margin-bottom: 20px;
-      flex-basis: 50%;
-      margin-top: 24px;
-    }
-
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-      line-height: 32px;
-    }
-
-    h3 {
-      font-size: 20px;
-      font-weight: bold;
-      line-height: 24px;
-      letter-spacing: 0px;
-    }
-
-    h4 {
-      font-size: 16px;
-      font-weight: bold;
-      line-height: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0px;
-    }
-
-    ul {
-      margin: 0 0 16px;
-      padding: 0 0 0 18px;
-    }
-
-    blockquote {
-      font-weight: normal;
-      line-height: 24px;
-      font-size: 16px;
-      border-left: 8px solid variables.$dopamine-dark;
-      margin-left: 0;
-
-      p {
-        margin-left: 16px;
-      }
-    }
-    pre {
-      background-color: #f1f1f3;
-      line-height: 24px;
-      padding: 16px;
-
-      code {
-        font-weight: normal;
-        font-size: 14px;
-      }
-    }
-
+  h1, p, h2, h3, blockquote, h4, pre { max-width: 680px; }
+  h1, h2, h3, h4, h5 { margin: 0 0 8px; color: #000; text-transform: none; }
+  h1 { font-size: 1.75rem; font-weight: 600; line-height: 1.3; }
+  h2 { font-size: 1.4rem; font-weight: 600; line-height: 1.3; }
+  h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; }
+  h4 { font-size: 1rem; font-weight: 600; text-transform: uppercase; }
+  p { margin-bottom: 16px; }
+  img { height: auto; max-width: 100%; margin: 24px 0 20px; border-radius: $es-radius-sm; }
+  ul { margin: 0 0 16px; padding: 0 0 0 18px; }
+  blockquote {
+    margin-left: 0;
+    border-left: 4px solid $es-mint;
+    p { margin-left: 16px; }
+  }
+  pre {
+    background-color: #f7f9fb;
+    border: 1px solid $es-border;
+    border-radius: $es-radius-sm;
+    line-height: 24px;
+    padding: 16px;
+    code { font-weight: normal; font-size: 14px; }
+  }
 }
 
-// Footer styles
-h2 {
-  height: 32px;
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 32px;
-  margin: 56px 0 24px;
-}
+/* Footer styles */
+.dataset-info {
+  .es-label { margin: 16px 0 6px; }
 
-h3 {
-  height: 16px;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 16px;
-  margin: 0 0 16px;
-}
+  h2 {
+    color: #000;
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $es-border;
+  }
 
-h4 {
-  color: white;
+  h3 {
+    color: $es-teal;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 16px;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+
+  h4 {
+    color: #000;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+    text-transform: none;
+  }
 }
 
 .info-icons {
-  .social-media-share-icons {
-    display: inline-block;
-  }
-  :deep(span){
-    margin-right: 24px;
-  }
-  // components within inline-templates do not correctly get the parent components css scope, need to use ::v-deep
+  .social-media-share-icons { display: inline-block; }
+  :deep(span) { margin-right: 24px; }
   button {
     background: none;
     border: 0;
     outline: none;
     padding: 0;
     cursor: pointer;
+    color: $es-teal;
   }
 }
 
 .info-publishing-history {
-  @media (min-width: 48em) {
-    display: flex;
-  }
-  .info-text {
-    margin-right: 90px;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
 }
 
 .info-text {
-  color: #ffffff;
-  font-size: 14px;
-  line-height: 24px;
+  color: #000;
+  font-size: 0.9rem;
+  line-height: 22px;
+  word-break: break-word;
 
   a {
-    color: #ffffff;
+    color: $es-primary;
     text-decoration: underline;
+    &:hover { color: $es-primary-dark; }
   }
 
   &.sub-text,
-  &.sub-text a {
-    color: #cfdbfc;
-  }
+  &.sub-text a { color: #555; }
 
   .info-text-caps {
     text-transform: uppercase;
-    color: #cddaff;
-    font-size: 12px;
+    color: #777;
+    font-size: 0.7rem;
     font-weight: 600;
+    letter-spacing: 0.5px;
     line-height: 16px;
   }
 }
 
 .info-citation {
-  border-radius: 4px;
-  background-color: #cddaff;
-  padding: 16px;
-  // color: variables.$dopamine;
-  font-size: 14px;
-  line-height: 24px;
+  background: #fff;
+  border: 1px solid $es-border;
+  border-left: 4px solid $es-teal;
+  border-radius: $es-radius-sm;
+  padding: 12px 14px;
+  color: #333;
+  font-size: 0.85rem;
+  line-height: 1.55;
   margin-bottom: 8px;
+  word-break: break-word;
 }
 
 .info-citation-links {
-  font-size: 14px;
+  font-size: 0.8rem;
   line-height: 16px;
-  padding-left: 16px;
-  color: #cddaff;
+  padding-left: 0;
+  color: #555;
 
   button {
     background: none;
@@ -974,27 +944,24 @@ h4 {
 
   button,
   a {
-    color: #cddaff;
+    color: $es-primary;
     line-height: 16px;
     text-decoration: underline;
-    font-size: 14px;
+    font-size: 0.85rem;
     cursor: pointer;
 
     &.active {
       text-decoration: none;
-      color: #ffffff;
+      color: #000;
+      font-weight: 600;
     }
   }
 }
+
 .sponsor-card {
   margin-top: 16px;
-  @media only screen and (min-width: 62em) {
-    margin-top: 0;
-  }
+  @media only screen and (min-width: 62em) { margin-top: 0; }
 }
 
-.icon-upload {
-  color: white;
-}
-
+.icon-upload { color: $es-teal; }
 </style>

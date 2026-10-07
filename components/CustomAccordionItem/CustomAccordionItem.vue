@@ -79,7 +79,7 @@ const props = defineProps({
       align-items: center;
 
       .cta-button {
-        // font-size: 0.9rem;
+        /* font-size: 0.9rem; */
         width: 100%;
         max-width: 250px;
       }
@@ -106,7 +106,7 @@ const props = defineProps({
     align-self: center;
   }
 
-  // Larger screens
+  /* Larger screens */
   @media (min-width: 768px) {
     flex-direction: row;
     align-items: stretch;
