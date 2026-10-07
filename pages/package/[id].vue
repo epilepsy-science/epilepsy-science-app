@@ -3,6 +3,7 @@ import { useMainStore } from "~/store/index.js";
 import { ref, onMounted, computed, shallowRef, nextTick } from "vue";
 import { Markdown, TextViewer, CSVViewer } from "@pennsieve-viz/core";
 import "@pennsieve-viz/core/style.css";
+import { filePathOf, publicDownloadsBase, publicFileUrl } from "~/utils/publicDownloads";
 
 // Dynamic imports for browser-only viewers
 const TSViewer = shallowRef(null);
@@ -98,14 +99,18 @@ async function fetchViewerAssets(sourcePackageId) {
   }
 }
 
+// A link for a viewer from download-service: shown in the browser, and
+// recorded as a view, not a download.
 async function fetchPresignedUrl(filePath, datasetId, version) {
-  const manifestUrl = `${runtimeConfig.public.discover_api_host}/datasets/${datasetId}/versions/${version}/files/download-manifest`;
   try {
-    const response = await useSendXhr(manifestUrl, {
-      method: "POST",
-      body: { paths: [filePath] },
+    const token = (await useGetToken()) || "";
+    const base = publicDownloadsBase({
+      api2Host: runtimeConfig.public.api2_host,
+      publicHost: runtimeConfig.public.download_public_host,
+      token,
     });
-    presignedUrl.value = response?.data?.[0]?.url || "";
+    const { url } = await publicFileUrl({ base, token, datasetId, version, path: filePath, purpose: "view" });
+    presignedUrl.value = url || "";
   } catch {
     // presignedUrl stays empty; viewer won't render
   }
@@ -155,7 +160,7 @@ async function processFileData(fileData, datasetId, version) {
     loadFileContent(fileData, datasetId, version);
   }
   if ([...csvFileTypes, ...imageFileTypes].includes(type)) {
-    fetchPresignedUrl(fileData.path, datasetId, version);
+    fetchPresignedUrl(filePathOf(fileData), datasetId, version);
   }
 
   // Fetch all viewer assets and categorize them

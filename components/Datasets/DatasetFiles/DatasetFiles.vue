@@ -1,12 +1,22 @@
 <script setup>
-import {ref, watch, nextTick} from "vue";
+import {ref, watch} from "vue";
+import {ElMessage} from "element-plus";
 import BfButton from "~/components/Shared/BfButton/BfButton.vue";
 import IconUpload from "~/components/Icons/IconUpload.vue";
-import IconXCircle from "~/components/Icons/IconXCircle.vue";
 import IconRemove from "~/components/Icons/IconRemove.vue";
 import {useMainStore} from '~/store/index.js'
 import DatasetFilesFooter from "~/components/Datasets/DatasetFilesFooter/DatasetFilesFooter.vue";
 import DatasetFilesHeader from "~/components/Datasets/DatasetFilesHeader/DatasetFilesHeader.vue";
+import AgentDownloadCommand from "~/components/Dataset/AgentDownloadCommand/AgentDownloadCommand.vue";
+import PublicArchiveStatus from "~/components/Dataset/PublicArchiveStatus/PublicArchiveStatus.vue";
+import {usePublicArchive} from "~/composables/usePublicArchive";
+import {
+  isActive,
+  publicDownloadsBase,
+  publicFileUrl,
+  rememberedArchives,
+  startBrowserDownload,
+} from "~/utils/publicDownloads";
 
 const store = useMainStore()
 const route = useRoute()
@@ -18,7 +28,10 @@ const props = defineProps({
   datasetId: {type: Number, default:0},
   version: {type: Number, default:0},
   isEmbargoed: {type: Boolean, default:false},
-  embargoedReleaseDate: {type: String, default:''}
+  embargoedReleaseDate: {type: String, default:''},
+  // The latest version's S3 location, for the AWS CLI alternative to the
+  // agent; empty for older versions, whose files need their object versions.
+  awsUri: {type: String, default:''}
 })
 
 const isLoading = ref(true)
@@ -40,6 +53,9 @@ watch(getFilesUrl, () => {
 onMounted(() => {
   const initialPath = route.query.path || ''
   getDatasetFiles(initialPath)
+  // A selection's archive this browser asked for and may come back to.
+  const remembered = rememberedArchives({ datasetId: props.datasetId, version: props.version }).filter((a) => !a.whole)
+  if (remembered.length) resumeArchive(remembered[remembered.length - 1])
 })
 
 const isLoggedin = ref(false)
@@ -133,33 +149,29 @@ function formatStorage(row) {
   return useFormatMetric(row.size)
 }
 
-function removeSelection(row) {
-  selectedFiles.value = selectedFiles.value.filter((f) => f.path !== row.path)
-
-  const selectedPaths = selectedFiles.value.map((s) => s.path)
-  datasetFiles.value.forEach((r) => {
-    fileTable.value.toggleRowSelection(r, selectedPaths.includes(r.path))
-  })
-}
-
 function setPackage(data) {
   store.setSelectedPackage({datasetId: props.datasetId, version: props.version, files: [data]})
 }
-
-// ---- ZIPIT ----
-
-const zipitUrl = computed(() => {
-  return `${runtimeConfig.public.zipit_api_host}`
-})
 
 // ---- DOWNLOAD ----
 
 const downloadConfirmed = ref(false)
 const showReduceSize = ref(false)
 const archiveName = ref(DEFAULT_ARCHIVE_NAME)
-const zipData = ref('')
-const zipForm = useTemplateRef('zipForm')
 const confirmDownloadVisible = ref(false)
+
+// Folders and several files download as a zip that download-service builds;
+// one file downloads directly.
+const {
+  archive,
+  error: archiveError,
+  starting,
+  signedIn,
+  start: startArchive,
+  resume: resumeArchive,
+  download: downloadArchive,
+  remove: removeArchive,
+} = usePublicArchive()
 
 /**
  * download is disabled if the total size is greater than the threshold, or no rows are selected
@@ -188,6 +200,21 @@ const maxDownloadSize = computed(() => {
   return useFormatMetric(runtimeConfig.public.max_download_size)
 })
 
+// The selection's size and paths, for the agent command when it's too
+// large to zip.
+const selectedSize = computed(() => {
+  return useFormatMetric(selectedFiles.value.reduce((total, f) => total + (f.size || 0), 0))
+})
+const selectedPaths = computed(() => selectedFiles.value.map((f) => f.path))
+const awsItems = computed(() =>
+  selectedFiles.value.map((f) => ({ path: f.path, isFolder: isFolder(f) }))
+)
+
+function isFolder(row) {
+  const type = (row.type || '').toLowerCase()
+  return type === 'directory' || type === 'folder'
+}
+
 function onDownloadClick() {
   if (shouldConfirmDownload.value) {
     showReduceSize.value = downloadDisabled.value
@@ -198,35 +225,40 @@ function onDownloadClick() {
 }
 
 async function executeDownload() {
+  const files = selectedFiles.value
+  const name = files.length > 1 ? archiveName.value : ''
+  closeConfirmDownload()
 
-  const mainPayload = {
-    paths: selectedFiles.value.map((f) => {
-      return f.path
-    }),
+  if (files.length === 1 && !isFolder(files[0])) {
+    await downloadOneFile(files[0])
+    return
+  }
+  if (starting.value || isActive(archive.value)) {
+    ElMessage.info('Another download is being prepared; wait for it to finish.')
+    return
+  }
+  await startArchive({
     datasetId: props.datasetId,
     version: props.version,
+    paths: files.map((f) => f.path),
+    rootPath: directoryPath.value || undefined,
+    archiveName: name,
+  })
+}
+
+async function downloadOneFile(file) {
+  try {
+    const token = (await useGetToken()) || ''
+    const base = publicDownloadsBase({
+      api2Host: runtimeConfig.public.api2_host,
+      publicHost: runtimeConfig.public.download_public_host,
+      token,
+    })
+    const { url } = await publicFileUrl({ base, token, datasetId: props.datasetId, version: props.version, path: file.path })
+    startBrowserDownload(url)
+  } catch (e) {
+    ElMessage.error(e.message || "Couldn't download the file. Try again.")
   }
-
-  const rootPathPayload = directoryPath.value 
-  ? { rootPath: directoryPath.value } 
-  : {}
-  const archiveNamePayload =
-    archiveName.value && selectedFiles.value.length > 1
-      ? { archiveName: archiveName.value }
-      : {}
-
-  const payload = {
-    ...mainPayload,
-    ...rootPathPayload,
-    ...archiveNamePayload
-  }
-  zipData.value = JSON.stringify(payload)
-
-  await nextTick()
-
-  zipForm.value.submit() // eslint-disable-line no-undef
-
-  closeConfirmDownload()
 }
 
 function confirmDownload() {
@@ -276,6 +308,15 @@ function handleTimeseriesDirectoryClick(row) {
       :limit="limit"
       @navigate-breadcrumb="handleNavigateBreadcrumb"
       @load-more-files="loadMore"
+    />
+    <public-archive-status
+      class="archive-status mb-16"
+      :archive="archive"
+      :error="archiveError"
+      :starting="starting"
+      :signed-in="signedIn"
+      @download="downloadArchive"
+      @remove="removeArchive"
     />
     <div v-if="selectedFiles.length > 0" class="selection-menu-wrap mb-16">
       <el-checkbox
@@ -368,13 +409,10 @@ function handleTimeseriesDirectoryClick(row) {
       @load-more-files="loadMore"
     />
 
-    <form ref="zipForm" method="POST" :action="zipitUrl">
-      <input v-model="zipData" type="hidden" name="data" />
-    </form>
-
     <client-only>
     <el-dialog
       v-model="confirmDownloadVisible"
+      :width="showReduceSize ? 'clamp(min(760px, 92vw), 50%, 92vw)' : undefined"
       :show-close="false"
       @close="closeConfirmDownload"
     >
@@ -391,28 +429,20 @@ function handleTimeseriesDirectoryClick(row) {
       <div class="bf-dialog-body">
         <div v-if="showReduceSize" class="mb-24">
           <p>
-            The file(s) you are trying to download exceed the limit of
-            {{ maxDownloadSize }}. Please reduce the number of files selected
-            and try again.
+            The file(s) you selected are {{ selectedSize }}, more than the
+            {{ maxDownloadSize }} you can download as a zip. Download them
+            with the Pennsieve agent instead:
           </p>
-          <el-table :show-header="false" :border="false" :data="selectedFiles">
-            <el-table-column prop="name" />
-            <el-table-column align="right">
-              <template #default="scope">
-                {{ useFormatMetric(scope.row.size) }}
-                <button>
-                  <IconXCircle
-                    color="#bdbdbd #404554"
-                    :height="28"
-                    :width="28"
-                    @click="removeSelection(scope.row)"
-                  />
-                </button>
-              </template>
-            </el-table-column>
-          </el-table>
+          <agent-download-command
+            :dataset-id="datasetId"
+            :version="version"
+            :paths="selectedPaths"
+            :folder-name="archiveName"
+            :aws-uri="awsUri"
+            :aws-items="awsItems"
+          />
         </div>
-        <div v-if="selectedFiles.length > 1" class="download-name">
+        <div v-else-if="selectedFiles.length > 1" class="download-name">
           <label for="downloadName">
             File Name
           </label>
@@ -424,9 +454,9 @@ function handleTimeseriesDirectoryClick(row) {
       <template #footer>
         <div class="dialog-footer">
           <bf-button class="secondary" @click="closeConfirmDownload">
-            Cancel
+            {{ showReduceSize ? 'Close' : 'Cancel' }}
           </bf-button>
-          <bf-button :disabled="downloadDisabled" @click="confirmDownload">
+          <bf-button v-if="!showReduceSize" :disabled="downloadDisabled" @click="confirmDownload">
             Download
           </bf-button>
         </div>
@@ -444,6 +474,12 @@ function handleTimeseriesDirectoryClick(row) {
 .dataset-files {
   position: relative;
   margin-bottom: 0;
+
+  .archive-status {
+    padding: 12px 16px;
+    border: 1px solid variables.$gray_2;
+    border-radius: 4px;
+  }
 
   &__message {
     font-weight: 700;

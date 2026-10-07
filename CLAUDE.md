@@ -92,3 +92,25 @@ Single Pinia store (`store/index.js`) manages:
 - Page statistics
 - Portal notifications (from Contentful)
 - Footer data
+
+# Nuxt 3 Front-End Standards
+
+## Stack & Architecture
+- Framework: Nuxt 3 (Vue 3 Composition API `<script setup lang="ts">`)
+- Utilities: Auto-imports (`ref`, `computed`, `useFetch`, `useAsyncData`, `useRoute`, `useRouter`)
+- Styling: Element-plus
+- State: Pinia (`@pinia/nuxt`)
+
+## Conventions
+- Pages live in `pages/`, reusable components in `components/`, composables in `composables/`.
+- Do NOT explicitly import Vue/Nuxt core functions (`ref`, `onMounted`, `useFetch`)—rely on Nuxt auto-imports.
+- For data fetching, use `useFetch` or `useAsyncData` instead of plain `axios`/`fetch` inside `onMounted` to ensure SSR compatibility.
+- Interactive-only UI (e.g., canvas, local storage access) must use `<ClientOnly>` or check `import.meta.client`.
+
+## UI/UX Rules
+- Maintain mobile-first responsive layouts (`sm:`, `md:`, `lg:`).
+- Always include loading (`pending`), error, and empty states for data-driven components.
+- Do NOT introduce inline custom CSS colors if CSS variables exists.
+
+## Verification Commands
+- Type check: `npx nuxi typecheck`

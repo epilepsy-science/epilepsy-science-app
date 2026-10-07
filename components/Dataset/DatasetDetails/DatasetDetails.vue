@@ -396,6 +396,7 @@ function onClickCopy() {
           :version="currentVersion"
           :dataset-id="datasetId"
           :dataset-type="props.datasetDetails.datasetType"
+          :aws-uri="isLatestVersion ? propOr('', 'uri', props.datasetDetails) : ''"
         />
       </div>
 

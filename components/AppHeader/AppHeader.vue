@@ -14,6 +14,14 @@
         <ul>
           <li><nuxt-link to="/projects" :class="{ 'router-link-active': isDataSection }">Data</nuxt-link></li>
           <li><nuxt-link to="/about">About</nuxt-link></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-trigger" type="button" aria-haspopup="true">
+              More <el-icon :size="12" class="nav-dropdown-arrow"><ArrowDown /></el-icon>
+            </button>
+            <ul class="nav-dropdown-menu">
+              <li><nuxt-link to="/dataset-proposal" @click="closeDropdown">Propose a dataset</nuxt-link></li>
+            </ul>
+          </li>
           <li><a class="cde-link" href="https://cde.epilepsy.science" target="_blank" rel="noopener"><strong>CDE's</strong> <el-icon :size="12" style="vertical-align: middle; margin-left: 2px;"><TopRight /></el-icon></a></li>
         </ul>
       </nav>
@@ -23,7 +31,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
-import { TopRight } from "@element-plus/icons-vue";
+import { TopRight, ArrowDown } from "@element-plus/icons-vue";
 
 const route = useRoute();
 const isDataSection = computed(() => /^\/(projects|data|datasets)(\/|$)/.test(route.path));
@@ -33,6 +41,12 @@ const windowWidth = ref(typeof window !== "undefined" ? window.innerWidth : 0);
 
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value;
+};
+
+// Blur the clicked link so :focus-within no longer keeps the dropdown open
+const closeDropdown = (clickEvent) => {
+  clickEvent.currentTarget?.blur();
+  menuOpen.value = false;
 };
 
 const updateWindowWidth = () => {
@@ -158,6 +172,54 @@ onBeforeUnmount(() => {
   outline-offset: 2px;
 }
 
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: $es-primary;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &:focus-visible {
+    outline: 2px solid $es-primary;
+    outline-offset: 2px;
+  }
+}
+
+.nav-dropdown-arrow {
+  transition: transform 0.2s ease;
+}
+
+.header-nav .nav-dropdown-menu {
+  list-style: none;
+  padding: 0 0 0 10px;
+  margin: 0;
+  gap: 0;
+
+  a {
+    text-transform: none;
+    white-space: nowrap;
+  }
+
+  // Dropdown items don't show the active-route underline/bold
+  a.router-link-active:not(:hover):not(:focus-visible) {
+    color: $es-primary;
+    font-weight: normal;
+
+    &::after {
+      width: 0;
+    }
+  }
+}
+
 .hamburger-menu {
   display: inline-flex;
   background: none;
@@ -203,6 +265,41 @@ onBeforeUnmount(() => {
   .header-nav ul {
     flex-direction: row;
     gap: 15px;
+  }
+
+  .header-nav .nav-dropdown-menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+    padding: 8px 0;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 110;
+
+    a {
+      display: block;
+      padding: 8px 16px;
+    }
+  }
+
+  .nav-dropdown:hover,
+  .nav-dropdown:focus-within {
+    .nav-dropdown-menu {
+      display: flex;
+    }
+
+    .nav-dropdown-trigger {
+      color: black;
+    }
+
+    .nav-dropdown-arrow {
+      transform: rotate(180deg);
+    }
   }
 }
 </style>
