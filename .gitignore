@@ -29,4 +29,4 @@ public/schemas/metadata_schema.json
 # Sitemaps
 publi/sitemap*
 
-CLAUDE.md
+./CLAUDE.md
