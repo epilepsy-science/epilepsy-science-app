@@ -258,10 +258,14 @@ export default {
   border-bottom: none;
 }
 
+.dataset-facet-menu > .dropdown-multiselect:last-child {
+  border-radius: 0 0 $es-radius $es-radius;
+}
+
 hr {
   margin: 0;
   border: none;
-  border-bottom: 1px solid $lineColor2;
+  border-bottom: 1px solid $es-border;
 }
 
 .container-link {
@@ -272,16 +276,16 @@ hr {
     text-decoration: none;
   }
 }
-//el-link adds a component with a border in order to underline the text.
-//The underline is too low so we cannot use it, and must instead hide it
+/*el-link adds a component with a border in order to underline the text. */
+/*The underline is too low so we cannot use it, and must instead hide it */
 .el-link.el-link--default:after {
   border: none;
 }
 
 .flex {
   display: flex;
-  border-left: 1px solid $lineColor2;
-  border-right: 1px solid $lineColor2;
+  border-left: 1px solid $es-border;
+  border-right: 1px solid $es-border;
   .el-link {
     margin: .5rem .75rem .5rem auto;
   }
