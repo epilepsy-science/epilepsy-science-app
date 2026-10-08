@@ -1,32 +1,38 @@
 import { ref, watch, onMounted } from 'vue'
-import { useMainStore } from '~/store/index'
 
 // Datasets published on Discover that are not part of any project collection.
+// Counted by Algolia with the same exclusion filter the scoped search page
+// uses (?scope=individual), so the card and the results always agree even
+// when the index and Discover are out of sync.
 export function useUnassignedDatasets(projects) {
-  const pageStore = useMainStore()
-  const { load } = useProjectDatasetIds()
+  const { $algoliaClient } = useNuxtApp()
+  const config = useRuntimeConfig()
+  const { excludeFilter } = useProjectDatasetIds()
   const count = ref(null)
   const size = ref(null)
   const loaded = ref(false)
 
-  // Kick this off synchronously so the store action runs inside the Nuxt context.
-  const statsReady =
-    typeof pageStore.pageStats.datasets === 'number'
-      ? Promise.resolve()
-      : pageStore.fetchDatasetStats()
-
   async function compute() {
     if (!projects.value?.length) return
 
-    const assigned = await load(projects.value)
-    const assignedSize = [...assigned.values()].reduce((sum, s) => sum + s, 0)
-
-    await statsReady
-    const total = pageStore.pageStats.datasets
-    const totalSize = pageStore.pageStats.totalDatasetSize
-    if (typeof total === 'number') count.value = Math.max(total - assigned.size, 0)
-    if (typeof totalSize === 'number') size.value = Math.max(totalSize - assignedSize, 0)
-    loaded.value = true
+    try {
+      const filters = await excludeFilter(projects.value)
+      const index = $algoliaClient.initIndex(config.public.ALGOLIA_INDEX)
+      const { nbHits, facets_stats } = await index.search('', {
+        hitsPerPage: 0,
+        analytics: false,
+        facets: ['size'],
+        filters,
+      })
+      count.value = nbHits
+      size.value = facets_stats?.size?.sum ?? 0
+    } catch (e) {
+      console.error('Failed to count individual datasets:', e)
+      count.value = null
+      size.value = null
+    } finally {
+      loaded.value = true
+    }
   }
 
   onMounted(() => {
