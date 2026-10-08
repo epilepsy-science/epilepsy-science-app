@@ -103,7 +103,7 @@ export default {
     padding-bottom: 0;
     margin-bottom: 0.5rem;
     border: none;
-    border-bottom: 1px solid $lineColor2;
+    border-bottom: 1px solid $es-border;
   }
   .flex {
     display: flex;
@@ -112,6 +112,8 @@ export default {
     }
   }
   .facet-card {
+    border: 1px solid $es-border;
+    border-radius: $es-radius-sm;
     :deep(.el-card__body) {
       padding: 10px;
       height: 6rem;
@@ -133,8 +135,8 @@ export default {
       text-decoration: none;
     }
   }
-  //el-link adds a component with a border in order to underline the text.
-  //The underline is too low so we cannot use it, and must instead hide it
+  /*el-link adds a component with a border in order to underline the text. */
+  /*The underline is too low so we cannot use it, and must instead hide it */
   .el-link.el-link--default:after {
     border: none;
   }

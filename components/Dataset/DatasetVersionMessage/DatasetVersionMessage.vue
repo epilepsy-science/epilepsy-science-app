@@ -75,8 +75,8 @@ const embargoedReleaseDate = computed(()=> {
   width: 550px;
 }
 a {
-  // Removes the underlined space at the end
-  // of the nuxt link to the latest version
+  /* Removes the underlined space at the end */
+  /* of the nuxt link to the latest version */
   display: inline-block;
 }
 

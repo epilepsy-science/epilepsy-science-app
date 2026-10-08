@@ -44,40 +44,42 @@ defineProps({
 
 <style scoped lang="scss">
 .collaborator-card {
-  background-color: #f0f0f0;
+  background: #fff;
+  border: 1px solid $es-border;
+  border-radius: $es-radius;
   padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: left;
-  color: #297fca;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 300px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border-color: $es-teal;
+    box-shadow: 0 4px 16px rgba(62, 120, 119, 0.15);
+  }
 
   .card-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 16px;
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: $es-primary;
   }
 
   .card-description {
-    margin-bottom: 16px;
-    color: black;
-  }
-
-  .card-subtext {
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-    color: #555;
+    margin: 0 0 16px;
+    line-height: 1.6;
+    color: #333;
   }
 
   .card-cta a {
-    color: #297fca;
+    color: $es-primary;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
     text-decoration: none;
-
-    :hover {
-      text-decoration: underline;
-    }
+    &:hover { text-decoration: underline; }
   }
 }
 </style>

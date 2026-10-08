@@ -262,7 +262,7 @@ const histogramBars = computed(() => {
   font-variant-numeric: tabular-nums;
 }
 
-// Rotated variant: labels angled -45° so densely-packed bins don't overlap.
+/* Rotated variant: labels angled -45° so densely-packed bins don't overlap. */
 .x-axis-ticks.rotated {
   height: 52px;
 }

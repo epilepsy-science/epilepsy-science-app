@@ -9,14 +9,25 @@
     <Meta name="twitter:description" :content="`Browse ${title}`" />
   </Head>
   <div class="page-data">
-    <div class="container">
-      <div class="search-bar__container">
-        <div class="body1 mb-8">
-          Search from published datasets
+    <section class="data-hero es-dots">
+      <div class="data-hero__inner">
+        <p class="es-label">Data</p>
+        <h1 class="data-hero__title">{{ isIndividualScope ? 'Individual published datasets' : 'All datasets' }}</h1>
+        <div class="es-heading-bar centered"><i></i></div>
+        <p class="data-hero__text">
+          {{ isIndividualScope
+            ? 'Datasets published independently of a research project.'
+            : 'Search every published dataset by keyword, then refine by tags, contributors, or availability.' }}
+        </p>
+        <DataBrowseTabs active="all" class="mb-24" />
+        <div class="data-hero__search">
+          <search-controls-contentful class="search-bar" placeholder="Find a dataset..." showSearchText />
         </div>
-        <search-controls-contentful class="search-bar" placeholder="Find a dataset..." showSearchText />
+        <NuxtLink v-if="isIndividualScope" class="scope-chip" :to="{ query: { ...$route.query, scope: undefined } }">
+          Not part of a project · Show all ✕
+        </NuxtLink>
       </div>
-    </div>
+    </section>
     <div class="container">
       <el-row :gutter="32" type="flex">
         <el-col :span="24">
@@ -30,9 +41,14 @@
             </el-col>
             <el-col :sm="searchColSpan('sm')" :md="searchColSpan('md')" :lg="searchColSpan('lg')">
               <div v-show="!isLoadingSearch && searchData.items.length" class="search-heading">
+                <div class="results-summary">
+                  <strong>{{ searchData.total.toLocaleString() }}</strong>
+                  {{ searchData.total === 1 ? 'dataset' : 'datasets' }}
+                  <template v-if="latestSearchTerm"> for “{{ latestSearchTerm }}”</template>
+                </div>
                 <client-only>
                   <div class="datasets-count">
-                    <span>Datasets per page</span>
+                    <span>Per page</span>
                     <el-select class="el-select-wrapper" v-model="searchData.limit" size="small"
                       @change="updateDataSearchLimit">
                       <el-option v-for="(item, index) in itemsToDisplay" :key="index" :label="item" :value="item" />
@@ -112,14 +128,31 @@ export default {
     const config = useRuntimeConfig()
     const route = useRoute()
     const { $algoliaClient } = useNuxtApp()
+    // Nuxt composables must be called before the first await in an async setup
+    const { excludeFilter } = useProjectDatasetIds()
+    const isIndividualScope = computed(() => route.query.scope === 'individual')
+    useBreadcrumb(computed(() => [
+      { label: 'Data', to: '/projects' },
+      { label: isIndividualScope.value ? 'Individual datasets' : 'All datasets' },
+    ]))
     const algoliaIndex = await $algoliaClient.initIndex(config.public.ALGOLIA_INDEX)
 
     const searchType = searchTypes.find(searchType => {
       return searchType.type == route.query.type
     })
     const title = propOr('', 'label', searchType)
+
+    // ?scope=individual hides datasets that belong to a project collection
+    const projectExcludeFilter = ref('')
+    async function loadScopeFilter() {
+      projectExcludeFilter.value = isIndividualScope.value ? await excludeFilter() : ''
+    }
+    await loadScopeFilter()
     return {
       algoliaIndex,
+      projectExcludeFilter,
+      isIndividualScope,
+      loadScopeFilter,
       title
     }
   },
@@ -223,6 +256,9 @@ export default {
       }
     },
 
+    '$route.query.scope': function () {
+      this.loadScopeFilter().then(() => this.fetchResults())
+    },
     '$route.query.search': {
       handler: function () {
         this.searchQuery = this.$route.query.search
@@ -301,10 +337,11 @@ export default {
           this.searchFailed = true
         })
         .finally(() => {
-          var filters = this.$refs.datasetFacetMenu?.getFilters()
-          filters = filters === undefined ?
-            '' :
-            filters 
+          const facetFilters = this.$refs.datasetFacetMenu?.getFilters() || ''
+          const filters = [facetFilters, this.projectExcludeFilter]
+            .filter(Boolean)
+            .map(f => `(${f})`)
+            .join(' AND ')
 
           this.algoliaIndex
             .search(query, {
@@ -371,23 +408,78 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.data-hero {
+  border-bottom: 1px solid $es-border;
 
-.alternative-links {
-  text-decoration: underline;
-  color: $es-primary-color;
+  &__inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 20px 40px;
+    text-align: center;
+  }
+
+  .es-label { margin: 0 0 12px; }
+
+  &__title {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 500;
+    color: #000;
+    text-transform: uppercase;
+  }
+
+  .es-heading-bar { margin-bottom: 16px; }
+
+  &__text {
+    margin: 0 auto 24px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  &__search {
+    max-width: 640px;
+    margin: 0 auto;
+
+    :deep(.el-input__wrapper) {
+      border-radius: $es-radius-sm 0 0 $es-radius-sm;
+      box-shadow: 0 0 0 1px $es-border inset;
+      padding: 6px 12px;
+      background: #fff;
+    }
+    :deep(.input-wrap) { margin-right: 0; }
+    :deep(.el-button) {
+      height: auto;
+      border-radius: 0 $es-radius-sm $es-radius-sm 0;
+      border: 1px solid $es-cta;
+      background: $es-cta;
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      &:hover { background: $es-cta-hover; border-color: $es-cta-hover; }
+    }
+  }
 }
 
-.search-bar__container {
-  margin-top: 1em;
-  padding: 0.75rem;
-  border: 0.1rem solid $lineColor2;
-  background: white;
+.scope-chip {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 4px 12px;
+  border: 1px solid $es-teal;
+  border-radius: $es-radius-sm;
+  background: #fff;
+  color: $es-teal;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { background: $es-teal; color: #fff; }
+}
 
-  h5 {
-    line-height: 1rem;
-    font-weight: 600;
-    font-size: 1rem;
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
 }
 
 .table-wrapper {
@@ -403,64 +495,58 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1em;
+  gap: 8px;
 
   @media screen and (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
   }
 
-  .el-select-wrapper {
-    margin-left: 16px;
-    width: 56px;
-  }
-}
-
-.facet-menu {
-  margin-top: 2em;
-}
-
-:deep(.el-table td) {
-  vertical-align: top;
-}
-
-:deep(.el-table .cell) {
-  word-break: normal;
-}
-
-.dataset-filters {
-  padding: 0.5rem 1rem 1rem;
-  margin-bottom: 2rem;
-
-  h2,
-  h3 {
-    font-size: 1.125rem;
-    font-weight: normal;
-    line-height: 1.2;
+  .results-summary {
+    font-size: 0.95rem;
+    color: #333;
+    strong { color: $es-teal; font-size: 1.1rem; }
   }
 
-  h2 {
-    border-bottom: 1px solid $lineColor1;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-
-  h3 {
-    font-size: 0.875rem;
-    text-transform: uppercase;
-  }
-
-  :deep(.el-checkbox-group) {
+  .datasets-count {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #555;
   }
 
-  :deep(.el-checkbox__label) {
-    color: $es-primary-color;
+  .el-select-wrapper {
+    margin-left: 8px;
+    width: 64px;
+    :deep(.el-select__wrapper) { border-radius: $es-radius-sm; }
   }
+
+  .pagination-wrapper { display: none; }
 }
 
 .dataset-results-footer {
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 16px;
+}
+
+:deep(.el-pagination) {
+  --el-pagination-button-bg-color: #fff;
+  .el-pager li, button {
+    border: 1px solid $es-border;
+    border-radius: $es-radius-sm;
+    margin: 0 3px;
+    min-width: 32px;
+    &.is-active { background: $es-teal; border-color: $es-teal; color: #fff; }
+  }
+}
+
+:deep(.el-table td) { vertical-align: top; }
+:deep(.el-table .cell) { word-break: normal; }
+
+@media (max-width: 768px) {
+  .data-hero__inner { padding: 40px 16px 32px; }
+  .data-hero__title { font-size: 1.6rem; }
+  .container { padding: 24px 16px 40px; }
 }
 </style>
