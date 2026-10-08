@@ -15,7 +15,7 @@
 
       <ul class="stat-row">
         <li class="stat">
-          <strong>{{ loaded ? count : '…' }}</strong><span>Datasets</span>
+          <strong>{{ loaded ? (count ?? '—') : '…' }}</strong><span>Datasets</span>
         </li>
         <li class="stat">
           <strong>{{ loaded ? useFormatMetric(size) : '…' }}</strong><span>Data</span>
