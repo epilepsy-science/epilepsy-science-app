@@ -29,7 +29,7 @@ async function initDB() {
   return initPromise
 }
 
-const PARQUET_BASE = 'https://epilepsy-parquet-metadata.s3.us-east-1.amazonaws.com'
+const PARQUET_BASE = 'https://epilepsy-parquet-metadata.s3.us-east-1.amazonaws.com/es-dashboarding/prod'
 
 export function useDuckDB() {
   /**
