@@ -106,12 +106,12 @@ const formattedTotalSize = computed(() => {
     }
   }
 
-  // Tablet and larger screens
+  /* Tablet and larger screens */
   @media (min-width: 768px) {
     padding: 40px;
   }
 
-  // Desktop and larger screens
+  /* Desktop and larger screens */
   @media (min-width: 1024px) {
     flex-direction: row;
     align-items: flex-start;

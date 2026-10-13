@@ -83,7 +83,7 @@ function navigateToForm() {
     }
   }
 
-  // Tablet and larger screens
+  /* Tablet and larger screens */
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
@@ -100,7 +100,7 @@ function navigateToForm() {
     }
   }
 
-  // Desktop and larger screens
+  /* Desktop and larger screens */
   @media (min-width: 1024px) {
     padding: 40px;
 

@@ -201,29 +201,47 @@ function formatNumber(number) {
 <style lang="scss" scoped>
 
 .dataset-card {
-  border: solid 1px $cortex;
-  border-radius: 3px 3px 0 0;
+  background: #fff;
+  border: 1px solid $es-border;
+  border-radius: $es-radius;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
 
+  &:hover {
+    border-color: $es-teal;
+    box-shadow: 0 4px 16px rgba(62, 120, 119, 0.12);
+  }
 }
 
 .dataset-content-wrap {
   flex: 1;
 }
 h3 {
-  color: #2760ff;
-  font-size: 18px;
+  font-size: 1.1rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
   margin: 0 0 8px;
   word-break: break-word;
+  text-transform: none;
+
+  a {
+    color: $es-primary;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
 }
 
 .subtitle {
-  color: #000;
-  font-size: 14px;
+  color: #333;
+  font-size: 0.9rem;
   font-weight: normal;
-  line-height: 24px;
+  line-height: 1.55;
   margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .dataset-details-wrap {
   display: flex;
@@ -246,8 +264,10 @@ h3 {
     align-items: center;
     display: flex;
     padding-right: 24px;
-    color: #404554;
+    color: #555;
     font-size: 12px;
+    strong { color: #000; margin-right: 3px; }
+    .svg-icon, svg { color: $es-teal; }
     font-weight: 400;
     letter-spacing: 0px;
     line-height: 16px;
@@ -260,29 +280,31 @@ h3 {
 .dataset-content {
   display: flex;
   flex-direction: row;
-  padding: 24px 16px;
+  padding: 20px;
 
   img {
     display: block;
     width: 86px;
     height: 86px;
+    border-radius: $es-radius-sm;
+    border: 1px solid $es-border;
   }
 }
 
 .meta {
-  border-top: solid 1px $cortex;
+  border-top: 1px solid $es-border;
+  background: #f7f9fb;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 8px 16px;
-  .author {
-    font-size: 12px;
-    line-height: 14px;
-  }
-  .tags {
-    font-size: 12px;
-    line-height: 14px;
-  }
+  gap: 16px;
+  padding: 10px 20px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #555;
+
+  .author strong { color: #000; }
+  .tags strong { color: $es-teal; font-weight: 600; }
 }
 
 a {
