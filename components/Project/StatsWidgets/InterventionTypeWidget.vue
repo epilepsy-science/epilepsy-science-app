@@ -104,11 +104,11 @@ function computeNiceMax(rawMax, desiredTickCount) {
   align-self: flex-start;
 }
 
-// 4 grid items with explicit placement:
-//   labels-col  → col 1, row 1 (stretches to fill row)
-//   bars-col    → col 2, row 1 (stretches to fill row, draws L-shaped axes)
-//   x-ticks     → col 2, row 2 (auto-sized)
-//   axis-title  → col 2, row 3 (auto-sized)
+/* 4 grid items with explicit placement: */
+/*   labels-col  → col 1, row 1 (stretches to fill row) */
+/*   bars-col    → col 2, row 1 (stretches to fill row, draws L-shaped axes) */
+/*   x-ticks     → col 2, row 2 (auto-sized) */
+/*   axis-title  → col 2, row 3 (auto-sized) */
 .chart-wrap {
   flex: 1;
   min-height: 0;

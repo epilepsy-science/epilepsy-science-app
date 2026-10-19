@@ -50,6 +50,12 @@ const tagsUrl = computed(() => {
 });
 const { data: tags } = await useFetch(tagsUrl, {});
 
+useBreadcrumb(computed(() => [
+  { label: "Data", to: "/projects" },
+  { label: "All datasets", to: "/data?type=dataset" },
+  { label: dsDetails.value?.name || "Dataset" },
+]));
+
 // ==== SEO HEAD ====
 const seoTitle = computed(() => {
   return `${dsDetails.value?.name} - Pennsieve Discover`;

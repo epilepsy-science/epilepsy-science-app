@@ -177,8 +177,8 @@ async function submitRehydrationRequest() {
 <style scoped lang="scss">
 
 .request-access-dialog {
-  margin: 20px;
-  padding: 40px;
+  margin: 0;
+  padding: 0;
 }
 
 .el-form-item__label {

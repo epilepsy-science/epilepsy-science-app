@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-//@use '../../../assets/css/_variables.scss';
+/*@use '../../../assets/css/_variables.scss'; */
 
 .bf-dialog-header {
   align-items: center;
@@ -68,7 +68,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  //color: $purple_3;
+  /*color: $purple_3; */
 }
 .tabs {
   bottom: -25px;

@@ -30,6 +30,9 @@ const { data:citation } = await useLazyFetch(citationUrl, {
 
 <style lang="scss" scoped>
 .external-publication-list-item {
-  color: #cfdbfc;
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  :deep(a) { color: $es-primary; }
 }
 </style>
