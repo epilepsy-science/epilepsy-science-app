@@ -117,9 +117,16 @@ export default defineNuxtConfig({
     },
     optimizeDeps: {
       exclude: ["@pennsieve-viz/tsviewer", "@duckdb/duckdb-wasm"],
+      // tsviewer is excluded above, so its CJS deps must be pre-bundled explicitly.
+      // @pennsieve-viz/core is listed so it isn't discovered lazily, which re-optimizes
+      // deps mid-session and loads a second pinia instance (no active pinia).
+      include: ["protobufjs", "@pennsieve-viz/core"],
     },
-    ssr: {
-      noExternal: ["@pennsieve-viz/tsviewer"],
+    // Scoped to $server: a top-level vite.ssr makes Nuxt drop optimizeDeps.include
+    $server: {
+      ssr: {
+        noExternal: ["@pennsieve-viz/tsviewer"],
+      },
     },
   },
 

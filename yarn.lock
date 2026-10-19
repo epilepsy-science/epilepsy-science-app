@@ -2101,10 +2101,10 @@
     "@parcel/watcher-win32-ia32" "2.5.6"
     "@parcel/watcher-win32-x64" "2.5.6"
 
-"@pennsieve-viz/core@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@pennsieve-viz/core/-/core-0.3.3.tgz#af0931821826737d1226cd746b5f67f7c3db4143"
-  integrity sha512-sLOH0J1ZF+eeer8yziE+rj9tBGt4XmliOFowgeDL6+kR0UC6Ni/gOBdUaWcy4dovLXQEEZEW7Ma6a7NlSh4/IQ==
+"@pennsieve-viz/core@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@pennsieve-viz/core/-/core-0.3.5.tgz#9ebfd6541ac32f3e55b83504f440e8d5144d2da1"
+  integrity sha512-Pt/nw39IeF9ReatsqBXDAwQiBZ7nmxFmvkvpDYWb8iWfIbmq/iBNUEjObooAiwL8EZ+1Vkg1vkbDdeIp2DlAUQ==
   dependencies:
     d3 "^7.9.0"
     dompurify "^3.2.6"
