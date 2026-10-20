@@ -28,3 +28,5 @@ export const PROJECT_STATS_AVAILABLE_IDS = Object.freeze([
   'pennepi',
 ])
 
+// Dataset proposal page + header link stay off until the proposal endpoint is live.
+export const IS_DATASET_PROPOSAL_ENABLED = false

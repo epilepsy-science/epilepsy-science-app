@@ -111,8 +111,15 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { CircleCheckFilled, InfoFilled } from '@element-plus/icons-vue'
 import { createEmptyProposal, useDatasetProposal } from '~/composables/useDatasetProposal'
+import { IS_DATASET_PROPOSAL_ENABLED } from '~/utils/constants.js'
 
 type ProposalFieldKey = keyof ReturnType<typeof createEmptyProposal>
+
+definePageMeta({
+  middleware: () => {
+    if (!IS_DATASET_PROPOSAL_ENABLED) return navigateTo('/', { redirectCode: 302 })
+  },
+})
 
 useHead({ title: 'Propose a Dataset - Epilepsy.Science' })
 
