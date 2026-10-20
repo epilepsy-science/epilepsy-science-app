@@ -40,11 +40,9 @@ export function useDatasetProposal() {
     }
   }
 
-  // TODO: replace with a real API call once the proposal endpoint exists
-  const submitProposal = async (proposal, submitter) => {
-    const proposalPayload = { ...proposal, submitterName: submitter.name, submitterEmail: submitter.email }
-    await new Promise((resolve) => setTimeout(resolve, 600))
-    return proposalPayload
+  // TODO: call the proposal endpoint once it is live
+  const submitProposal = async () => {
+    throw new Error('Dataset proposal submission is not available yet')
   }
 
   return { loadDraft, saveDraft, clearDraft, submitProposal }

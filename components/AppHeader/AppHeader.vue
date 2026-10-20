@@ -14,8 +14,7 @@
         <ul>
           <li><nuxt-link to="/projects" :class="{ 'router-link-active': isDataSection }">Data</nuxt-link></li>
           <li><nuxt-link to="/about">About</nuxt-link></li>
-          <!-- Hidden for now: "Propose a dataset" is the only item in this dropdown
-          <li class="nav-dropdown">
+          <li v-if="IS_DATASET_PROPOSAL_ENABLED" class="nav-dropdown">
             <button class="nav-dropdown-trigger" type="button" aria-haspopup="true">
               More <el-icon :size="12" class="nav-dropdown-arrow"><ArrowDown /></el-icon>
             </button>
@@ -23,7 +22,6 @@
               <li><nuxt-link to="/dataset-proposal" @click="closeDropdown">Propose a dataset</nuxt-link></li>
             </ul>
           </li>
-          -->
           <li><a class="cde-link" href="https://cde.epilepsy.science" target="_blank" rel="noopener"><strong>CDE's</strong> <el-icon :size="12" style="vertical-align: middle; margin-left: 2px;"><TopRight /></el-icon></a></li>
         </ul>
       </nav>
@@ -34,6 +32,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { TopRight, ArrowDown } from "@element-plus/icons-vue";
+import { IS_DATASET_PROPOSAL_ENABLED } from "~/utils/constants.js";
 
 const route = useRoute();
 const isDataSection = computed(() => /^\/(projects|data|datasets)(\/|$)/.test(route.path));
