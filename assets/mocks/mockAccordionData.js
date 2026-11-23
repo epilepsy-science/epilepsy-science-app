@@ -42,9 +42,9 @@ export const mockAccordionData = [
       description: 'Add your data to the repository, link to it in papers, share with other scientists to advance epilepsy research.',
       imgSrc: 'https://images.ctfassets.net/erzgaqq17mnz/7fIMFpiQ2LOLcuBaw36JjL/c43243ecf4182cfc63289f1520313122/epilepsy_science_new_imagery_4.jpg',
       redirectLink1Text: 'Learn About Data Sharing',
-      redirectLink2Text: 'Contribute Now',
+      redirectLink2Text: 'Propose a Dataset',
       redirectLink1Url: '/data/sharing-info',
-      redirectLink2Url: 'https://forms.gle/rGW9MQna5jQa7iGm6'
+      redirectLink2Url: '/dataset-proposal'
     }
   }
 ]

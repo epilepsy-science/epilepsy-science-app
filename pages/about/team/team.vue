@@ -133,12 +133,15 @@ const PI = computed(() => {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 48px;
 }
 
 h1 {
-  font-weight: 300;
-  color: $purple_2;
+  margin: 0 0 24px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #000;
+  text-transform: uppercase;
 }
 
 .member-wrapper {
@@ -146,6 +149,7 @@ h1 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  gap: 16px 0;
 }
 
 .featureSection {

@@ -117,19 +117,23 @@ export default {
 }
 
 .label-title {
-  font-size: 1em;
+  font-size: 0.8rem;
   line-height: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #000;
 }
 
+.arrow-icon { color: $es-teal; }
+
 .help-icon {
-  fill: $purple;
+  fill: $es-teal;
   vertical-align: text-top;
 }
 
 :deep(hr) {
   border: none;
-  border-bottom: 1px solid $lineColor2;
+  border-bottom: 1px solid $es-border;
   margin: 0;
 }
 

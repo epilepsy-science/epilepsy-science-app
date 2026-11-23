@@ -1,6 +1,6 @@
-// Utility classes (previously from sparc-design-system-components-2)
+/* Utility classes (previously from sparc-design-system-components-2) */
 
-// Margin utilities
+/* Margin utilities */
 .mb-0 { margin-bottom: 0; }
 .mb-8 { margin-bottom: 8px; }
 .mb-16 { margin-bottom: 16px; }
@@ -23,7 +23,7 @@
 .my-8 { margin-top: 8px; margin-bottom: 8px; }
 .my-16 { margin-top: 16px; margin-bottom: 16px; }
 
-// Padding utilities
+/* Padding utilities */
 .pb-8 { padding-bottom: 8px; }
 .pb-16 { padding-bottom: 16px; }
 
@@ -43,7 +43,7 @@
 .py-16 { padding-top: 16px; padding-bottom: 16px; }
 .py-24 { padding-top: 24px; padding-bottom: 24px; }
 
-// Typography classes
+/* Typography classes */
 .heading1 {
   font-size: 1.5rem;
   line-height: 2rem;
@@ -79,7 +79,7 @@
   font-weight: 600;
 }
 
-// Container class used by the app
+/* Container class used by the app */
 .container {
   width: 100%;
   padding-right: 15px;

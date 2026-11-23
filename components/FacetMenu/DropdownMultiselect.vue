@@ -334,7 +334,7 @@ export default {
 
 .dropdown-multiselect {
   background-color: white;
-  border: 1px solid $lineColor2;
+  border: 1px solid $es-border;
 }
 
 :deep(.show-all-node) {
@@ -344,8 +344,14 @@ export default {
 }
 :deep(.el-tree-node.is-checked) {
   .custom-tree-node {
-    color: $purple;
+    color: $es-teal;
+    font-weight: 600;
   }
+}
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner),
+:deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner) {
+  background-color: $es-teal;
+  border-color: $es-teal;
 }
 :deep(.custom-tree-node) {
   text-overflow: ellipsis;
@@ -374,7 +380,7 @@ export default {
   }
 }
 :deep(.show-all-node) {
-  color: $purple;
+  color: $es-teal;
   font-size: .875rem;
   font-weight: normal;
   .el-checkbox {
@@ -389,7 +395,7 @@ export default {
   background: white;
 }
 .expand-options-container {
-  color: $purple;
+  color: $es-primary;
   font-size: 14px;
   font-weight: 500;
   margin: 0.25rem 1.5rem;

@@ -376,16 +376,10 @@ const isRehydrationModalVisible = ref(false)
 
 <template>
   <div class="dataset-header">
-    <div class="row mb-8">
-      <div class="col-xs-12">
-        <NuxtLink :to="{ name: 'data' }" class="header-link">
-          <IconArrowLeft class="header-link-icon"/>
-          View all Datasets
-        </NuxtLink>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12 col-sm-6">
+    <div class="header-panel">
+    <div class="row header-panel__body">
+      <div class="col-xs-12 col-sm-8 header-text-col">
+        <p class="es-label">Dataset</p>
         <h1 class="dataset-title">
           {{ datasetTitle }}
         </h1>
@@ -461,7 +455,7 @@ const isRehydrationModalVisible = ref(false)
           Your request for access is pending.
         </p>
       </div>
-      <div class="col-xs-12 col-sm-6 first-xs last-sm">
+      <div class="col-xs-12 col-sm-4 first-xs last-sm">
         <div class="header-image-section">
           <dataset-banner-image class="dataset-image" :src="getDatasetImage" />
         </div>
@@ -535,6 +529,7 @@ const isRehydrationModalVisible = ref(false)
         </div>
       </div>
     </div>
+    </div>
 
     <download-dataset
       v-model:visible="isDownloadModalVisible"
@@ -573,67 +568,110 @@ const isRehydrationModalVisible = ref(false)
 <style lang="scss" scoped>
 @use '@/assets/scss/variables';
 
-
 .header-image-section {
+  display: flex;
+  justify-content: flex-end;
+
   .dataset-image {
     display: block;
-    height: auto;
     width: 100%;
-    @media (max-width: 48em) {
-      max-width: 400px;
-    }
-    @media (min-width: 48em) {
-      width: 100%;
-    }
+    max-width: 240px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 1px solid $es-border;
+    border-radius: $es-radius-sm;
+    background: #fff;
+  }
+
+  @media (max-width: 48em) {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    .dataset-image { max-width: 200px; }
   }
 }
 
+.header-text-col { padding-right: 32px; }
+
+/* White panel so body text never sits directly on the dot grid */
+.header-panel {
+  background: #fff;
+  border: 1px solid $es-border;
+  border-radius: $es-radius;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  &__body {
+    margin: 0;
+    padding: 28px 32px 32px;
+    [class*='col-'] { padding: 0; }
+  }
+}
+
+/* Stats as the panel footer */
 .header-stats-section {
-  border-top: 1px solid #dadada;
-  border-bottom: 1px solid #dadada;
-  margin: 26px 0 10px;
-  padding: 10px 16px;
+  border-top: 1px solid $es-border;
+  background: #f7f9fb;
+
+  .row { margin: 0; }
+  [class*='col-'] { padding: 0; }
 }
 
 .header-stats-block {
   align-items: center;
   display: flex;
+  padding: 14px 24px;
+  border: 0;
+  font-size: 0.9rem;
+  color: #555;
+
+  strong { color: #000; font-size: 1.1rem; margin-right: 3px; }
+  svg { color: $es-teal; flex-shrink: 0; }
+
   a {
-    &:focus {
-      color: #1c46bd;
-    }
+    color: $es-primary;
+    &:hover { text-decoration: underline; }
   }
+}
+/* dividers between adjacent boxes */
+.col-sm-3:not(:first-child) .header-stats-block { border-left: 1px solid $es-border; }
+@media (max-width: 48em) {
+  .col-sm-3:nth-child(3) .header-stats-block { border-left: 0; }
+  .col-sm-3:nth-child(n+3) .header-stats-block { border-top: 1px solid $es-border; }
 }
 
 .dataset-header {
-  padding-top: 24px;
+  padding-top: 8px;
+
+  .es-label { display: inline-flex; }
+
+  .es-label { margin: 0 0 10px; }
+
   h1 {
-    font-size: 32px;
+    font-size: 1.85rem;
     color: #000;
-    font-weight: bold;
-    margin-bottom: 24px;
-    line-height: 40px;
+    font-weight: 600;
+    margin: 0 0 16px;
+    line-height: 1.25;
     word-break: break-word;
-    @media (min-width: 48em) {
-      margin-top: 32px;
-    }
+    text-transform: none;
   }
 }
+
 .dataset-description {
-  color: #000;
-  font-size: 16px;
-  line-height: 24px;
-  margin-bottom: 24px;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 .dataset-owners {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  color: #404554;
-  font-size: 14px;
+  color: #555;
+  font-size: 0.9rem;
   line-height: 24px;
-  margin-bottom: 13px;
+  margin-bottom: 16px;
   .contributor-item-wrap {
     display: inline-flex;
     margin-right: 4px;
@@ -643,58 +681,48 @@ const isRehydrationModalVisible = ref(false)
 .dataset-corresponding-contributor {
   display: inline-flex;
   flex-direction: row;
-
-  p {
-    margin-right: 3px;
-  }
+  p { margin-right: 3px; }
 }
 
 .dataset-updated-date {
-  height: 24px;
-  color: #404554;
-  font-size: 14px;
+  color: #555;
+  font-size: 0.85rem;
   line-height: 24px;
 
   a {
-    color: #404554;
+    color: $es-primary;
     text-decoration: underline;
-    &:hover,
-    &:active,
-    &:visited {
-      color: #404554;
-    }
-    &:focus {
-      color: black;
-    }
+    &:hover { color: $es-primary-dark; }
   }
+}
+
+.dataset-meta {
+  font-size: 0.85rem;
+  color: #555;
 }
 
 .get-dataset-button {
   font-weight: 600;
   line-height: 16px;
-  font-size: 14px;
-  background-color: variables.$purple_3;
-  margin-top: 19px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  background-color: $es-cta;
+  border-radius: $es-radius-sm;
+  margin-top: 20px;
 
-  &:focus {
-    background-color: variables.$purple_3;
-  }
-  .svg-icon {
-    margin-right: 8px;
-  }
+  &:focus,
+  &:hover { background-color: $es-cta-hover !important; }
+  .svg-icon { margin-right: 8px; }
 }
+
 .header-link {
   color: variables.$purple_2;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: 600;
   line-height: 16px;
-
-  &:focus {
-    color: variables.$purple_2;
-  }
-
+  text-decoration: none;
+  &:hover { color: $es-primary; }
   .header-link-icon {
-    color: variables.$purple_2;
     height: 10px;
     width: 10px;
     margin-right: 4px;
@@ -705,20 +733,16 @@ const isRehydrationModalVisible = ref(false)
   height: 16px;
   width: 16px;
   border-radius: 2px;
-  background-color: #dadada;
+  border: none;
+  background-color: $es-border;
   margin: 0 6px;
-
-  &:focus {
-    background-color: #b6b7ba;
-  }
-
-  .button-text {
-    position: relative;
-    bottom: 5px;
-  }
+  cursor: pointer;
+  &:focus { background-color: #b6b7ba; }
+  .button-text { position: relative; bottom: 5px; }
 }
+
 .requested-label {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
   margin-top: 32px;
 }

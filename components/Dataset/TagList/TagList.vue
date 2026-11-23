@@ -31,25 +31,33 @@ export default {
 
 <style lang="scss">
 .tag-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
   li {
     display: inline-block;
-    margin: 0 8px 8px 0;
+    margin: 0 6px 6px 0;
   }
 }
 .tag-list-tag {
   border-radius: 4px;
-  background-color: #cddaff;
-  color: #1c46bd;
+  background-color: #fff;
+  border: 1px solid #d6dde6;
+  color: #3E7877;
   display: block;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 16px;
-  padding: 8px;
-  text-align: center;
+  padding: 4px 9px;
+  text-align: left;
   text-decoration: none;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
   &:hover,
   &:focus {
-    background-color: white;
+    background-color: #3E7877;
+    border-color: #3E7877;
+    color: #fff;
     text-decoration: none;
   }
 }

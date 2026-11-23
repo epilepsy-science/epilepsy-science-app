@@ -1,36 +1,42 @@
-$es-primary-color: #297fca;
+/* Primary action/link colour — the logo teal (swap here to retheme the site) */
+$es-primary: #3E7877;
+$es-primary-dark: #2d5a59;
+$es-primary-color: $es-primary;
+/* Filled call-to-action buttons: black, like the logo frame */
+$es-cta: #000000;
+$es-cta-hover: #333333;
 $es-primary-color-light: #f0f0f0;
 
-// Sparc design system variables (previously from sparc-design-system-components-2)
-// Primary colors
+/* Sparc design system variables (previously from sparc-design-system-components-2) */
+/* Primary colors */
 $purple: #8300BF;
 $darkBlue: #24245B;
 $grey: #303133;
 
-// Secondary colors
+/* Secondary colors */
 $lightPurple: #BC00FC;
 $blue: #0026FF;
 
-// Status colors
+/* Status colors */
 $success: #5e9f69;
 $warning: #FF8400;
 $danger: #b51d09;
 
-// Text colors
+/* Text colors */
 $neutralGrey: #616161;
 $mediumGrey: #606266;
 $lightGrey: #909399;
 
-// Line colors
+/* Line colors */
 $lineColor1: #DCDFE6;
 $lineColor2: #E4E7ED;
 
-// Background colors
+/* Background colors */
 $background: #F5F7FA;
 $cochlear: #FFFFFF;
 $tooltipColor: #f3ecf6;
 
-// Search box colors
+/* Search box colors */
 $darkGrey: #606266;
 
 $app-primary-color: $purple;
@@ -38,13 +44,13 @@ $app-secondary-color: $darkBlue;
 
 $font-family: 'Asap', sans-serif;
 
-// Viewport Sizes
+/* Viewport Sizes */
 $viewport-sm: 20rem;
 $viewport-md: 47rem;
 $viewport-lg: 64rem;
 $viewport-xlg: 120rem;
 
-// standard app colors
+/* standard app colors */
 $gray_0: #F2F2F2;
 $gray_1: #F7F7F7;
 $gray_2: #e5e5e5;
@@ -72,3 +78,16 @@ $myelin: $gray_6;
 $axon: $gray_1;
 
 $text-color: $gray_5;
+
+/* Epilepsy.Science brand (from logo): black frame, teal stroke, mint dots */
+$es-black: #000000;
+$es-teal: #3E7877;
+$es-mint: #83CFAB;
+$es-panel-grey: #F0F0F0;
+$es-border: #d6dde6;
+$es-primary-tint: #edf4f3; /* ~8% teal over white, for soft fills */
+$es-slate: #4d628c;        /* muted blue (= $purple_2): card header bands */
+$es-slate-dark: #3f5276;
+$es-slate-tint: #e9eef5;   /* light slate: card header bands */
+$es-radius: 6px;
+$es-radius-sm: 4px;

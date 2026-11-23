@@ -1,114 +1,69 @@
 <template>
   <div class="about-page">
-    <section class="body-wrapper mission-section">
-      <h1 class="mission-title">{{ content.mission.title }}</h1>
-    </section>
-
-    <!-- <section class="body-wrapper stats-section">
-      <div class="stats-container">
-        <el-row class="stats-row">
-          <el-col
-            v-for="(stat, index) in displayStats"
-            :key="index"
-            :span="6"
-            :xs="12"
-            :md="6"
-            class="stat-box"
-          >
-            <div class="stat-value">{{ stat.value }}</div>
-            <div class="stat-label">{{ stat.label }}</div>
-          </el-col>
-        </el-row>
-        <hr />
-        <p class="stats-description">{{ content.statsDescription }}</p>
-      </div>
-    </section> -->
-
-    <section class="body-wrapper what-we-do-section">
-      <h2 class="section-title">{{ content.whatWeDo.title }}</h2>
-      <div class="what-we-do-container">
-        <el-row :gutter="20" class="stats-row">
-          <el-col
-            v-for="(text, index) in content.whatWeDo.textItems"
-            :key="index"
-            :span="12"
-            :xs="24"
-          >
-            <p class="text-section">{{ text }}</p>
-          </el-col>
-        </el-row>
+    <section class="mission-section es-dots">
+      <div class="mission-inner">
+        <p class="es-label">About</p>
+        <h1 class="mission-title">{{ content.mission.title }}</h1>
+        <div class="es-heading-bar centered"><i></i></div>
       </div>
     </section>
 
-    <section class="body-wrapper mission-details-section">
-      <h2 class="section-title">{{ content.missionDetails.title }}</h2>
-      <p class="section-subtitle">{{ content.missionDetails.subtitle }}</p>
-      <div class="content-container">
-        <div class="text-column">
-          <p class="bold-text mb-8">
-            {{ content.missionDetails.additionalInfo }}
+    <div class="about-body">
+      <section class="panel what-we-do-section">
+        <h2 class="section-title">{{ content.whatWeDo.title }}</h2>
+        <div class="two-col">
+          <p v-for="(text, index) in content.whatWeDo.textItems" :key="index" class="text-section">
+            {{ text }}
           </p>
-          <p class="mb-8">{{ content.missionDetails.introduction }}</p>
-          <p class="bold-text mb-8">
-            {{ content.missionDetails.highlightsTitle }}
-          </p>
-          <ul class="highlights">
-            <li
-              v-for="(highlight, index) in content.missionDetails.highlights"
-              :key="index"
-            >
-              {{ highlight }}
-            </li>
-          </ul>
-          <p class="bold-text">{{ content.missionDetails.footer }}</p>
         </div>
+      </section>
 
-        <div class="image-column">
-          <img
-            :src="content.missionDetails.imageSrc"
-            alt="Epilepsy data platform"
-          />
+      <section class="panel mission-details-section">
+        <h2 class="section-title">{{ content.missionDetails.title }}</h2>
+        <p class="section-subtitle">{{ content.missionDetails.subtitle }}</p>
+        <div class="content-container">
+          <div class="text-column">
+            <p class="bold-text mb-8">{{ content.missionDetails.additionalInfo }}</p>
+            <p class="mb-8">{{ content.missionDetails.introduction }}</p>
+            <p class="bold-text mb-8">{{ content.missionDetails.highlightsTitle }}</p>
+            <ul class="highlights">
+              <li v-for="(highlight, index) in content.missionDetails.highlights" :key="index">
+                {{ highlight }}
+              </li>
+            </ul>
+            <p class="bold-text">{{ content.missionDetails.footer }}</p>
+          </div>
+          <div class="image-column">
+            <img :src="content.missionDetails.imageSrc" alt="Epilepsy data platform" />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="body-wrapper collaboration-section">
-      <h2 class="collaboration-title">
-        {{ collaboratorSectionContent.title }}
-      </h2>
-      <p class="collaboration-subtitle">
-        {{ collaboratorSectionContent.subtitle }}
-      </p>
-
-      <div class="cards-container">
-        <el-carousel type="card" :interval="6000">
-          <el-carousel-item
+      <section class="collaboration-section">
+        <div class="section-heading">
+          <p class="es-label">Partners</p>
+          <h2 class="section-title">{{ collaboratorSectionContent.title }}</h2>
+          <p class="collaboration-subtitle">{{ collaboratorSectionContent.subtitle }}</p>
+        </div>
+        <div class="cards-grid">
+          <CollaboratorCard
             v-for="(card, index) in collaboratorSectionContent.cards"
             :key="index"
-          >
-            <CollaboratorCard
-              :title="card.title"
-              :description="card.description"
-              :link="card.link"
-            />
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-    </section>
-    <section class="body-wrapper team-section">
-      <Team />
-    </section>
-    <!-- TODO: display this form once the endpoint to accept form submissions is available -->
-    <!-- <section class="body-wrapper collaboration-form">
-    <h2 class="collaboration-form-title"> We'd LOVE to collaborate! </h2>
-    <p class="collaboration-form-subtitle"> What excites you about partnering? </p>
-    <CollaboratorForm />
-  </section> -->
+            :title="card.title"
+            :description="card.description"
+            :link="card.link"
+          />
+        </div>
+      </section>
+
+      <section class="team-section">
+        <Team />
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { useMainStore } from "~/store/index";
 import {
   aboutPageContent,
   aboutCollaboratorsContent,
@@ -116,199 +71,137 @@ import {
 import { ref } from "vue";
 import Team from "./team/team.vue";
 
-const stats = useMainStore().pageStats;
+useBreadcrumb([{ label: "About" }]);
 const content = ref(aboutPageContent);
 const collaboratorSectionContent = ref(aboutCollaboratorsContent);
 
-const displayStats = [
-  { value: `${stats.files}`, label: "Files" },
-  { value: `${stats.labs}+`, label: "Labs" },
-  { value: `${stats.datasets}`, label: "Datasets" },
-  { value: `${stats.publicUsers}+`, label: "Public Users" },
-];
 </script>
 
 <style scoped lang="scss">
-.about-page {
-  max-width: 1024px;
-  margin: 0 auto;
+.mission-section {
+  border-bottom: 1px solid $es-border;
 
-  .section-title {
+  .mission-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 72px 20px 56px;
     text-align: center;
   }
-}
 
-.body-wrapper {
-  padding-inline: 32px;
-  margin-top: 72px;
-
-  &:last-of-type {
-    margin-bottom: 72px;
-  }
-}
-
-.mission-section {
-  text-align: center;
+  .es-label { margin: 0 0 16px; }
 
   .mission-title {
-    color: #297fca;
+    margin: 0;
+    font-size: 2.1rem;
+    line-height: 1.3;
+    font-weight: 500;
+    color: #000;
     text-transform: none;
   }
+
+  .es-heading-bar { margin-top: 20px; }
 }
 
-.stats-section {
-  background-color: #f0f0f0;
-  border-radius: 10px;
+.about-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 20px 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
 
-  .stats-container {
-    text-align: center;
-    padding: 20px;
-  }
+.panel {
+  background: #fff;
+  border: 1px solid $es-border;
+  border-radius: $es-radius;
+  padding: 40px;
+}
 
-  .stats-row {
-    justify-content: center;
-  }
-
-  .stat-box {
-    text-align: center;
-    padding: 20px;
-
-    .stat-value {
-      font-size: 40px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-    }
-
-    .stat-label {
-      font-size: 16px;
-    }
-  }
+.section-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .what-we-do-section {
-  padding: 20px;
-  color: #297fca;
-
-  .what-we-do-container {
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
     margin-top: 24px;
+  }
+
+  .text-section {
+    margin: 0;
+    line-height: 1.65;
+    color: #333;
   }
 }
 
 .mission-details-section {
-  background-color: #297fca;
-  color: white;
-  padding: 40px;
-
   .section-subtitle {
-    font-size: 16px;
-    margin-bottom: 32px;
-    line-height: 1.5;
+    max-width: 800px;
+    margin: 12px auto 32px;
+    line-height: 1.6;
+    color: #333;
     text-align: center;
   }
 
   .content-container {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    gap: 40px;
+    align-items: flex-start;
   }
 
   .text-column {
     flex: 1;
+    line-height: 1.6;
+    color: #333;
 
-    .bold-text {
-      font-weight: bold;
-    }
-
-    .mb-8 {
-      margin-bottom: 8px;
-    }
-
+    .bold-text { font-weight: 600; color: #000; }
     .highlights {
-      list-style-type: disc;
-      font-size: 14px;
-
-      li {
-        margin-bottom: 8px;
-      }
+      padding-left: 20px;
+      li { margin-bottom: 8px; }
     }
   }
 
   .image-column {
-    flex: 1;
-    text-align: center;
+    flex: 0 0 280px;
 
     img {
-      width: 250px;
-      height: 500px;
+      width: 100%;
+      border: 1px solid $es-border;
+      border-radius: $es-radius-sm;
     }
   }
 }
 
-@media (min-width: 1024px) {
-  .mission-section {
-    text-align: center;
-    padding-inline: 0;
-    margin-top: 72px;
-  }
-
-  .stat-box {
-    padding: 30px;
-  }
-
-  .mission-details-section .content-container {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .mission-details-section.body-wrapper {
-    padding-inline: 32px;
-  }
-
-  .body-wrapper {
-    padding-inline: 0px;
-  }
-}
-
 .collaboration-section {
-  text-align: center;
+  .section-heading {
+    text-align: center;
+    margin-bottom: 24px;
 
-  .collaboration-title {
-    color: #297fca;
+    .es-label { margin: 0 0 8px; }
+    .collaboration-subtitle { margin: 8px 0 0; color: $es-teal; font-weight: 600; }
   }
 
-  .collaboration-subtitle {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #000;
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 }
 
-// TODO: display this form once the endpoint to accept form submissions is available
-// .collaboration-form {
-//   text-align: center;
-
-//   .collaboration-form-title {
-//     color: #297fca;
-//   }
-
-//   .collaboration-form-subtitle {
-//     font-size: 24px;
-//     margin-bottom: 32px;
-//   }
-// }
-</style>
-
-<style lang="scss">
-.stats-row .stat-box:nth-child(3)::after {
-  content: "coming soon!";
-  background-color: #f9f9f9;
-  color: #666;
-  font-size: 0.75rem;
-  font-weight: bold;
-  border: 1px solid #e0e0e0;
-  border-radius: 3px;
-  padding: 2px 6px;
-  margin-left: 5px;
+@media (max-width: 768px) {
+  .mission-section .mission-title { font-size: 1.5rem; }
+  .about-body { padding: 32px 16px 48px; gap: 32px; }
+  .panel { padding: 24px; }
+  .what-we-do-section .two-col,
+  .collaboration-section .cards-grid { grid-template-columns: 1fr; }
+  .mission-details-section .content-container { flex-direction: column; }
+  .mission-details-section .image-column { flex: none; width: 100%; }
 }
 </style>

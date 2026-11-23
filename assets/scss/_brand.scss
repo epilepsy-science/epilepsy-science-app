@@ -1,0 +1,65 @@
+/* Epilepsy.Science signature details, derived from the logo mark: */
+/* a black square frame, a teal inner stroke, and a tiny hollow teal square. */
+
+/* The mint dot grid used behind panels */
+.es-dots {
+  background-color: #fff;
+  background-image: radial-gradient($es-mint 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Small uppercase label with the logo's hollow square as a leading glyph */
+.es-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: $es-teal;
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid $es-teal;
+    border-radius: 2px;
+    box-sizing: border-box;
+  }
+}
+
+/* Three squares under a heading: the dot grid "resolving" into the brand mark */
+.es-heading-bar {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+
+  &::before,
+  &::after,
+  > i {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  &::before { background: $es-black; }
+  > i { background: $es-teal; }
+  &::after { background: $es-mint; }
+
+  &.centered { justify-content: center; }
+}
+
+/* Square double frame on hover (registration-mark feel), no radius, no shadow */
+.es-frame-hover {
+  outline: 1px solid transparent;
+  outline-offset: 3px;
+  transition: outline-color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    outline-color: $es-teal;
+  }
+}
