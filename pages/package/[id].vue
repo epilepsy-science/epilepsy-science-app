@@ -4,12 +4,21 @@ import { ref, onMounted, computed, shallowRef, nextTick } from "vue";
 import { Markdown, TextViewer, CSVViewer } from "@pennsieve-viz/core";
 import "@pennsieve-viz/core/style.css";
 import { filePathOf, publicDownloadsBase, publicFileUrl } from "~/utils/publicDownloads";
+import {
+  TIMESERIES_ZARR,
+  pickZarrTimeseriesAsset,
+  signedAssetUrl,
+} from "~/utils/viewerAssets";
+
+// TSViewer clears its own store on unmount, so one id serves every package page.
+const VIEWER_INSTANCE_ID = "package-viewer";
 
 // Dynamic imports for browser-only viewers
 const TSViewer = shallowRef(null);
 const viewerStore = shallowRef(null);
 const tsViewerReady = ref(false);
 const tsViewerError = ref("");
+const timeseriesAsset = ref(null);
 
 const OrthogonalFrame = shallowRef(null);
 
@@ -18,7 +27,7 @@ if (import.meta.client) {
   import("@pennsieve-viz/tsviewer/style.css");
   tsViewerLoaded = import("@pennsieve-viz/tsviewer").then((module) => {
     TSViewer.value = module.TSViewer;
-    viewerStore.value = module.createViewerStore("package-viewer");
+    viewerStore.value = module.createViewerStore(VIEWER_INSTANCE_ID);
   });
   import("@pennsieve-viz/core").then((module) => {
     OrthogonalFrame.value = module.OrthogonalFrame;
@@ -36,6 +45,7 @@ const fileContent = ref("");
 const isLoadingContent = ref(false);
 const contentError = ref("");
 const { fetchFileContent } = useFileContent();
+const { fetchViewerAssets, fetchSignedAssetUrl } = useViewerAssets();
 
 // Orthogonal (Zarr) viewer state
 const NEUROGLANCER_ASSET_TYPES = ["ome-zarr", "neuroglancer-precomputed"];
@@ -56,7 +66,7 @@ const imageFileTypes = ["PNG", "JPG", "JPEG", "GIF", "SVG", "WEBP", "BMP", "ICO"
 const neuroglancerFileTypes = ["NII", "NII.GZ", "ZARR", "OME.TIFF", "OME.TIF"]
 
 const isReady = computed(() => !isLoading.value && !!fileType.value)
-const isLoadingAssets = ref(false)
+const isLoadingAssets = ref(true)
 
 const resolvedFileType = computed(() => {
   const type = fileType.value.toUpperCase()
@@ -70,7 +80,8 @@ const resolvedFileType = computed(() => {
 const viewerType = computed(() => {
   if (!isReady.value) return null
   const type = resolvedFileType.value
-  if (timeseriesFileTypes.includes(type)) return "timeseries"
+  // A Zarr bundle makes the package a timeseries whatever its extension says.
+  if (timeseriesAsset.value || timeseriesFileTypes.includes(type)) return "timeseries"
   if (csvFileTypes.includes(type)) return "csv"
   if (markdownFileTypes.includes(type)) return "markdown"
   if (textFileTypes.includes(type)) return "text"
@@ -78,26 +89,6 @@ const viewerType = computed(() => {
   if (neuroglancerFileTypes.includes(type)) return "neuroglancer"
   return "unsupported"
 })
-
-async function fetchViewerAssets(sourcePackageId) {
-  const url = `${runtimeConfig.public.packages_api_host}/discover/assets?package_id=${encodeURIComponent(sourcePackageId)}`;
-  try {
-    const response = await useSendXhr(url, { method: "GET" });
-    const cloudfront = response?.cloudfront || null;
-    const seen = new Set();
-    const assets = (response?.assets || [])
-      .filter((a) => {
-        if (a.status !== "ready") return false;
-        if (seen.has(a.asset_url)) return false;
-        seen.add(a.asset_url);
-        return true;
-      })
-      .map((a) => ({ ...a, cloudfront }));
-    return assets;
-  } catch {
-    return [];
-  }
-}
 
 // A link for a viewer from download-service: shown in the browser, and
 // recorded as a view, not a download.
@@ -128,22 +119,22 @@ async function loadFileContent(file, datasetId, version) {
   }
 }
 
-async function initTimeseriesViewer(sourcePackageId, assetId) {
-  if (!sourcePackageId && !assetId) return;
+// Visitors are anonymous, so only a Zarr bundle can be shown: the streaming
+// service needs a session this site doesn't have.
+async function initTimeseriesViewer(sourcePackageId, zarrAsset) {
   await tsViewerLoaded;
   if (!viewerStore.value) return;
   tsViewerError.value = "";
   try {
-    const apiHost = runtimeConfig.public.pennsieve_api_host;
-    const wsHost = apiHost.replace(/^https?:\/\//, "wss://");
-    viewerStore.value.setViewerConfig({
-      timeseriesDiscoverApi: `${wsHost}/streaming/discover/ts/query`,
-      apiUrl: apiHost,
+    viewerStore.value.setViewerConfig({ apiUrl: runtimeConfig.public.pennsieve_api_host });
+    viewerStore.value.setActiveTool("pan");
+    await viewerStore.value.fetchAndSetActiveViewer({
+      viewerAssetId: zarrAsset.id,
+      packageId: sourcePackageId,
+      assetType: TIMESERIES_ZARR,
+      url: signedAssetUrl(zarrAsset),
+      onUrlExpired: () => fetchSignedAssetUrl(sourcePackageId, zarrAsset.id),
     });
-    const viewerParams = assetId
-      ? { viewerAssetId: assetId, packageId: sourcePackageId }
-      : { packageId: sourcePackageId };
-    await viewerStore.value.fetchAndSetActiveViewer(viewerParams);
     tsViewerReady.value = true;
   } catch (error) {
     console.error("Failed to initialize timeseries viewer:", error);
@@ -167,7 +158,6 @@ async function processFileData(fileData, datasetId, version) {
   const sourcePackageId = fileData.sourcePackageId || route.params.id;
   isLoadingAssets.value = true;
   fetchViewerAssets(sourcePackageId).then((assets) => {
-    const tsAssets = assets.filter((a) => a.asset_type === "timeseries");
     const ngAssets = assets.filter((a) => NEUROGLANCER_ASSET_TYPES.includes(a.asset_type));
 
     if (ngAssets.length > 0) {
@@ -175,10 +165,9 @@ async function processFileData(fileData, datasetId, version) {
       selectedAssetIndex.value = 0;
     }
 
-    if (timeseriesFileTypes.includes(type) && tsAssets.length > 0) {
-      initTimeseriesViewer(sourcePackageId, tsAssets[0].id);
-    } else if (timeseriesFileTypes.includes(type)) {
-      initTimeseriesViewer(sourcePackageId, undefined);
+    timeseriesAsset.value = pickZarrTimeseriesAsset(assets);
+    if (timeseriesAsset.value) {
+      initTimeseriesViewer(sourcePackageId, timeseriesAsset.value);
     }
   }).finally(() => {
     isLoadingAssets.value = false;
@@ -268,7 +257,7 @@ onMounted(() => {
         </button>
       </div>
 
-      <div class="viewer-wrapper">
+      <div class="viewer-wrapper" :class="{ 'viewer-wrapper--timeseries': viewerType === 'timeseries' }">
         <!-- Orthogonal (Zarr) Viewer -->
         <client-only v-if="hasOrthogonalAssets && selectedOrthogonalAsset">
           <component
@@ -289,8 +278,11 @@ onMounted(() => {
 
         <!-- Timeseries Viewer -->
         <client-only v-else-if="viewerType === 'timeseries'">
-          <component :is="TSViewer" v-if="TSViewer && tsViewerReady" instance-id="package-viewer" style="min-height: 100vh;" />
+          <component :is="TSViewer" v-if="TSViewer && tsViewerReady" :instance-id="VIEWER_INSTANCE_ID" />
           <div v-else-if="tsViewerError" class="viewer-message viewer-message--error">{{ tsViewerError }}</div>
+          <div v-else-if="!isLoadingAssets && !timeseriesAsset" class="viewer-message">
+            Timeseries preview isn't available for this file yet.
+          </div>
           <div v-else class="viewer-message">Loading viewer...</div>
         </client-only>
 
@@ -418,6 +410,17 @@ onMounted(() => {
 
 .viewer-wrapper {
   height: 85vh;
+
+  &--timeseries {
+    display: flex;
+    flex-direction: column;
+    min-height: 800px;
+
+    > * {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+  }
 }
 
 .viewer-message {

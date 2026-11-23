@@ -2112,18 +2112,18 @@
     marked "^15.0.7"
     ramda "^0.31.3"
 
-"@pennsieve-viz/tsviewer@2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@pennsieve-viz/tsviewer/-/tsviewer-2.1.2.tgz#ea92e854b5a0bb08019daf4ef91cce74afc2dff0"
-  integrity sha512-jSI4C5Y2aFL7wbdOx+w3H6fcma6hJJEmxf70NlrHFMLssmqCVqHoSNxZHUpR/zv8xX+sd7PdsPkzpZ3QHlmeRA==
+"@pennsieve-viz/tsviewer@2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@pennsieve-viz/tsviewer/-/tsviewer-2.4.1.tgz#98683fd108d149f30af447bdedf0f19208f9150e"
+  integrity sha512-TIFEhdeoKlU0AhPA4YZEbPZcfQlT90lpHkJEbHYA+ty1KTi/I4DHOuOh15rkXZ3obunP/1kQb8O4PjbnHPWxMw==
   dependencies:
-    "@pennsieve/timeseries-zarr-reader" "0.6.0"
+    "@pennsieve/timeseries-zarr-reader" "1.0.0-beta.0"
     protobufjs "^7.6.3"
 
-"@pennsieve/timeseries-zarr-reader@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@pennsieve/timeseries-zarr-reader/-/timeseries-zarr-reader-0.6.0.tgz#6c77019293d2960217834f34d76bdf1924c6bb50"
-  integrity sha512-xFIf8Z8E8LHntJFuTV+k7BoO15O789oYQMFGFRsNZ7lauO0Hazj6QJb/jeXhSk0ARQE7PUSjEbfdAzmKv2fWeA==
+"@pennsieve/timeseries-zarr-reader@1.0.0-beta.0":
+  version "1.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@pennsieve/timeseries-zarr-reader/-/timeseries-zarr-reader-1.0.0-beta.0.tgz#a0ab4f69c48584763bc5a8be4868992ed8b7a134"
+  integrity sha512-Frcd/1t+3IjoaBofy1208lkcENp3v5Y3TOv9pQJzXp24YEAPLlUwdMaifb1fXyLeSIOdeVeIXIKPTU64n2YHFg==
   dependencies:
     fili "^2.0.3"
     p-limit "^7.3.1"

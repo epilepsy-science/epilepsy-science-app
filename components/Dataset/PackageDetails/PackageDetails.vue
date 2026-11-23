@@ -7,6 +7,7 @@ import { usePublicArchive } from '~/composables/usePublicArchive'
 import { filePathOf, isActive, publicDownloadsBase, publicFileUrl, startBrowserDownload } from '~/utils/publicDownloads'
 
 const runtimeConfig = useRuntimeConfig()
+const currentRoute = useRoute()
 const store = useMainStore()
 
 const parentFolderPath = computed(() => {
@@ -17,8 +18,11 @@ const parentFolderPath = computed(() => {
   return lastSlash > 0 ? filePath.substring(0, lastSlash) : ''
 })
 
+// On a refresh the store is empty while the server renders, so the dataset
+// comes from the URL; without either there is nowhere to link back to.
 const backToFilesRoute = computed(() => {
-  const datasetId = store.selectedPackage?.datasetId
+  const datasetId = store.selectedPackage?.datasetId || currentRoute.query.datasetId
+  if (!datasetId) return null
   const route = {
     name: 'datasets-datasetId',
     params: { datasetId },
@@ -87,7 +91,7 @@ function isFolder(file) {
 <template>
   <div class="dataset-details">
     <div class="action-row">
-      <nuxt-link :to="backToFilesRoute" class="back-link">
+      <nuxt-link v-if="backToFilesRoute" :to="backToFilesRoute" class="back-link">
         <IconArrowLeft class="back-link-icon" />
         <span>{{ backLinkLabel }}</span>
       </nuxt-link>
