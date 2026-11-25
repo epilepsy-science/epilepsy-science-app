@@ -11,6 +11,7 @@
       <div class="hero-actions">
         <NuxtLink to="/projects" class="btn primary">Browse projects</NuxtLink>
         <NuxtLink to="/data?type=dataset" class="btn secondary">Search all datasets</NuxtLink>
+        <NuxtLink to="/notebooks/new" class="btn secondary">Open a notebook</NuxtLink>
       </div>
 
       <dl class="hero-stats">
@@ -85,6 +86,7 @@ h1 {
 
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
   margin-bottom: 48px;

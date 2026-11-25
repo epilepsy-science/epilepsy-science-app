@@ -101,6 +101,25 @@ const datasetId = computed(() => {
   return propOr(0, 'id', props.datasetDetails)
 })
 
+// Whether the dataset is in Epilepsy.Science's bucket in the Registry of
+// Open Data on AWS, where a notebook reads it (at its latest version): its
+// manifest is there.
+const inOpenData = ref(false)
+async function checkOpenData(id) {
+  inOpenData.value = false
+  if (!id) return
+  const { OPEN_DATA_PORTALS } = await import('@pennsieve/notebooks/utils/openDataPortals')
+  const { bucket } = OPEN_DATA_PORTALS.epilepsyScience
+  try {
+    const resp = await fetch(`https://${bucket}.s3.amazonaws.com/${id}/manifest.json`, { method: 'HEAD' })
+    inOpenData.value = resp.ok && datasetId.value === id
+  } catch {
+    inOpenData.value = false
+  }
+}
+onMounted(() => checkOpenData(datasetId.value))
+watch(datasetId, checkOpenData)
+
 /**
  * Gets latest version number of dataset
  * @returns {Number}
@@ -434,6 +453,13 @@ const isRehydrationModalVisible = ref(false)
         >
           Get Dataset
         </bf-button>
+        <NuxtLink
+          v-if="inOpenData"
+          :to="{ path: '/notebooks/new', query: { dataset: datasetId } }"
+          class="notebook-button"
+        >
+          Open in a notebook
+        </NuxtLink>
         <bf-button
           v-if="isDatasetEmbargoed && datasetDetails.embargoAccess === null"
           key="btn-request-access"
@@ -699,6 +725,27 @@ const isRehydrationModalVisible = ref(false)
 .dataset-meta {
   font-size: 0.85rem;
   color: #555;
+}
+
+.notebook-button {
+  display: inline-block;
+  margin: 20px 0 0 12px;
+  padding: 9px 20px;
+  border: 1px solid $es-primary;
+  border-radius: $es-radius-sm;
+  color: $es-primary;
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 16px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    background: $es-primary;
+    color: #fff;
+  }
 }
 
 .get-dataset-button {
