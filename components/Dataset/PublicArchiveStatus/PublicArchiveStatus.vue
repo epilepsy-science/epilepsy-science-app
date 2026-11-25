@@ -49,7 +49,7 @@ const expires = computed(() => {
         :percentage="percent"
         :show-text="false"
         :stroke-width="6"
-        :color="inverted ? '#ffffff' : '#4d628c'"
+        :color="inverted ? '#ffffff' : '#3E7877'"
       />
       <p class="note">
         <template v-if="signedIn">
@@ -120,7 +120,7 @@ const expires = computed(() => {
     padding: 0;
     border: none;
     background: none;
-    color: variables.$purple_2;
+    color: variables.$es-primary;
     font: inherit;
     font-weight: 500;
     cursor: pointer;

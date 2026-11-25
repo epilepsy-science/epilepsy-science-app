@@ -399,12 +399,12 @@ onMounted(() => {
   cursor: pointer;
 
   &:hover {
-    color: $purple_1;
+    color: $es-primary;
   }
 
   &--active {
-    color: $purple_1;
-    border-bottom-color: $purple_1;
+    color: $es-primary;
+    border-bottom-color: $es-primary;
   }
 }
 

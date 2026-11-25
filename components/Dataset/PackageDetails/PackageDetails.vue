@@ -138,12 +138,13 @@ function isFolder(file) {
 .get-dataset-button {
   font-weight: 600;
   line-height: 16px;
-  font-size: 14px;
-  background-color: $purple_3;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  background-color: $es-cta;
+  border-radius: $es-radius-sm;
 
-  &:focus {
-    background-color: $purple_3;
-  }
+  &:focus,
+  &:hover { background-color: $es-cta-hover !important; }
 }
 
 .archive-status {
@@ -226,18 +227,19 @@ function isFolder(file) {
 .back-link {
   display: inline-flex;
   align-items: center;
-  color: $purple_2;
+  color: $es-primary;
   font-size: 14px;
   font-weight: 600;
   line-height: 16px;
   text-decoration: none;
 
-  &:focus {
-    color: $purple_2;
+  &:focus,
+  &:hover {
+    color: $es-primary-dark;
   }
 
   .back-link-icon {
-    color: $purple_2;
+    color: currentColor;
     height: 10px;
     width: 10px;
     margin-right: 4px;
