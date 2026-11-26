@@ -100,6 +100,10 @@ export default defineNuxtConfig({
     },
   ],
 
+  // Vite is rolldown-vite (package.json resolutions): with Rollup, the
+  // notebook pages run the build out of Heroku's memory (~2.5 GB heap).
+  // Their heavy parts are .client components (components/Notebooks), kept
+  // out of the server build for the same reason.
   vite: {
     define: {
       "window.global": {},
