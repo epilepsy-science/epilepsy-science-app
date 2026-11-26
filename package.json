@@ -18,7 +18,7 @@
     "@vitejs/plugin-vue": "^6.0.7",
     "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.10.4",
-    "nuxt": "^3.8.2",
+    "nuxt": "^3.21.10",
     "nuxt-svgo": "^3.5.6",
     "sass": "^1.79.5",
     "vitest": "^4.1.9"
@@ -51,5 +51,8 @@
     "vue-recaptcha-v3": "^2.0.1",
     "vue-social-sharing": "^4.0.0-alpha4"
   },
-  "type": "module"
+  "type": "module",
+  "resolutions": {
+    "**/fast-xml-parser": "^5.12.0"
+  }
 }
