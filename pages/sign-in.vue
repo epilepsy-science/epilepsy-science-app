@@ -46,9 +46,14 @@
         <el-button link class="back" @click="restart">Back to sign in</el-button>
       </el-form>
 
-      <p class="note">
-        No Pennsieve account? Notebooks are open to existing Pennsieve users for now.
-      </p>
+      <div v-if="state === 'logIn'" class="sign-up">
+        <p>
+          <strong>Don't have a Pennsieve account?</strong>
+          Create one on Pennsieve, free. You'll get an email to set your password; then sign in here with the same
+          account.
+        </p>
+        <a :href="signUpUrl" target="_blank" rel="noopener" class="sign-up__link">Create a Pennsieve account ↗</a>
+      </div>
     </div>
   </section>
 </template>
@@ -83,6 +88,10 @@ const codeRef = ref(null)
 const mfa = ref({ code: '' })
 const codeRules = { code: [{ required: true, message: 'Enter the code', trigger: 'submit' }] }
 const totpSecret = ref('')
+
+// Accounts are made on Pennsieve: its invitation email, password and profile
+// setup all happen there.
+const signUpUrl = `${runtimeConfig.public.workspace_app_host}/sign-up`
 
 const landingPath = () => safeRedirectPath(route.query.redirectTo) || '/notebooks'
 
@@ -227,10 +236,42 @@ h1 {
   word-break: break-all;
 }
 
-.note {
-  margin: 24px 0 0;
-  color: #666;
-  font-size: 13px;
-  line-height: 1.5;
+// The way to a new account, under the form.
+.sign-up {
+  margin: 28px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid $es-border;
+
+  p {
+    margin: 0 0 12px;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 2px;
+    color: $es-black;
+    font-weight: 600;
+  }
+}
+
+.sign-up__link {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid $es-primary;
+  border-radius: $es-radius-sm;
+  color: $es-primary;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    background: $es-primary;
+    color: #fff;
+  }
 }
 </style>
