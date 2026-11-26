@@ -11,7 +11,7 @@
 
       <el-alert v-if="kernelsError" :title="kernelsError" type="error" show-icon :closable="false" />
       <div v-else v-loading="!kernels" class="launcher">
-        <QuickLauncher
+        <NotebookLauncher
           v-if="kernels"
           :workflows="kernels"
           personal
@@ -27,7 +27,6 @@
 <script setup>
 // The quick launcher of @pennsieve/notebooks, as a page: data, notebook,
 // start. ?dataset=<id> opens it on that dataset ("Open in a notebook").
-import QuickLauncher from '@pennsieve/notebooks/launch/QuickLauncher.vue'
 import { notebookBackend } from '@pennsieve/notebooks/notebooks/host'
 
 definePageMeta({ middleware: 'visitor' })

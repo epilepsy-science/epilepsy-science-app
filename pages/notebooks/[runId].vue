@@ -1,6 +1,6 @@
 <template>
   <div v-if="stage === 'ready'" class="session">
-    <JupyterSession :run-id="runId" />
+    <NotebookSession :run-id="runId" />
   </div>
   <section v-else class="page">
     <NuxtLink to="/notebooks" class="back">← My notebooks</NuxtLink>
@@ -48,10 +48,9 @@
 </template>
 
 <script setup>
-// A notebook: its start, timed, then the notebook itself (@pennsieve/notebooks'
-// JupyterSession), as in LabBooks.
+// A notebook: its start, timed, then the notebook itself (NotebookSession:
+// @pennsieve/notebooks' JupyterSession), as in LabBooks.
 import { RUNNING, getRun, sessionConnect } from "@/services/notebooks";
-import JupyterSession from "@pennsieve/notebooks/components/Analysis/JupyterSession/JupyterSession.vue";
 
 definePageMeta({ middleware: "visitor" });
 useHead({ title: "Notebook · Epilepsy.Science" });
