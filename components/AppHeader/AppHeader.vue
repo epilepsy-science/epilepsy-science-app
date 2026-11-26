@@ -13,8 +13,18 @@
       <nav class="header-nav" :class="{ 'is-mobile-menu': menuOpen }">
         <ul>
           <li><nuxt-link to="/projects" :class="{ 'router-link-active': isDataSection }">Data</nuxt-link></li>
+          <li><nuxt-link to="/notebooks">Notebooks</nuxt-link></li>
+          <li>
+            <a
+              class="external-link"
+              href="https://cde.epilepsy.science"
+              target="_blank"
+              rel="noopener"
+              title="Common Data Elements"
+            >CDEs <el-icon :size="12" class="external-icon"><TopRight /></el-icon></a>
+          </li>
           <li><nuxt-link to="/about">About</nuxt-link></li>
-          <li class="nav-dropdown">
+          <li v-if="IS_DATASET_PROPOSAL_ENABLED" class="nav-dropdown">
             <button class="nav-dropdown-trigger" type="button" aria-haspopup="true">
               More <el-icon :size="12" class="nav-dropdown-arrow"><ArrowDown /></el-icon>
             </button>
@@ -22,7 +32,21 @@
               <li><nuxt-link to="/dataset-proposal" @click="closeDropdown">Propose a dataset</nuxt-link></li>
             </ul>
           </li>
-          <li><a class="cde-link" href="https://cde.epilepsy.science" target="_blank" rel="noopener"><strong>CDE's</strong> <el-icon :size="12" style="vertical-align: middle; margin-left: 2px;"><TopRight /></el-icon></a></li>
+          <ClientOnly>
+            <li v-if="visitor.signedIn" class="nav-dropdown">
+              <button class="nav-dropdown-trigger" type="button" aria-haspopup="true">
+                {{ visitor.profile.firstName || visitor.profile.email }}
+                <el-icon :size="12" class="nav-dropdown-arrow"><ArrowDown /></el-icon>
+              </button>
+              <ul class="nav-dropdown-menu">
+                <li><nuxt-link to="/notebooks" @click="closeDropdown">My notebooks</nuxt-link></li>
+                <li><a href="#" @click.prevent="signOut">Sign out</a></li>
+              </ul>
+            </li>
+            <li v-else>
+              <nuxt-link :to="{ path: '/sign-in', query: { redirectTo: route.fullPath } }" class="sign-in">Sign in</nuxt-link>
+            </li>
+          </ClientOnly>
         </ul>
       </nav>
     </div>
@@ -32,8 +56,20 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { TopRight, ArrowDown } from "@element-plus/icons-vue";
+import { IS_DATASET_PROPOSAL_ENABLED } from "~/utils/constants.js";
+import { useVisitorStore } from "@/store/visitor";
 
 const route = useRoute();
+const router = useRouter();
+
+// The visitor's own Pennsieve sign-in (notebooks), read in the browser.
+const visitor = useVisitorStore();
+onMounted(() => visitor.load());
+async function signOut(clickEvent) {
+  closeDropdown(clickEvent);
+  await visitor.signOut();
+  if (route.path.startsWith("/notebooks")) router.push("/");
+}
 const isDataSection = computed(() => /^\/(projects|data|datasets)(\/|$)/.test(route.path));
 
 const menuOpen = ref(false);
@@ -134,19 +170,29 @@ onBeforeUnmount(() => {
   }
 }
 
-.header-nav a.cde-link {
-  background-color: $es-cta;
-  color: #ffffff;
-  border-radius: 4px;
+// An external site: the arrow says so; the acronym's words are its title.
+.header-nav a.external-link {
   text-transform: none;
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.external-icon {
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+// Signed out: the way in, outlined, at the end of the nav.
+.header-nav a.sign-in {
+  border: 1px solid $es-primary;
+  border-radius: $es-radius-sm;
+
+  &::after {
+    display: none;
+  }
 
   &:hover,
   &:focus-visible {
-    color: #ffffff;
-    background-color: $es-cta-hover;
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    background: $es-primary;
+    color: #fff;
   }
 }
 

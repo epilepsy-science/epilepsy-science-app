@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { resolve } from "pathe";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineNuxtConfig({
   app: {
@@ -113,7 +114,16 @@ export default defineNuxtConfig({
       },
     },
     resolve: {
-      dedupe: ["vue"],
+      // One copy of what this app and @pennsieve/notebooks share.
+      dedupe: [
+        "vue",
+        "vue-router",
+        "element-plus",
+        "@element-plus/icons-vue",
+        "dompurify",
+        "marked",
+        "ramda",
+      ],
     },
     optimizeDeps: {
       exclude: ["@pennsieve-viz/tsviewer", "@duckdb/duckdb-wasm"],
@@ -123,9 +133,24 @@ export default defineNuxtConfig({
     },
   },
 
-  routeRules: {},
+  // Notebooks and signing in run in the browser only: they hold the
+  // visitor's session (@pennsieve/notebooks, Amplify).
+  routeRules: {
+    "/sign-in": { ssr: false },
+    "/notebooks": { ssr: false },
+    "/notebooks/**": { ssr: false },
+  },
 
   hooks: {
+    // @pennsieve/notebooks' Jupyter client (@jupyterlab/services) expects
+    // Node's util, process and Buffer in the browser.
+    "vite:extendConfig"(config, { isClient }) {
+      if (isClient) {
+        config.plugins.push(
+          nodePolyfills({ include: ["util"], globals: { process: true, Buffer: true } })
+        );
+      }
+    },
     "pages:extend"(pages) {
       pages.push(
         {
@@ -164,8 +189,6 @@ export default defineNuxtConfig({
       userPoolId: process.env.USER_POOL_ID || "us-east-1_FVLhJ7CQA",
       userPoolWebClientId:
         process.env.USER_POOL_WEB_CLIENT_ID || "703lm5d8odccu21pagcfjkeaea",
-      masterUserName: process.env.MASTERUSER_USERNAME,
-      masterUserPW: process.env.MASTERUSER_PASSWORD,
       pennsieve_api_host: process.env.PENNSIEVE_API_HOST || "https://api.pennsieve.io",
       api2_host: process.env.PENNSIEVE_API2_HOST || "https://api2.pennsieve.io",
       packages_api_host: process.env.PACKAGES_API_HOST || "https://api2.pennsieve.io/packages",
