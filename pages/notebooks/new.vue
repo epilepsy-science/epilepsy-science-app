@@ -1,8 +1,8 @@
 <template>
   <div>
     <NotebooksHero title="Start a notebook">
-      On an Epilepsy.Science dataset, read from its copy in the Registry of Open Data on AWS. You pick the files to
-      download into the notebook.
+      On an Epilepsy.Science dataset: its copy in the Registry of Open Data on AWS, or its published version on
+      Pennsieve Discover. You pick the files to download into the notebook.
     </NotebooksHero>
 
   <section class="page">
@@ -16,6 +16,7 @@
           :workflows="kernels"
           personal
           :start-portal-dataset="startDataset"
+          :start-public-dataset="startPublic"
           @launched="opened"
         />
       </div>
@@ -26,8 +27,11 @@
 
 <script setup>
 // The quick launcher of @pennsieve/notebooks, as a page: data, notebook,
-// start. ?dataset=<id> opens it on that dataset ("Open in a notebook").
+// start. ?dataset=<id> opens it on that dataset's Open Data copy, and
+// ?publicDataset=<id>&version=<n> on its published version on Discover
+// ("Open in a notebook").
 import { notebookBackend } from '@pennsieve/notebooks/notebooks/host'
+import { fetchPublicDataset } from '@pennsieve/notebooks/utils/publicDatasets'
 
 definePageMeta({ middleware: 'visitor' })
 useHead({ title: 'Start a notebook · Epilepsy.Science' })
@@ -41,11 +45,17 @@ const startDataset = computed(() => {
 })
 
 // Pennsieve's notebook definitions; the launcher offers those that start
-// without a workspace.
+// without a workspace. A Discover dataset is read before the launcher opens.
 const kernels = ref(null)
 const kernelsError = ref('')
+const startPublic = ref(null)
 onMounted(async () => {
   try {
+    const id = Number(route.query.publicDataset)
+    if (Number.isInteger(id) && id > 0) {
+      const version = Number(route.query.version) || null
+      startPublic.value = await fetchPublicDataset(id, version).catch(() => null)
+    }
     kernels.value = await notebookBackend().listNotebookDefinitions()
   } catch (err) {
     kernelsError.value = `Couldn't load notebooks: ${err.message}`

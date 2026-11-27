@@ -120,6 +120,14 @@ async function checkOpenData(id) {
 onMounted(() => checkOpenData(datasetId.value))
 watch(datasetId, checkOpenData)
 
+// "Open in a notebook": from the Open Data copy when there is one, else the
+// published version on Pennsieve Discover. Embargoed datasets can't open.
+const notebookQuery = computed(() =>
+  inOpenData.value
+    ? { dataset: datasetId.value }
+    : { publicDataset: datasetId.value, version: latestVersion.value }
+)
+
 /**
  * Gets latest version number of dataset
  * @returns {Number}
@@ -454,8 +462,8 @@ const isRehydrationModalVisible = ref(false)
           Get Dataset
         </bf-button>
         <NuxtLink
-          v-if="inOpenData"
-          :to="{ path: '/notebooks/new', query: { dataset: datasetId } }"
+          v-if="!isDatasetEmbargoed"
+          :to="{ path: '/notebooks/new', query: notebookQuery }"
           class="notebook-button"
         >
           Open in a notebook
