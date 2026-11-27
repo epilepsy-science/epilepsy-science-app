@@ -2451,10 +2451,10 @@
     ramda "^0.28.0"
     tiny-emitter "2.1.0"
 
-"@pennsieve/notebooks@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@pennsieve/notebooks/-/notebooks-0.2.3.tgz#69b519bb52096dccc17a1e8e3c79aedbc391d1bb"
-  integrity sha512-dIxiHkiJTsQoSv6w+hKy7SZ1WDlHbCRUqgmUceWIws3AoBIZH98poemAJfNDynus88Wu4rWGl5K1zfZCB47lXg==
+"@pennsieve/notebooks@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@pennsieve/notebooks/-/notebooks-0.3.0.tgz#f68f1b999f26f13db709eff0783670c76e08694b"
+  integrity sha512-BhRcOkqCIEJGh3gm9hN1wPLNpt6jmEzISNOi3fcWV9IZkUGdzNfXDdGSC/uEqTGUAyiiN5y3s+HOElHHf2CL8g==
   dependencies:
     "@codemirror/autocomplete" "^6.20.4"
     "@codemirror/commands" "^6.6.0"
