@@ -7,7 +7,7 @@
       <PageBreadcrumb :items="breadcrumb" class="breadcrumb-strip__inner" />
     </div>
     <slot />
-    <AppFooter/>
+    <AppFooter v-if="!fullScreen" />
     <cookie-notice v-if="!hasAcceptedGDPR" />
   </div>
 </template>
@@ -21,7 +21,8 @@ export default {
   },
   setup() {
     const breadcrumb = useBreadcrumb()
-    return { breadcrumb }
+    const fullScreen = useFullScreen()
+    return { breadcrumb, fullScreen }
   },
   computed: {
     hasAcceptedGDPR() {

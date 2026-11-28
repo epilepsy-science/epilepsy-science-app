@@ -81,6 +81,10 @@ const run = ref(null);
 const connection = ref(null);
 // starting, ready, ended or failed
 const stage = ref("starting");
+// The open notebook fills the window under the header: the layout leaves
+// out the site's footer while it's open (useFullScreen).
+const fullScreen = useFullScreen();
+watch(stage, (s) => (fullScreen.value = s === "ready"), { immediate: true });
 const current = ref(0);
 const error = ref("");
 
@@ -192,6 +196,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearTimeout(timer);
   clearInterval(ticker);
+  fullScreen.value = false;
 });
 </script>
 

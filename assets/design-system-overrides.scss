@@ -1,15 +1,16 @@
+@use "sass:color";
 @use "@/assets/scss/_variables.scss" as *;
 
 :root body {
     --el-color-primary: #{$es-primary-color};
     // Element Plus's hover, focus and disabled shades: mixed the way it mixes
     // its own, so a focused primary button (a confirm box's) stays teal.
-    --el-color-primary-light-3: #{mix(#fff, $es-primary-color, 30%)};
-    --el-color-primary-light-5: #{mix(#fff, $es-primary-color, 50%)};
-    --el-color-primary-light-7: #{mix(#fff, $es-primary-color, 70%)};
-    --el-color-primary-light-8: #{mix(#fff, $es-primary-color, 80%)};
-    --el-color-primary-light-9: #{mix(#fff, $es-primary-color, 90%)};
-    --el-color-primary-dark-2: #{mix(#000, $es-primary-color, 20%)};
+    --el-color-primary-light-3: #{color.mix(#fff, $es-primary-color, 30%)};
+    --el-color-primary-light-5: #{color.mix(#fff, $es-primary-color, 50%)};
+    --el-color-primary-light-7: #{color.mix(#fff, $es-primary-color, 70%)};
+    --el-color-primary-light-8: #{color.mix(#fff, $es-primary-color, 80%)};
+    --el-color-primary-light-9: #{color.mix(#fff, $es-primary-color, 90%)};
+    --el-color-primary-dark-2: #{color.mix(#000, $es-primary-color, 20%)};
 }
 
 #epilepsy-science-app {
